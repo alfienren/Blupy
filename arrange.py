@@ -13,31 +13,31 @@ from xlwings import Workbook, Range, Sheet
 wb = Workbook("C:/Users/aarschle1/Google Drive/Optimedia/T-Mobile/Projects/Weekly_Reporting/Opti_DFA_Weekly_Reporting.xlsm")
 
 
-# In[39]:
+# In[148]:
 
 sa = Range("CFV_Temp", "A1").table.value
 cfv = Range("SA_Temp", "A1").table.value
 
 
-# In[40]:
+# In[149]:
 
 sa = pd.DataFrame(sa)
 cfv = pd.DataFrame(cfv)
 
 
-# In[47]:
+# In[167]:
 
-merged = pd.merge(cfv, sa, how='inner', on=0, sort=False)
-
-
-# In[48]:
-
-merged.head(3)
+sa.head(5)
 
 
-# In[49]:
+# In[169]:
 
-Range("working", "A1").value = merged
+merged = pd.merge(cfv, sa, how='outer', on=1)
+
+
+# In[165]:
+
+Range('working', 'A1').value = merged
 
 
 # In[ ]:
