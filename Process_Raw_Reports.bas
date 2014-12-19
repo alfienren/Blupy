@@ -88,7 +88,7 @@ With ActiveSheet
         Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
             :=False, Transpose:=False
             
-    Set rUniqueIDSA = Selection
+    
     
 End With
 
@@ -116,23 +116,6 @@ With ActiveSheet
     Range(Selection, Selection.End(xlToRight)).Select
     
     Set rCFVData = Range(Selection, Selection.End(xlDown).Offset(-1, 0))
-    
-'    .Range("C1").Select
-'    Selection.End(xlDown).Select
-'
-'    Range(Selection, Selection.End(xlDown)).Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
-'
-'    Selection.Value = "Unique ID"
-'
-'    Selection.Offset(1, -1).Select
-'    Range(Selection, Selection.End(xlDown)).Offset(0, 1).Select
-'
-'    Selection.Formula = "=RC[-2]&RC[-1]&RC[1]&RC[7]&RC[9]"
-'        Selection.Copy
-'        Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
-'            :=False, Transpose:=False
-'
-'    Set rUniqueIDCFV = Selection
     
 End With
 
@@ -162,101 +145,10 @@ With ActiveSheet
         Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
             :=False, Transpose:=False
             
-    'Columns("B:L").Delete Shift:=xlToLeft
-    
+    Range("A1").CurrentRegion.Replace What:="", Replacement:="0", LookAt:=xlPart, _
+        SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:=False, _
+        ReplaceFormat:=False
             
 End With
-
-'Set rCFVCell = rUniqueIDCFV.Cells(1)
-'
-'Application.DisplayAlerts = False
-'On Error Resume Next
-'Worksheets(wTempSheet).Delete
-'Err.Clear
-'
-'Application.DisplayAlerts = True
-'Worksheets.Add.Name = wTempSheet
-'
-'Sheets("Temp_Sheet").Activate
-'With ActiveSheet
-'
-'    rUniqueIDSA.Copy
-'    .Range("A2").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
-'        :=False, Transpose:=False
-'
-'    .Range("A1").Value = "UniqueIDSA"
-'    Set rUniqueIDSA = .Range(.Range("A2"), .Range("A2").End(xlDown))
-'
-'    rUniqueIDCFV.Copy
-'    .Range("B2").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
-'        :=False, Transpose:=False
-'
-'    .Range("B1").Value = "UniqueIDCFV"
-'    .Range("B2").Select
-'    Set rUniqueIDCFV = Range(Selection, Selection.End(xlDown))
-'
-'    rCFVData.Copy
-'    .Range("C1").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
-'        :=False, Transpose:=False
-'
-'    Range(.Range("A1"), .Range("A1").End(xlToRight)).Select
-'    Range(Selection, Selection.End(xlDown)).Select
-'
-'    Selection.Sort.SortFields.Clear
-'    Selection.Sort.SortFields.Add Key:=Range(.Range("A2"), .Range("A2").End(xlDown)), SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:= _
-'        xlSortNormal
-'    Selection.Sort.SortFields.Add Key:=Range(.Range("B2"), .Range("B2").End(xlDown)), SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:= _
-'        xlSortNormal
-'
-'    With Selection.Sort
-'
-'        .SetRange Range("A1").CurrentRegion
-'        .Header = xlYes
-'        .MatchCase = False
-'        .Orientation = xlTopToBottom
-'        .SortMethod = xlPinYin
-'        .Apply
-'
-'    End With
-'
-'End With
-'
-'Sheets("working").Activate
-'
-'With ActiveSheet
-'
-'    With .Range("A1").End(xlToRight)
-'
-'        .Offset(0, 1).Value = "Floodlight Attribution Type"
-'
-'        .Offset(1, 1).Select
-'
-'        For Each cell In rUniqueIDSA
-'
-'            Selection.Formula = "=IF(VLOOKUP(," '& cell & "," & rCFVData & ",1,TRUE)=" & cell _
-'                                    '& ",VLOOKUP(" & cell & "," & rCFVData & ",2,TRUE), 0)"
-'
-'            If cell = cell.Offset(1, 0) Then
-'
-'                Selection.Offset(1, 0).Value = 0
-'                Selection.Offset(2, 0).Select
-'
-'            End If
-'
-'            Selection.Offset(1, 0).Select
-'
-'        Next cell
-'
-'        .Offset(0, 2).Value = "Activity"
-'        .Offset(0, 3).Value = "Order Number"
-'        .Offset(0, 4).Value = "Plan (string)"
-'        .Offset(0, 5).Value = "Device (string)"
-'        .Offset(0, 6).Value = "Service (string)"
-'        .Offset(0, 7).Value = "Accessory (string)"
-'        .Offset(0, 8).Value = "Transaction Count"
-'
-'    End With
-'
-'End With
 
 End Sub
