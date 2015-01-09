@@ -3,24 +3,25 @@
 
 ##### Load necessary packages
 
-# In[1]:
+# In[2]:
 
 import pandas as pd
 import numpy as np
 from xlwings import Workbook, Range, Sheet
 import re
+import itertools
 
 
 ##### Open the working Excel sheet
 
-# In[220]:
+# In[3]:
 
 wb = Workbook("C:/Users/aarschle1/Google Drive/Optimedia/T-Mobile/Projects/Weekly_Reporting/Opti_DFA_Weekly_Reporting.xlsm")
 
 
 ##### A VBA subroutinue will create and add the required data to the sheets "SA_Temp" and "CFV_Temp". Create pandas DataFrames from this data.
 
-# In[221]:
+# In[4]:
 
 sa = Range("SA_Temp", "A1").table.value
 cfv = Range("CFV_Temp", "A1").table.value
@@ -28,7 +29,7 @@ cfv = Range("CFV_Temp", "A1").table.value
 
 ##### Set the column names of the DataFrame
 
-# In[222]:
+# In[5]:
 
 sa = pd.DataFrame(Range("SA_Temp", "A1").table.value, columns = Range("SA_Temp", "A1").horizontal.value)
 cfv = pd.DataFrame(Range("CFV_Temp", "A1").table.value, columns = Range("CFV_Temp", "A1").horizontal.value)
@@ -37,22 +38,14 @@ sa = sa.drop(0)
 cfv = cfv.drop(0)
 
 
-# In[262]:
-
-tag_columns = Range('SA_Temp', 'R1').horizontal.value
-cfv_fls_columns = Range('CFV_Temp', 'M1').horizontal.value
-creative_columns = Range('SA_Temp', 'E1:N1')
-counts = Range('SA_Temp', 'O1:Q1')
-
-
 ##### Transform CFV Data
 
-# In[223]:
+# In[6]:
 
 cfv['Orders'] = 1
 
 
-# In[224]:
+# In[7]:
 
 cfv['Plans'] = cfv['Plan (string)'].str.count(',') + 1
 cfv['Devices'] = cfv['Device (string)'].str.count(',') + 1
@@ -76,7 +69,7 @@ cfv['Prepaid Plans'] = prepaid
 
 ##### Append the CFV data to the SA data and fill N/A values with 0.
 
-# In[225]:
+# In[8]:
 
 appended = sa.append(cfv)
 appended = appended.fillna(0)
@@ -84,7 +77,7 @@ appended = appended.fillna(0)
 
 ##### With the appended DataFrame, group the data, i.e. compress it, by each column below.
 
-# In[226]:
+# In[9]:
 
 appended = appended.groupby(['Campaign', 'Date', 'Site (DFA)', 'Creative', 'Click-through URL', 'Ad', 'Creative Groups 1',
                              'Creative Groups 2', 'Creative ID', 'Creative Type', 'Creative Field 1', 'Placement',   
@@ -92,17 +85,33 @@ appended = appended.groupby(['Campaign', 'Date', 'Site (DFA)', 'Creative', 'Clic
                              'Plan (string)', 'Service (string)']).aggregate(np.sum)
 
 
-##### Copy the new DataFrame into the Excel sheet on the working tab. Create a new DataFrame off of this data
-
-# In[228]:
+# In[10]:
 
 Range('working', 'A1').value = appended
 appended = pd.DataFrame(Range('working', 'A2').table.value, columns=Range('working', 'A1').horizontal.value)
 
 
+# In[11]:
+
+appended['Site'] = appended['Site (DFA)']
+appended['Destination URL'] = appended['Click-through URL']
+
+appended = appended.drop('Site (DFA)', 1)
+appended = appended.drop('Click-through URL', 1)
+
+
+##### Add Week and Video columns
+
+# In[12]:
+
+appended['Week'] = appended['Date'].min()
+appended['Video Completions'] = 0
+appended['Video Views'] = 0
+
+
 ##### Using the list of actions in the 'Action Reference' tab of the Excel sheet, set lists for each action category.
 
-# In[229]:
+# In[13]:
 
 a_actions = Range('Action_Reference', 'A2').vertical.value
 b_actions = Range('Action_Reference', 'B2').vertical.value
@@ -115,7 +124,7 @@ col_head = Range('working', 'A1').horizontal.value
 
 ##### Set the actions to lists and search the DataFrame columns for each one, summing each value when found.
 
-# In[230]:
+# In[14]:
 
 a_actions = list(set(a_actions).intersection(col_head))
 b_actions = list(set(b_actions).intersection(col_head))
@@ -124,7 +133,7 @@ d_actions = list(set(d_actions).intersection(col_head))
 e_actions = list(set(e_actions).intersection(col_head))
 
 
-# In[231]:
+# In[15]:
 
 view_through = []
 i = iter(view_through)
@@ -143,7 +152,7 @@ for item in col_head:
         j.next()
 
 
-# In[232]:
+# In[16]:
 
 view_based = list(set(view_through).intersection(col_head))
 click_based = list(set(click_through).intersection(col_head))
@@ -151,7 +160,7 @@ click_based = list(set(click_through).intersection(col_head))
 
 ##### Add columns to the DataFrame for each action category
 
-# In[233]:
+# In[17]:
 
 appended['A Actions'] = appended[a_actions].sum(axis=1)
 appended['B Actions'] = appended[b_actions].sum(axis=1)
@@ -159,13 +168,15 @@ appended['C Actions'] = appended[c_actions].sum(axis=1)
 appended['D Actions'] = appended[d_actions].sum(axis=1)
 appended['E Actions'] = appended[e_actions].sum(axis=1)
 
-appended['Click Based'] = appended[click_based].sum(axis=1)
-appended['View Based'] = appended[view_based].sum(axis=1)
+appended['F Actions'] = 0
+
+appended['Post-Click Activity'] = appended[click_based].sum(axis=1)
+appended['Post-Impression Activity'] = appended[view_based].sum(axis=1)
 
 
 ##### Store Locator
 
-# In[234]:
+# In[18]:
 
 store_locator = []
 k = iter(store_locator)
@@ -176,7 +187,7 @@ for item in col_head:
         k.next()
 
 
-# In[235]:
+# In[19]:
 
 SLV_conversions = list(set(store_locator).intersection(col_head))
 appended['Store Locator Visits'] = appended[store_locator].sum(axis=1)
@@ -184,7 +195,7 @@ appended['Store Locator Visits'] = appended[store_locator].sum(axis=1)
 
 ##### Traffic Action Totals
 
-# In[236]:
+# In[20]:
 
 appended['Awareness Actions'] = appended['A Actions'] + appended['B Actions']
 appended['Consideration Actions'] = appended['C Actions'] + appended['D Actions']
@@ -193,7 +204,7 @@ appended['Traffic Actions'] = appended['Awareness Actions'] + appended['Consider
 
 ##### Message Categories
 
-# In[237]:
+# In[21]:
 
 appended['Creative Field 1'] = appended['Creative Field 1'].str.replace('Creative Type: ', '')
 
@@ -209,42 +220,96 @@ appended['Message Offer'] = appended['Creative Field 1'].str.split('_').str.get(
 appended['Message Offer'].fillna(appended['Creative Groups 2'], inplace=True)
 
 
+##### F Tag
+
+# In[22]:
+
+appended['F Tag'] = 0
+appended['Category'] = 0
+
+
 ##### Strip the embedded URL encoding used by BlueKai to get the actual URL.
 
-# In[238]:
+# In[23]:
 
-appended['Click-through URL'] = appended['Click-through URL'].str.replace('http://analytics.bluekai.com/site/', '')
-appended['Click-through URL'] = appended['Click-through URL'].str.replace('15991\?phint', '')
-appended['Click-through URL'] = appended['Click-through URL'].str.replace('http://15991\?phint', '')
-appended['Click-through URL'] = appended['Click-through URL'].str.replace('event%3Dclick&phint', '')
-appended['Click-through URL'] = appended['Click-through URL'].str.replace('event%3Dclick&phint', '')
-appended['Click-through URL'] = appended['Click-through URL'].str.replace('aid%3D%eadv!&phint', '')
-appended['Click-through URL'] = appended['Click-through URL'].str.replace('pid%3D%epid!&phint', '')
-appended['Click-through URL'] = appended['Click-through URL'].str.replace('cid%3D%ebuy!&phint', '')
-appended['Click-through URL'] = appended['Click-through URL'].str.replace('crid%3D%ecid!&done', '')
-appended['Click-through URL'] = appended['Click-through URL'].str.replace('pid%3D%25epid!&phint', '')
-appended['Click-through URL'] = appended['Click-through URL'].str.replace('%3Fcmpid%3DWTR_DD_DDRFCBK_RQLMKXRCUQZ1042%26csdids%3D%epid!_%eaid!_%ecid!_%eadv!', '')
-appended['Click-through URL'] = appended['Click-through URL'].str.replace('%3F%26csdids%3DADV_DS_%epid!_%eaid!_%ecid!_%eadv!', '')
-appended['Click-through URL'] = appended['Click-through URL'].str.replace('=', '')
-appended['Click-through URL'] = appended['Click-through URL'].str.replace('%2F', '/')
-appended['Click-through URL'] = appended['Click-through URL'].str.replace('%3A', ':')
-appended['Click-through URL'] = appended['Click-through URL'].str.replace('%23', '#')
-appended['Click-through URL'] = appended['Click-through URL'].apply(lambda x: x.split('.html')[0])
-appended['Click-through URL'] = appended['Click-through URL'].apply(lambda x: x.split('?')[0])
-
-
-##### F Tags and Conversions
-
-# In[254]:
-
-Range('pivot_working', 'A1', index = False).value = appended['Site (DFA)']
+appended['Destination URL'] = appended['Destination URL'].str.replace('http://analytics.bluekai.com/site/', '')
+appended['Destination URL'] = appended['Destination URL'].str.replace('15991\?phint', '')
+appended['Destination URL'] = appended['Destination URL'].str.replace('http://15991\?phint', '')
+appended['Destination URL'] = appended['Destination URL'].str.replace('event%3Dclick&phint', '')
+appended['Destination URL'] = appended['Destination URL'].str.replace('aid%3D%eadv!&phint', '')
+appended['Destination URL'] = appended['Destination URL'].str.replace('pid%3D%epid!&phint', '')
+appended['Destination URL'] = appended['Destination URL'].str.replace('cid%3D%ebuy!&phint', '')
+appended['Destination URL'] = appended['Destination URL'].str.replace('crid%3D%ecid!&done', '')
+appended['Destination URL'] = appended['Destination URL'].str.replace('pid%3D%25epid!&phint', '')
+appended['Destination URL'] = appended['Destination URL'].str.replace('%3Fcmpid%3DWTR_DD_DDRFCBK_RQLMKXRCUQZ1042%26csdids%3D%epid!_%eaid!_%ecid!_%eadv!', '')
+appended['Destination URL'] = appended['Destination URL'].str.replace('%3F%26csdids%3DADV_DS_%epid!_%eaid!_%ecid!_%eadv!', '')
+appended['Destination URL'] = appended['Destination URL'].str.replace('=', '')
+appended['Destination URL'] = appended['Destination URL'].str.replace('%2F', '/')
+appended['Destination URL'] = appended['Destination URL'].str.replace('%3A', ':')
+appended['Destination URL'] = appended['Destination URL'].str.replace('%23', '#')
+appended['Destination URL'] = appended['Destination URL'].apply(lambda x: x.split('.html')[0])
+appended['Destination URL'] = appended['Destination URL'].apply(lambda x: x.split('?')[0])
 
 
 ##### Copy data into pivot tab
 
-# In[264]:
+# In[24]:
+
+sa_columns = sa.columns.tolist()
+cfv_columns = cfv.columns.tolist()
 
 
+# In[25]:
+
+action_tags = sa_columns[sa_columns.index('Clicks') + 1:]
+
+
+# In[26]:
+
+metrics = ['Media Cost', 'Impressions', 'Clicks', 'Orders', 'Plans', 'Add-a-Line', 'Activations', 'Devices', 'Services', 'Accessories',
+           'Prepaid Plans', 'Store Locator Visits', 'A Actions', 'B Actions', 'C Actions', 'D Actions', 'F Actions', 'Awareness Actions',
+           'Consideration Actions', 'Traffic Actions', 'Post-Click Activity', 'Post-Impression Activity']
+
+dimensions = ['Week', 'Date', 'Campaign', 'Site', 'Category', 'Destination URL', 'F Tag', 'Message Bucket', 'Message Category', 'Message Offer',
+              'Creative', 'Ad', 'Creative Groups 1', 'Creative Groups 2', 'Creative ID', 'Creative Type', 'Creative Field 1', 'Placement',
+              'Placement Cost Structure']
+
+
+# In[27]:
+
+columns = dimensions + metrics + action_tags
+columns = list(itertools.chain(columns))
+
+
+# In[28]:
+
+appended = appended[columns]
+
+
+# In[29]:
+
+Range('working', 'A1', index=False).value = appended
+
+
+# In[30]:
+
+from splinter import Browser
+
+
+# In[33]:
+
+browser = Browser()
+
+
+# In[71]:
+
+browser.visit(appended['Destination URL'][1])
+iframes = browser.find_by_tag('iframe')
+
+
+# In[74]:
+
+iframes.find_by_id()
 
 
 # In[ ]:
