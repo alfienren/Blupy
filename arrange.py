@@ -3,25 +3,27 @@
 
 ##### Load necessary packages
 
-# In[2]:
+# In[1]:
 
 import pandas as pd
 import numpy as np
 from xlwings import Workbook, Range, Sheet
 import re
 import itertools
+from splinter import Browser
+from bs4 import BeautifulSoup
 
 
 ##### Open the working Excel sheet
 
-# In[3]:
+# In[2]:
 
 wb = Workbook("C:/Users/aarschle1/Google Drive/Optimedia/T-Mobile/Projects/Weekly_Reporting/Opti_DFA_Weekly_Reporting.xlsm")
 
 
 ##### A VBA subroutinue will create and add the required data to the sheets "SA_Temp" and "CFV_Temp". Create pandas DataFrames from this data.
 
-# In[4]:
+# In[3]:
 
 sa = Range("SA_Temp", "A1").table.value
 cfv = Range("CFV_Temp", "A1").table.value
@@ -29,7 +31,7 @@ cfv = Range("CFV_Temp", "A1").table.value
 
 ##### Set the column names of the DataFrame
 
-# In[5]:
+# In[4]:
 
 sa = pd.DataFrame(Range("SA_Temp", "A1").table.value, columns = Range("SA_Temp", "A1").horizontal.value)
 cfv = pd.DataFrame(Range("CFV_Temp", "A1").table.value, columns = Range("CFV_Temp", "A1").horizontal.value)
@@ -40,12 +42,12 @@ cfv = cfv.drop(0)
 
 ##### Transform CFV Data
 
-# In[6]:
+# In[5]:
 
 cfv['Orders'] = 1
 
 
-# In[7]:
+# In[6]:
 
 cfv['Plans'] = cfv['Plan (string)'].str.count(',') + 1
 cfv['Devices'] = cfv['Device (string)'].str.count(',') + 1
@@ -69,7 +71,7 @@ cfv['Prepaid Plans'] = prepaid
 
 ##### Append the CFV data to the SA data and fill N/A values with 0.
 
-# In[8]:
+# In[7]:
 
 appended = sa.append(cfv)
 appended = appended.fillna(0)
@@ -77,7 +79,7 @@ appended = appended.fillna(0)
 
 ##### With the appended DataFrame, group the data, i.e. compress it, by each column below.
 
-# In[9]:
+# In[8]:
 
 appended = appended.groupby(['Campaign', 'Date', 'Site (DFA)', 'Creative', 'Click-through URL', 'Ad', 'Creative Groups 1',
                              'Creative Groups 2', 'Creative ID', 'Creative Type', 'Creative Field 1', 'Placement',   
@@ -85,13 +87,13 @@ appended = appended.groupby(['Campaign', 'Date', 'Site (DFA)', 'Creative', 'Clic
                              'Plan (string)', 'Service (string)']).aggregate(np.sum)
 
 
-# In[10]:
+# In[9]:
 
 Range('working', 'A1').value = appended
 appended = pd.DataFrame(Range('working', 'A2').table.value, columns=Range('working', 'A1').horizontal.value)
 
 
-# In[11]:
+# In[10]:
 
 appended['Site'] = appended['Site (DFA)']
 appended['Destination URL'] = appended['Click-through URL']
@@ -102,7 +104,7 @@ appended = appended.drop('Click-through URL', 1)
 
 ##### Add Week and Video columns
 
-# In[12]:
+# In[11]:
 
 appended['Week'] = appended['Date'].min()
 appended['Video Completions'] = 0
@@ -111,7 +113,7 @@ appended['Video Views'] = 0
 
 ##### Using the list of actions in the 'Action Reference' tab of the Excel sheet, set lists for each action category.
 
-# In[13]:
+# In[12]:
 
 a_actions = Range('Action_Reference', 'A2').vertical.value
 b_actions = Range('Action_Reference', 'B2').vertical.value
@@ -124,7 +126,7 @@ col_head = Range('working', 'A1').horizontal.value
 
 ##### Set the actions to lists and search the DataFrame columns for each one, summing each value when found.
 
-# In[14]:
+# In[13]:
 
 a_actions = list(set(a_actions).intersection(col_head))
 b_actions = list(set(b_actions).intersection(col_head))
@@ -133,7 +135,7 @@ d_actions = list(set(d_actions).intersection(col_head))
 e_actions = list(set(e_actions).intersection(col_head))
 
 
-# In[15]:
+# In[14]:
 
 view_through = []
 i = iter(view_through)
@@ -152,7 +154,7 @@ for item in col_head:
         j.next()
 
 
-# In[16]:
+# In[15]:
 
 view_based = list(set(view_through).intersection(col_head))
 click_based = list(set(click_through).intersection(col_head))
@@ -160,7 +162,7 @@ click_based = list(set(click_through).intersection(col_head))
 
 ##### Add columns to the DataFrame for each action category
 
-# In[17]:
+# In[16]:
 
 appended['A Actions'] = appended[a_actions].sum(axis=1)
 appended['B Actions'] = appended[b_actions].sum(axis=1)
@@ -176,7 +178,7 @@ appended['Post-Impression Activity'] = appended[view_based].sum(axis=1)
 
 ##### Store Locator
 
-# In[18]:
+# In[17]:
 
 store_locator = []
 k = iter(store_locator)
@@ -187,7 +189,7 @@ for item in col_head:
         k.next()
 
 
-# In[19]:
+# In[18]:
 
 SLV_conversions = list(set(store_locator).intersection(col_head))
 appended['Store Locator Visits'] = appended[store_locator].sum(axis=1)
@@ -195,7 +197,7 @@ appended['Store Locator Visits'] = appended[store_locator].sum(axis=1)
 
 ##### Traffic Action Totals
 
-# In[20]:
+# In[19]:
 
 appended['Awareness Actions'] = appended['A Actions'] + appended['B Actions']
 appended['Consideration Actions'] = appended['C Actions'] + appended['D Actions']
@@ -204,7 +206,7 @@ appended['Traffic Actions'] = appended['Awareness Actions'] + appended['Consider
 
 ##### Message Categories
 
-# In[21]:
+# In[20]:
 
 appended['Creative Field 1'] = appended['Creative Field 1'].str.replace('Creative Type: ', '')
 
@@ -222,7 +224,7 @@ appended['Message Offer'].fillna(appended['Creative Groups 2'], inplace=True)
 
 ##### F Tag
 
-# In[22]:
+# In[21]:
 
 appended['F Tag'] = 0
 appended['Category'] = 0
@@ -230,7 +232,7 @@ appended['Category'] = 0
 
 ##### Strip the embedded URL encoding used by BlueKai to get the actual URL.
 
-# In[23]:
+# In[22]:
 
 appended['Destination URL'] = appended['Destination URL'].str.replace('http://analytics.bluekai.com/site/', '')
 appended['Destination URL'] = appended['Destination URL'].str.replace('15991\?phint', '')
@@ -249,6 +251,50 @@ appended['Destination URL'] = appended['Destination URL'].str.replace('%3A', ':'
 appended['Destination URL'] = appended['Destination URL'].str.replace('%23', '#')
 appended['Destination URL'] = appended['Destination URL'].apply(lambda x: x.split('.html')[0])
 appended['Destination URL'] = appended['Destination URL'].apply(lambda x: x.split('?')[0])
+
+
+# In[23]:
+
+urls = pd.DataFrame(appended[['Destination URL', 'F Tag']].drop_duplicates())
+
+
+# In[33]:
+
+url_f_tag = np.where(urls['F Tag'] == 0, urls['Destination URL'], urls['F Tag'])
+
+for url in url_f_tag[0:2]:
+    with Browser() as browser:
+        page = browser.visit(url)
+        f_tag_name = input('Enter F Tag name: ')
+        f_tag = np.where(appended['Destination URL'] == url, f_tag_name, 'missing')
+
+appended['F Tag'] = f_tag
+
+
+# In[123]:
+
+browser = Browser()
+page = browser.visit(url)
+html = browser.html
+soup = BeautifulSoup(html)
+
+
+# In[209]:
+
+iframes = list(soup.find_all("iframe"))
+src = []
+floodlights = []
+j = iter(floodlights)
+i = iter(iframes)
+for iframe in iframes:
+    src.append(iframe.get('src'))
+    i.next()
+for fls in src:
+    tags = re.search('fls.doubleclick', str(fls))
+    if tags:
+        floodlights.append(tags)
+if len(floodlights) < 1:
+    print 'No Floodlight tag found on page'
 
 
 ##### Copy data into pivot tab
@@ -289,30 +335,4 @@ appended = appended[columns]
 # In[29]:
 
 Range('working', 'A1', index=False).value = appended
-
-
-# In[30]:
-
-from splinter import Browser
-
-
-# In[33]:
-
-browser = Browser()
-
-
-# In[71]:
-
-browser.visit(appended['Destination URL'][1])
-iframes = browser.find_by_tag('iframe')
-
-
-# In[74]:
-
-iframes.find_by_id()
-
-
-# In[ ]:
-
-
 
