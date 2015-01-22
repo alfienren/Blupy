@@ -3,4 +3,5 @@ $ cat .gitignore
 test_docs/
 _/
 *.xlsm
+*.xls
 DataMunge.bas
