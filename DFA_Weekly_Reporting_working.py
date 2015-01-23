@@ -27,20 +27,17 @@ wb = Workbook("C:/Users/aarschle1/Google Drive/Optimedia/T-Mobile/Projects/Weekl
 
 # In[3]:
 
-#sa = pd.DataFrame(pd.read_excel(wb.fullname, 'SA_Temp', index_col = None))
-#cfv = pd.DataFrame(pd.read_excel(wb.fullname, 'CFV_Temp', index_col = None))
+sa = pd.DataFrame(pd.read_excel(wb.fullname, 'SA_Temp', index_col = None))
+cfv = pd.DataFrame(pd.read_excel(wb.fullname, 'CFV_Temp', index_col = None))
 
 
-# In[50]:
+# In[3]:
 
-sa = pd.DataFrame(Range("SA_Temp", "A1").table.value, columns = Range("SA_Temp", "A1").horizontal.value)
-cfv = pd.DataFrame(Range("CFV_Temp", "A1").table.value, columns = Range("CFV_Temp", "A1").horizontal.value)
+#sa = pd.DataFrame(Range("SA_Temp", "A1").table.value, columns = Range("SA_Temp", "A1").horizontal.value)
+#cfv = pd.DataFrame(Range("CFV_Temp", "A1").table.value, columns = Range("CFV_Temp", "A1").horizontal.value)
 
 sa = sa.fillna(0)
 cfv = cfv.fillna(0)
-
-
-# In[51]:
 
 sa.drop(0, inplace = True)
 cfv.drop(0, inplace = True)
@@ -48,12 +45,12 @@ cfv.drop(0, inplace = True)
 
 ##### Transform CFV Data
 
-# In[52]:
+# In[4]:
 
 cfv['Orders'] = 1
 
 
-# In[53]:
+# In[5]:
 
 cfv['Plans'] = cfv['Plan (string)'].str.count(',') + 1
 cfv['Devices'] = cfv['Device (string)'].str.count(',') + 1
@@ -77,7 +74,7 @@ cfv['Prepaid Plans'] = prepaid
 
 ##### Append the CFV data to the SA data and fill N/A values with 0.
 
-# In[54]:
+# In[6]:
 
 appended = sa.append(cfv)
 appended = appended.fillna(0)
@@ -85,7 +82,7 @@ appended = appended.fillna(0)
 
 ##### With the appended DataFrame, group the data, i.e. compress it, by each column below.
 
-# In[55]:
+# In[7]:
 
 appended = appended.groupby(['Campaign', 'Date', 'Site (DCM)', 'Creative', 'Click-through URL', 'Ad', 'Creative Groups 1',
                              'Creative Groups 2', 'Creative ID', 'Creative Type', 'Creative Field 1', 'Placement',   
@@ -93,13 +90,13 @@ appended = appended.groupby(['Campaign', 'Date', 'Site (DCM)', 'Creative', 'Clic
                              'Plan (string)', 'Service (string)'], as_index = False).aggregate(np.sum)
 
 
-# In[56]:
+# In[8]:
 
 appended['Media Cost'] = np.where(appended['DBM Cost USD'] != 0, appended['DBM Cost USD'], appended['Media Cost'])
 appended = appended.drop('DBM Cost USD', 1)
 
 
-# In[57]:
+# In[9]:
 
 appended['Site'] = appended['Site (DCM)']
 appended['Destination URL'] = appended['Click-through URL']
@@ -110,7 +107,7 @@ appended = appended.drop('Click-through URL', 1)
 
 ##### Add Week and Video columns
 
-# In[58]:
+# In[10]:
 
 appended['Week'] = appended['Date'].min()
 appended['Video Completions'] = 0
@@ -119,7 +116,7 @@ appended['Video Views'] = 0
 
 ##### Using the list of actions in the 'Action Reference' tab of the Excel sheet, set lists for each action category.
 
-# In[59]:
+# In[11]:
 
 a_actions = Range('Action_Reference', 'A2').vertical.value
 b_actions = Range('Action_Reference', 'B2').vertical.value
@@ -132,16 +129,16 @@ col_head = appended.columns
 
 ##### Set the actions to lists and search the DataFrame columns for each one, summing each value when found.
 
-# In[60]:
+# In[12]:
 
 a_actions = list(set(a_actions).intersection(col_head))
 b_actions = list(set(b_actions).intersection(col_head))
-c_actions = list(set(b_actions).intersection(col_head))
+c_actions = list(set(c_actions).intersection(col_head))
 d_actions = list(set(d_actions).intersection(col_head))
 e_actions = list(set(e_actions).intersection(col_head))
 
 
-# In[61]:
+# In[13]:
 
 view_through = []
 i = iter(view_through)
@@ -160,7 +157,7 @@ for item in col_head:
         j.next()
 
 
-# In[62]:
+# In[14]:
 
 view_based = list(set(view_through).intersection(col_head))
 click_based = list(set(click_through).intersection(col_head))
@@ -168,7 +165,7 @@ click_based = list(set(click_through).intersection(col_head))
 
 ##### Add columns to the DataFrame for each action category
 
-# In[63]:
+# In[15]:
 
 appended['A Actions'] = appended[a_actions].sum(axis=1)
 appended['B Actions'] = appended[b_actions].sum(axis=1)
@@ -184,7 +181,7 @@ appended['Post-Impression Activity'] = appended[view_based].sum(axis=1)
 
 ##### Store Locator
 
-# In[64]:
+# In[16]:
 
 store_locator = []
 k = iter(store_locator)
@@ -195,7 +192,7 @@ for item in col_head:
         k.next()
 
 
-# In[65]:
+# In[17]:
 
 SLV_conversions = list(set(store_locator).intersection(col_head))
 appended['Store Locator Visits'] = appended[store_locator].sum(axis=1)
@@ -203,7 +200,7 @@ appended['Store Locator Visits'] = appended[store_locator].sum(axis=1)
 
 ##### Traffic Action Totals
 
-# In[66]:
+# In[18]:
 
 appended['Awareness Actions'] = appended['A Actions'] + appended['B Actions']
 appended['Consideration Actions'] = appended['C Actions'] + appended['D Actions']
@@ -212,7 +209,7 @@ appended['Traffic Actions'] = appended['Awareness Actions'] + appended['Consider
 
 ##### Message Categories
 
-# In[67]:
+# In[19]:
 
 appended['Creative Field 1'] = appended['Creative Field 1'].str.replace('Creative Type: ', '')
 
@@ -230,7 +227,7 @@ appended['Message Offer'].fillna(appended['Creative Groups 2'], inplace=True)
 
 ##### Strip the embedded URL encoding used by BlueKai to get the actual URL.
 
-# In[68]:
+# In[20]:
 
 appended['Destination URL'] = appended['Destination URL'].str.replace('http://analytics.bluekai.com/site/', '')
 appended['Destination URL'] = appended['Destination URL'].str.replace('15991\?phint', '')
@@ -255,64 +252,33 @@ appended['Destination URL'] = appended['Destination URL'].apply(lambda x: x.spli
 appended['Destination URL'] = appended['Destination URL'].apply(lambda x: x.split('?')[0])
 
 
-# In[69]:
+# In[21]:
 
 f_tags = pd.DataFrame(Range('F_Tags', 'B1').table.value, columns = Range('F_Tags', 'B1').horizontal.value)
 f_tags.drop(0, inplace = True)
-f_tag_names = f_tags['Group Name'] + " : " + f_tags['Activity Name']
+f_tags['F Tag Names'] = f_tags['Group Name'] + " : " + f_tags['Activity Name']
+f_tags['F Tag Names'] = np.where(f_tags['F Tag Names'].str.contains('ES-'), 'None', f_tags['F Tag Names'])
+column_names = appended.columns
+traffic_tags = a_actions + b_actions + c_actions + d_actions + e_actions
 
 
-# In[120]:
-
-Range('Action_Reference', 'G1').value = pd.Series(f_tag_list)
-Range('Action_Reference', 'I1', index = False).value = pd.Series(list(new_tags))
-
-
-# In[102]:
+# In[22]:
 
 f_tag_list = []
-column_names = appended.columns
 
 for i in column_names:
-    for j in list(f_tag_names):
+    for j in f_tags['F Tag Names']: 
         tag = re.search(j, i)
         if tag:
             f_tag_list.append(i)
-
-
-# In[121]:
-
-traffic_tags = a_actions + b_actions + c_actions + d_actions + e_actions
+            
 tags = set(f_tag_list).difference(traffic_tags)
 f_tag_conversions = list(set(tags).intersection(column_names))
 
 
-# In[89]:
-
-Range('Action_Reference', '1').value = pd.Series(appended.columns)
+# In[ ]:
 
 
-# In[54]:
-
-urls = appended[['Destination URL', 'F Tag']].drop_duplicates()
-urls['Destination URL'] = np.where(urls['Destination URL'].str.contains('mobile.com') == True, urls['Destination URL'], np.NaN)
-urls.dropna(inplace = True)
-
-
-# In[30]:
-
-page_url = pd.DataFrame(page_url, columns = ['URLs'])
-f_tags = pd.DataFrame(f_tags, columns = ['F Tags'])
-
-
-# In[31]:
-
-df_f_tag = page_url.merge(f_tags, left_index = True, right_index = True)
-
-
-# In[32]:
-
-Range('Lookup', 'C1', index = False).value = df_f_tag
 
 
 ##### Copy data into pivot tab
