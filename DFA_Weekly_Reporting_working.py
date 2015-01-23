@@ -7,6 +7,7 @@
 
 import pandas as pd
 import numpy as np
+import datetime as datetime
 from xlwings import Workbook, Range, Sheet
 import re
 import itertools
@@ -24,25 +25,35 @@ wb = Workbook("C:/Users/aarschle1/Google Drive/Optimedia/T-Mobile/Projects/Weekl
 
 ##### A VBA subroutinue will create and add the required data to the sheets "SA_Temp" and "CFV_Temp". Create pandas DataFrames from this data.
 
-##### Set the column names of the DataFrame
+# In[3]:
 
-# In[35]:
+#sa = pd.DataFrame(pd.read_excel(wb.fullname, 'SA_Temp', index_col = None))
+#cfv = pd.DataFrame(pd.read_excel(wb.fullname, 'CFV_Temp', index_col = None))
+
+
+# In[50]:
 
 sa = pd.DataFrame(Range("SA_Temp", "A1").table.value, columns = Range("SA_Temp", "A1").horizontal.value)
 cfv = pd.DataFrame(Range("CFV_Temp", "A1").table.value, columns = Range("CFV_Temp", "A1").horizontal.value)
 
-sa = sa.drop(0)
-cfv = cfv.drop(0)
+sa = sa.fillna(0)
+cfv = cfv.fillna(0)
+
+
+# In[51]:
+
+sa.drop(0, inplace = True)
+cfv.drop(0, inplace = True)
 
 
 ##### Transform CFV Data
 
-# In[36]:
+# In[52]:
 
 cfv['Orders'] = 1
 
 
-# In[37]:
+# In[53]:
 
 cfv['Plans'] = cfv['Plan (string)'].str.count(',') + 1
 cfv['Devices'] = cfv['Device (string)'].str.count(',') + 1
@@ -66,7 +77,7 @@ cfv['Prepaid Plans'] = prepaid
 
 ##### Append the CFV data to the SA data and fill N/A values with 0.
 
-# In[38]:
+# In[54]:
 
 appended = sa.append(cfv)
 appended = appended.fillna(0)
@@ -74,38 +85,32 @@ appended = appended.fillna(0)
 
 ##### With the appended DataFrame, group the data, i.e. compress it, by each column below.
 
-# In[39]:
+# In[55]:
 
-appended = appended.groupby(['Campaign', appended['Date'].astype(str), 'Site (DFA)', 'Creative', 'Click-through URL', 'Ad', 'Creative Groups 1',
+appended = appended.groupby(['Campaign', 'Date', 'Site (DCM)', 'Creative', 'Click-through URL', 'Ad', 'Creative Groups 1',
                              'Creative Groups 2', 'Creative ID', 'Creative Type', 'Creative Field 1', 'Placement',   
                              'Placement Cost Structure', 'Device (string)', 'Floodlight Attribution Type', 'OrderNumber (string)',
                              'Plan (string)', 'Service (string)'], as_index = False).aggregate(np.sum)
 
 
-# In[40]:
+# In[56]:
 
 appended['Media Cost'] = np.where(appended['DBM Cost USD'] != 0, appended['DBM Cost USD'], appended['Media Cost'])
 appended = appended.drop('DBM Cost USD', 1)
 
 
-# In[28]:
+# In[57]:
 
-#appended = pd.DataFrame(Range('working', 'A1').table.value, columns = Range('working', 'A1').horizontal.value)
-#appended.drop(0, inplace = True)
-
-
-# In[41]:
-
-appended['Site'] = appended['Site (DFA)']
+appended['Site'] = appended['Site (DCM)']
 appended['Destination URL'] = appended['Click-through URL']
 
-appended = appended.drop('Site (DFA)', 1)
+appended = appended.drop('Site (DCM)', 1)
 appended = appended.drop('Click-through URL', 1)
 
 
 ##### Add Week and Video columns
 
-# In[42]:
+# In[58]:
 
 appended['Week'] = appended['Date'].min()
 appended['Video Completions'] = 0
@@ -114,7 +119,7 @@ appended['Video Views'] = 0
 
 ##### Using the list of actions in the 'Action Reference' tab of the Excel sheet, set lists for each action category.
 
-# In[43]:
+# In[59]:
 
 a_actions = Range('Action_Reference', 'A2').vertical.value
 b_actions = Range('Action_Reference', 'B2').vertical.value
@@ -122,12 +127,12 @@ c_actions = Range('Action_Reference', 'C2').vertical.value
 d_actions = Range('Action_Reference', 'D2').vertical.value
 e_actions = Range('Action_Reference', 'E2').vertical.value
 
-col_head = Range('working', 'A1').horizontal.value
+col_head = appended.columns
 
 
 ##### Set the actions to lists and search the DataFrame columns for each one, summing each value when found.
 
-# In[44]:
+# In[60]:
 
 a_actions = list(set(a_actions).intersection(col_head))
 b_actions = list(set(b_actions).intersection(col_head))
@@ -136,7 +141,7 @@ d_actions = list(set(d_actions).intersection(col_head))
 e_actions = list(set(e_actions).intersection(col_head))
 
 
-# In[45]:
+# In[61]:
 
 view_through = []
 i = iter(view_through)
@@ -155,7 +160,7 @@ for item in col_head:
         j.next()
 
 
-# In[46]:
+# In[62]:
 
 view_based = list(set(view_through).intersection(col_head))
 click_based = list(set(click_through).intersection(col_head))
@@ -163,7 +168,7 @@ click_based = list(set(click_through).intersection(col_head))
 
 ##### Add columns to the DataFrame for each action category
 
-# In[47]:
+# In[63]:
 
 appended['A Actions'] = appended[a_actions].sum(axis=1)
 appended['B Actions'] = appended[b_actions].sum(axis=1)
@@ -179,7 +184,7 @@ appended['Post-Impression Activity'] = appended[view_based].sum(axis=1)
 
 ##### Store Locator
 
-# In[48]:
+# In[64]:
 
 store_locator = []
 k = iter(store_locator)
@@ -190,7 +195,7 @@ for item in col_head:
         k.next()
 
 
-# In[49]:
+# In[65]:
 
 SLV_conversions = list(set(store_locator).intersection(col_head))
 appended['Store Locator Visits'] = appended[store_locator].sum(axis=1)
@@ -198,7 +203,7 @@ appended['Store Locator Visits'] = appended[store_locator].sum(axis=1)
 
 ##### Traffic Action Totals
 
-# In[50]:
+# In[66]:
 
 appended['Awareness Actions'] = appended['A Actions'] + appended['B Actions']
 appended['Consideration Actions'] = appended['C Actions'] + appended['D Actions']
@@ -207,7 +212,7 @@ appended['Traffic Actions'] = appended['Awareness Actions'] + appended['Consider
 
 ##### Message Categories
 
-# In[51]:
+# In[67]:
 
 appended['Creative Field 1'] = appended['Creative Field 1'].str.replace('Creative Type: ', '')
 
@@ -223,17 +228,9 @@ appended['Message Offer'] = appended['Creative Field 1'].str.split('_').str.get(
 appended['Message Offer'].fillna(appended['Creative Groups 2'], inplace=True)
 
 
-##### F Tag
-
-# In[52]:
-
-appended['F Tag'] = 0
-appended['Category'] = 0
-
-
 ##### Strip the embedded URL encoding used by BlueKai to get the actual URL.
 
-# In[53]:
+# In[68]:
 
 appended['Destination URL'] = appended['Destination URL'].str.replace('http://analytics.bluekai.com/site/', '')
 appended['Destination URL'] = appended['Destination URL'].str.replace('15991\?phint', '')
@@ -258,20 +255,41 @@ appended['Destination URL'] = appended['Destination URL'].apply(lambda x: x.spli
 appended['Destination URL'] = appended['Destination URL'].apply(lambda x: x.split('?')[0])
 
 
-# In[62]:
+# In[69]:
 
 f_tags = pd.DataFrame(Range('F_Tags', 'B1').table.value, columns = Range('F_Tags', 'B1').horizontal.value)
 f_tags.drop(0, inplace = True)
-f_tags['Action Tag Name'] = f_tags['Group Name'] + " : " + f_tags['Activity Name']
-list(f_tags['Action Tag Name'])
+f_tag_names = f_tags['Group Name'] + " : " + f_tags['Activity Name']
 
 
-# In[63]:
+# In[120]:
 
+Range('Action_Reference', 'G1').value = pd.Series(f_tag_list)
+Range('Action_Reference', 'I1', index = False).value = pd.Series(list(new_tags))
+
+
+# In[102]:
+
+f_tag_list = []
 column_names = appended.columns
 
 for i in column_names:
-    
+    for j in list(f_tag_names):
+        tag = re.search(j, i)
+        if tag:
+            f_tag_list.append(i)
+
+
+# In[121]:
+
+traffic_tags = a_actions + b_actions + c_actions + d_actions + e_actions
+tags = set(f_tag_list).difference(traffic_tags)
+f_tag_conversions = list(set(tags).intersection(column_names))
+
+
+# In[89]:
+
+Range('Action_Reference', '1').value = pd.Series(appended.columns)
 
 
 # In[54]:
@@ -279,26 +297,6 @@ for i in column_names:
 urls = appended[['Destination URL', 'F Tag']].drop_duplicates()
 urls['Destination URL'] = np.where(urls['Destination URL'].str.contains('mobile.com') == True, urls['Destination URL'], np.NaN)
 urls.dropna(inplace = True)
-
-
-# In[29]:
-
-f_tags = []
-page_url = []
-page_error = []
-
-with Browser('firefox') as browser:
-    for url in urls['Destination URL']:
-        
-        try:
-            browser.visit(url)
-        except HttpResponseError, e:
-            page_error.append(e)
-            
-        html = browser.html
-        soup = BeautifulSoup(html)
-        page_url.append(url)
-        f_tags.append(soup.title.string)
 
 
 # In[30]:
@@ -352,11 +350,6 @@ columns = list(itertools.chain(columns))
 appended = appended[columns]
 
 
-# In[ ]:
-
-Range('working', 'A1', index=False).value = appended
-
-
 #### Saved for later
 
 # In[ ]:
@@ -377,4 +370,24 @@ with Browser('firefox') as browser:
             fls = re.search('fls.doubleclick', str(iframe.get('src')))
             if fls:
                 floodlights.append(url)
+
+
+# In[ ]:
+
+f_tags = []
+page_url = []
+page_error = []
+
+with Browser('firefox') as browser:
+    for url in urls['Destination URL']:
+        
+        try:
+            browser.visit(url)
+        except HttpResponseError, e:
+            page_error.append(e)
+            
+        html = browser.html
+        soup = BeautifulSoup(html)
+        page_url.append(url)
+        f_tags.append(soup.title.string)
 
