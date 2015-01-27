@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[167]:
+# In[3]:
 
 import pandas as pd
 import numpy as np
@@ -10,18 +10,18 @@ import re
 import itertools
 
 
-# In[168]:
+# In[4]:
 
 wb = Workbook("C:/Users/aarschle1/Google Drive/Optimedia/T-Mobile/Projects/Weekly_Reporting/Opti_DFA_Weekly_Reporting.xlsm")
 
 
-# In[169]:
+# In[5]:
 
 sa2 = pd.DataFrame(pd.read_excel(wb.fullname, 'SA_Temp', index_col = None))
 cfv2 = pd.DataFrame(pd.read_excel(wb.fullname, 'CFV_Temp', index_col = None))
 
 
-# In[170]:
+# In[6]:
 
 def chunk_df(df, sheet, startcell, chunk_size = 10000):
     if len(df) <= (chunk_size + 1):
@@ -37,13 +37,13 @@ def chunk_df(df, sheet, startcell, chunk_size = 10000):
             col += chunk_size
 
 
-# In[205]:
+# In[7]:
 
 sa = sa2
 cfv = cfv2
 
 
-# In[206]:
+# In[8]:
 
 cfv['Orders'] = 1
 cfv['Plans'] = cfv['Plan (string)'].str.count(',') + 1
@@ -60,18 +60,18 @@ cfv ['Orders'] = np.where((cfv['Campaign'].str.contains('DDR') == True) & (cfv['
                            cfv['Orders'] * 0.5, cfv['Orders'])
 
 
-# In[207]:
+# In[9]:
 
 appended = sa.append(cfv)
 
 
-# In[208]:
+# In[10]:
 
 appended['Media Cost'] = np.where(appended['DBM Cost USD'] != 0, appended['DBM Cost USD'], appended['Media Cost'])
 appended.drop('DBM Cost USD', 1, inplace = True)
 
 
-# In[209]:
+# In[11]:
 
 appended['Click-through URL'] = appended['Click-through URL'].str.replace('http://analytics.bluekai.com/site/', '')
 appended['Click-through URL'] = appended['Click-through URL'].str.replace('%3F%3DADV_DS_%epid!_%eaid!_%ecid!_%eadv!', '')
@@ -107,7 +107,7 @@ appended['Click-through URL'] = appended['Click-through URL'].apply(lambda x: st
 appended['Click-through URL'] = appended['Click-through URL'].apply(lambda x: str(x).split('%')[0])
 
 
-# In[210]:
+# In[12]:
 
 appended = appended.groupby(['Campaign', 'Date', 'Site (DCM)', 'Creative', 'Click-through URL', 'Ad', 'Creative Groups 1',
                              'Creative Groups 2', 'Creative ID', 'Creative Type', 'Creative Field 1', 'Placement',   
@@ -115,7 +115,7 @@ appended = appended.groupby(['Campaign', 'Date', 'Site (DCM)', 'Creative', 'Clic
                              'Plan (string)', 'Device (string)', 'Service (string)', 'Accessory (string)'], as_index = False).aggregate(np.sum)
 
 
-# In[211]:
+# In[13]:
 
 appended['Plans'].fillna(0, inplace = True)
 appended['Services'].fillna(0, inplace = True)
@@ -124,7 +124,7 @@ appended['Accessories'].fillna(0, inplace = True)
 appended['Orders'].fillna(0, inplace = True)
 
 
-# In[212]:
+# In[14]:
 
 appended['Plan (string)'] = np.where(appended['Plans'] < 1, '',
                                      appended['Plan (string)'])
@@ -147,7 +147,7 @@ appended['Floodlight Attribution Type'] = np.where(appended['Orders'] < 1, '', a
 appended['Devices'] = np.where(appended['Device (string)'].str.contains('nan') == True, 0, appended['Devices'])
 
 
-# In[213]:
+# In[15]:
 
 a_actions = Range('Action_Reference', 'A2').vertical.value
 b_actions = Range('Action_Reference', 'B2').vertical.value
@@ -171,21 +171,7 @@ appended['D Actions'] = appended[d_actions].sum(axis=1)
 appended['E Actions'] = appended[e_actions].sum(axis=1)
 
 
-# In[214]:
-
-platform = np.where(appended['Placement'].str.contains(mobile) == True, 'Mobile',
-                    np.where(appended['Placement'].str.contains(tablet) == True, 'Tablet',
-                             np.where(appended['Placement'].str.contains(social) == True, 'Social', '')))
-
-creative = np.where(appended['Placement'].str.contains(rm) == True, 'Rich Media',
-                    np.where(appended['Placement'].str.contains(custom) == True, 'Custom',
-                             np.where(appended['Placement'].str.contains(rem) == True, 'Remessaging', 'Standard')))
-
-buy = np.where(appended['Placement'].str.contains(dynamic) == True, 'dCPM',
-               np.where(appended['Placement'].str.contains(other_buy), 'Flat', ''))
-
-
-# In[215]:
+# In[18]:
 
 mobile = '|'.join(list(Range('Lookup', 'B2:B6').value))
 tablet = '|'.join(list(Range('Lookup', 'B7:B9').value))
@@ -199,7 +185,21 @@ dynamic = '|'.join(list(Range('Lookup', 'F2:F3').value))
 other_buy = '|'.join(list(Range('Lookup', 'F4').value))
 
 
-# In[216]:
+# In[19]:
+
+platform = np.where(appended['Placement'].str.contains(mobile) == True, 'Mobile',
+                    np.where(appended['Placement'].str.contains(tablet) == True, 'Tablet',
+                             np.where(appended['Placement'].str.contains(social) == True, 'Social', '')))
+
+creative = np.where(appended['Placement'].str.contains(rm) == True, 'Rich Media',
+                    np.where(appended['Placement'].str.contains(custom) == True, 'Custom',
+                             np.where(appended['Placement'].str.contains(rem) == True, 'Remessaging', 'Standard')))
+
+buy = np.where(appended['Placement'].str.contains(dynamic) == True, 'dCPM',
+               np.where(appended['Placement'].str.contains(other_buy), 'Flat', ''))
+
+
+# In[20]:
 
 view_through = []
 for item in column_names:
@@ -220,25 +220,25 @@ for item in column_names:
         store_locator.append(item)
 
 
-# In[217]:
+# In[21]:
 
 view_based = list(set(view_through).intersection(column_names))
 click_based = list(set(click_through).intersection(column_names))
 SLV_conversions = list(set(store_locator).intersection(column_names))
 
 
-# In[218]:
+# In[22]:
 
 appended['Post-Click Activity'] = appended[click_based].sum(axis=1)
 appended['Post-Impression Activity'] = appended[view_based].sum(axis=1)
-appended['Store Locator Visits'] = appended[store_locator].sum(axis=1)
+appended['Store Locator Visits'] = appended[SLV_conversions].sum(axis=1)
 
 appended['Awareness Actions'] = appended['A Actions'] + appended['B Actions']
 appended['Consideration Actions'] = appended['C Actions'] + appended['D Actions']
 appended['Traffic Actions'] = appended['Awareness Actions'] + appended['Consideration Actions']
 
 
-# In[219]:
+# In[23]:
 
 appended['Creative Field 1'] = appended['Creative Field 1'].str.replace('Creative Type: ', '')
 appended['Creative Field 1'] = appended['Creative Field 1'].str.replace('(', '')
@@ -253,7 +253,7 @@ appended['Message Offer'] = appended['Creative Field 1'].str.split('_').str.get(
 appended['Message Offer'].fillna(appended['Creative Groups 2'], inplace=True)
 
 
-# In[253]:
+# In[24]:
 
 appended['Platform'] = platform
 appended['P_Creative'] = creative
@@ -265,12 +265,7 @@ appended['Category'] = np.where(appended['Category'].str[:3] == ' - ', appended[
 appended['Category'] = np.where(appended['Category'].str[-3:] == ' - ', appended['Category'].str[:-3], appended['Category'])
 
 
-# In[254]:
-
-appended['Category']
-
-
-# In[222]:
+# In[25]:
 
 appended['Week'] = appended['Date'].min()
 appended['Video Completions'] = 0
@@ -280,12 +275,12 @@ appended['F Tag'] = 0
 appended['F Actions'] = 0
 
 
-# In[223]:
+# In[26]:
 
 sa_columns = list(sa.columns)
 
 
-# In[224]:
+# In[27]:
 
 dimensions = ['Week', 'Date', 'Campaign', 'Site (DCM)', 'Click-through URL', 'F Tag', 'Category', 'Message Bucket', 'Message Category', 
               'Message Offer', 'Creative', 'Ad', 'Creative Groups 1', 'Creative Groups 2', 'Creative ID', 'Creative Type', 
@@ -298,28 +293,28 @@ metrics = ['Media Cost', 'Impressions', 'Clicks', 'Orders', 'Plans', 'Add-a-Line
            'Video Completions', 'Video Views']
 
 
-# In[225]:
+# In[28]:
 
 action_tags = sa_columns[sa_columns.index('DBM Cost USD') + 1:]
 
 
-# In[226]:
+# In[29]:
 
 new_columns = dimensions + metrics + action_tags
 
 
-# In[227]:
+# In[30]:
 
 new_appended = appended[new_columns]
 
 
-# In[228]:
+# In[31]:
 
 Range('working', 'A1').horizontal.value = list(new_appended.columns)
 chunk_df(new_appended, 'working', 'A2')
 
 
-# In[229]:
+# In[33]:
 
 f_tag_range = Range('working', 'F2').vertical
 
@@ -330,7 +325,7 @@ for cell in f_tag_range:
 new_appended['F Tag'] = Range('working', 'F2').vertical.value
 
 
-# In[230]:
+# In[34]:
 
 f_tag_list = []
 for i in new_appended['F Tag']:
@@ -340,35 +335,66 @@ for i in new_appended['F Tag']:
             f_tag_list.append(j)
 
 
-# In[231]:
+# In[35]:
 
 f_tag_list2 = list(set(f_tag_list).intersection(new_appended.columns))
 f_conversions = list(set(f_tag_list2).intersection(new_appended.columns))
 
 
-# In[232]:
+# In[36]:
 
 new_appended['F Actions'] = new_appended[f_conversions].sum(axis=1)
 
 
-# In[233]:
+# In[37]:
 
 data_columns = dimensions + metrics + action_tags
 
 
-# In[234]:
+# In[38]:
 
 data = new_appended[data_columns]
 data.fillna(0, inplace = True)
 
 
-# In[235]:
+## New Data + Past Data Merge
 
-Range('data', 'A1').value = list(data.columns)
-chunk_df(data, 'data', 'A2')
+# In[47]:
+
+past_data = pd.DataFrame(pd.read_excel(wb.fullname, 'data', index_col = None))
+
+
+# In[40]:
+
+past_data['Impressions'].sum()
+
+
+# In[41]:
+
+appended_data = past_data.append(data)
+
+
+# In[43]:
+
+appended_data['Impressions'].sum()
+
+
+# In[44]:
+
+past_data['Impressions'].sum() + data['Impressions'].sum()
+
+
+# In[45]:
+
+chunk_df(appended_data, 'Sheet1', 'A1')
+
+
+# In[46]:
+
+Range('Sheet1', 'A1').value = list(appended_data.columns)
 
 
 # In[ ]:
 
-Range('data', 'G1').value =
+
 
