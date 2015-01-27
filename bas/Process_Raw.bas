@@ -9,10 +9,11 @@ Dim rCFVData                As Range
 
 Dim wCFVTemp                As String
 Dim wSATemp                 As String
+Dim wWorking                As String
 
 With Application
     
-    .ScreenUpdating = False
+    .ScreenUpdating = True
     .EnableEvents = False
     .Calculation = xlCalculationManual
     
@@ -20,6 +21,7 @@ End With
 
 wCFVTemp = "CFV_Temp"
 wSATemp = "SA_Temp"
+wWorking = "working"
 
 Sheets("SA").Activate
 
@@ -47,7 +49,7 @@ With ActiveSheet
 
     Cells.ClearContents
     rSAData.Copy
-    .Range("A1").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+    .Range("A1").PasteSpecial Paste:=xlPasteAll, Operation:=xlNone, SkipBlanks _
         :=False, Transpose:=False
         
 End With
@@ -81,9 +83,17 @@ Sheets("CFV_Temp").Activate
 
 With ActiveSheet
     
-    Range("A1").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+    Range("A1").PasteSpecial Paste:=xlPasteAll, Operation:=xlNone, SkipBlanks _
         :=False, Transpose:=False
                 
 End With
+
+Application.DisplayAlerts = False
+On Error Resume Next
+Worksheets(wWorking).Delete
+Err.Clear
+
+Application.DisplayAlerts = True
+Worksheets.Add.Name = wWorking
 
 End Sub

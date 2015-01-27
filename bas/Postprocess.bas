@@ -13,6 +13,7 @@ Application.DisplayAlerts = False
 On Error Resume Next
 Worksheets(wSATemp).Delete
 Worksheets(wCFVTemp).Delete
+Worksheets(wWorking).Delete
 Err.Clear
 
 Application.DisplayAlerts = True
