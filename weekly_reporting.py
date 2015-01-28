@@ -74,7 +74,9 @@ def dfa_reporting():
     data['Click-through URL'] = data['Click-through URL'].apply(lambda x: str(x).split('.html')[0])
     data['Click-through URL'] = data['Click-through URL'].apply(lambda x: str(x).split('?')[0])
     data['Click-through URL'] = data['Click-through URL'].apply(lambda x: str(x).split('%')[0])
-    
+    data['Click-through URL'] = data['Click-through URL'].apply(lambda x: str(x).split('_')[0])
+    data['Click-through URL'] = data['Click-through URL'].str.replace('DWTR', '')  
+
     data = data.groupby(['Campaign', 'Date', 'Site (DCM)', 'Creative', 'Click-through URL', 'Ad', 'Creative Groups 1',
                                  'Creative Groups 2', 'Creative ID', 'Creative Type', 'Creative Field 1', 'Placement',   
                                  'Placement Cost Structure', 'Floodlight Attribution Type', 'Activity', 'OrderNumber (string)',
@@ -223,6 +225,11 @@ def dfa_reporting():
     Range('working', 'A1').horizontal.value = list(data.columns)
     chunk_df(data, 'working', 'A2')
     
+    ftags = pd.DataFrame(Range('F_Tags', 'B1').table.value, columns = Range('F_Tags', 'B1').horizontal.value)
+    ftags.drop(0, inplace = True)
+    ftags['Tag Name (Concatenated)'] = ftags['Group Name'] + " : " + ftags['Activity Name']
+    Range('F_Tags', 'G2', index = False).value = ftags['Tag Name (Concatenated)']
+
     f_tag_range = Range('working', 'F2').vertical
     
     for cell in f_tag_range:
@@ -243,6 +250,8 @@ def dfa_reporting():
     
     data['F Actions'] = data[f_conversions].sum(axis=1)
     
+    data['F Tag'] = data['F Tag'].apply(lambda x: str(x).split(':')[0])
+    
     data_columns = dimensions + metrics + action_tags
 
     data = data[data_columns]
@@ -250,6 +259,7 @@ def dfa_reporting():
     
     past_data = pd.DataFrame(pd.read_excel(wb.fullname, 'data', index_col = None))
     appended_data = past_data.append(data)
+    appended_data.drop_duplicates(inplace = True)
     
     Sheet('data').clearcontents()
     
