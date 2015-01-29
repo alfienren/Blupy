@@ -7,7 +7,8 @@ def chunk_df(df, sheet, startcell, chunk_size = 1000):
     if len(df) <= (chunk_size + 1):
         Range(sheet, startcell, index = False, header = True).value = df
     else:
-        c = re.match(r"([a-z]+)([0-9]+)", startcell, re.I)
+        Range(sheet, startcell, index = False).value = list(df.columns)
+        c = re.match(r"([a-z]+)([0-9]+)", startcell[0] + str(int(startcell[1]) + 1), re.I)
         row = c.group(1)
         col = int(c.group(2))
         
@@ -214,7 +215,7 @@ def dfa_reporting():
                   'Plan (string)', 'Device (string)', 'Service (string)', 'Accessory (string)']
     
     metrics = ['Media Cost', 'Impressions', 'Clicks', 'Orders', 'Plans', 'Add-a-Line', 'Activations', 'Devices', 'Services', 'Accessories',
-               'Prepaid Plans', 'eGAs', 'Store Locator Visits', 'A Actions', 'B Actions', 'C Actions', 'D Actions', 'E Actions', 'F Actions', 
+               'Postpaid Plans', 'Prepaid Plans', 'eGAs', 'Store Locator Visits', 'A Actions', 'B Actions', 'C Actions', 'D Actions', 'E Actions', 'F Actions', 
                'Awareness Actions', 'Consideration Actions', 'Traffic Actions', 'Post-Click Activity', 'Post-Impression Activity', 
                'Video Completions', 'Video Views']
 
@@ -251,7 +252,7 @@ def dfa_reporting():
     
     data['F Actions'] = data[f_conversions].sum(axis=1)
     
-    data['F Tag'] = data['F Tag'].apply(lambda x: str(x).split(':'))
+    data['F Tag'] = data['F Tag'].apply(lambda x: str(x).split(':')[-1])
     
     data_columns = dimensions + metrics + action_tags
 
@@ -260,12 +261,12 @@ def dfa_reporting():
     
     wb.save()
     
-    past_data = pd.DataFrame(pd.read_excel(sheet, 'data', index_col = None))
-    appended_data = past_data.append(data)
-    appended_data = appended_data[data_columns]
-    appended_data.drop_duplicates(inplace = True)
-    
-    Sheet('data').clear_contents()
-    
-    Range('data', 'A1').value = list(appended_data.columns)
-    chunk_df(appended_data, 'data', 'A2')
+    if Range('data', 'A1').value == None:
+        chunk_df(data, 'data', 'A1')
+    else:
+        past_data = pd.DataFrame(pd.read_excel(sheet, 'data', index_col = None))
+        appended_data = past_data.append(data)
+        appended_data = appended_data[data_columns]
+        appended_data.fillna(0, inplace = True)
+        Sheet('data').clear_contents()
+        chunk_df(appended_data, 'data', 'A1')
