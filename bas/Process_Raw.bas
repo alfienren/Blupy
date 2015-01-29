@@ -1,7 +1,7 @@
 Attribute VB_Name = "Process_Raw"
 Option Explicit
 
-Sub ProcessRawDFA()
+Sub Process_Raw_Reports()
 
 Dim rFloodlightCell         As Range
 Dim rSAData                 As Range
@@ -31,7 +31,7 @@ With ActiveSheet
     Selection.End(xlDown).Select
     Range(Selection.End(xlToRight), Selection.End(xlToLeft)).Select
     
-    Set rSAData = Range(Selection, Selection.End(xlDown))
+    Set rSAData = Range(Selection, Selection.End(xlDown).Offset(-1, 0))
 
 End With
 

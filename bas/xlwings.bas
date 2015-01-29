@@ -25,7 +25,7 @@ Function Settings(ByRef PYTHON_WIN As String, ByRef PYTHON_MAC As String, ByRef 
     PYTHON_WIN = ""
     PYTHON_MAC = GetMacDir("Home") & "/anaconda/bin"
     PYTHON_FROZEN = ThisWorkbook.Path & "\build\exe.win32-2.7"
-    PYTHONPATH = ThisWorkbook.Path
+    PYTHONPATH = "C:\Users\aarschle1\Google Drive\Optimedia\T-Mobile\Projects\Weekly_Reporting"
     LOG_FILE = ThisWorkbook.Path & "\xlwings_log.txt"
 
 End Function
