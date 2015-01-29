@@ -3,7 +3,7 @@ import numpy as np
 from xlwings import Workbook, Range, Sheet
 import re
 
-def chunk_df(df, sheet, startcell, chunk_size = 10000):
+def chunk_df(df, sheet, startcell, chunk_size = 1000):
     if len(df) <= (chunk_size + 1):
         Range(sheet, startcell, index = False, header = True).value = df
     else:
@@ -19,9 +19,12 @@ def chunk_df(df, sheet, startcell, chunk_size = 10000):
 def dfa_reporting():
     
     wb = Workbook.caller()
-
-    sa = pd.DataFrame(pd.read_excel(wb.fullname, 'SA_Temp', index_col = None))
-    cfv = pd.DataFrame(pd.read_excel(wb.fullname, 'CFV_Temp', index_col = None))
+    sheet = Range('Lookup', 'G1').value
+    
+    wb.save()
+    
+    sa = pd.DataFrame(pd.read_excel(sheet, 'SA_Temp', index_col = None))
+    cfv = pd.DataFrame(pd.read_excel(sheet, 'CFV_Temp', index_col = None))
     
     cfv['Orders'] = 1
     cfv['Plans'] = cfv['Plan (string)'].str.count(',') + 1
@@ -76,11 +79,6 @@ def dfa_reporting():
     data['Click-through URL'] = data['Click-through URL'].apply(lambda x: str(x).split('%')[0])
     data['Click-through URL'] = data['Click-through URL'].apply(lambda x: str(x).split('_')[0])
     data['Click-through URL'] = data['Click-through URL'].str.replace('DWTR', '')  
-
-    data = data.groupby(['Campaign', 'Date', 'Site (DCM)', 'Creative', 'Click-through URL', 'Ad', 'Creative Groups 1',
-                                 'Creative Groups 2', 'Creative ID', 'Creative Type', 'Creative Field 1', 'Placement',   
-                                 'Placement Cost Structure', 'Floodlight Attribution Type', 'Activity', 'OrderNumber (string)',
-                                 'Plan (string)', 'Device (string)', 'Service (string)', 'Accessory (string)'], as_index = False).aggregate(np.sum)
 
     data['Plans'].fillna(0, inplace = True)
     data['Services'].fillna(0, inplace = True)
@@ -176,6 +174,10 @@ def dfa_reporting():
     data['Consideration Actions'] = data['C Actions'] + data['D Actions']
     data['Traffic Actions'] = data['Awareness Actions'] + data['Consideration Actions']
 
+    data['eGAs'] = np.where(data['Floodlight Attribution Type'].str.contains('View-through') == True,
+                            (data['Device (string)'].str.count(',') + 1) / 2, 
+                                data['Device (string)'].str.count(',') + 1)
+                                
     data['Creative Field 1'] = data['Creative Field 1'].str.replace('Creative Type: ', '')
     data['Creative Field 1'] = data['Creative Field 1'].str.replace('(', '')
     data['Creative Field 1'] = data['Creative Field 1'].str.replace(')', '')
@@ -212,8 +214,8 @@ def dfa_reporting():
                   'Plan (string)', 'Device (string)', 'Service (string)', 'Accessory (string)']
     
     metrics = ['Media Cost', 'Impressions', 'Clicks', 'Orders', 'Plans', 'Add-a-Line', 'Activations', 'Devices', 'Services', 'Accessories',
-               'Prepaid Plans', 'Store Locator Visits', 'A Actions', 'B Actions', 'C Actions', 'D Actions', 'E Actions', 'F Actions', 
-               'Awareness Actions', 'Consideration Actions', 'Traffic Actions', 'Post-Click Activity', 'Post-Impression Activity',
+               'Prepaid Plans', 'eGAs', 'Store Locator Visits', 'A Actions', 'B Actions', 'C Actions', 'D Actions', 'E Actions', 'F Actions', 
+               'Awareness Actions', 'Consideration Actions', 'Traffic Actions', 'Post-Click Activity', 'Post-Impression Activity', 
                'Video Completions', 'Video Views']
 
     action_tags = sa_columns[sa_columns.index('DBM Cost USD') + 1:]
@@ -222,8 +224,7 @@ def dfa_reporting():
     
     data = data[new_columns]
     
-    Range('working', 'A1').horizontal.value = list(data.columns)
-    chunk_df(data, 'working', 'A2')
+    chunk_df(data, 'working', 'A1')
     
     ftags = pd.DataFrame(Range('F_Tags', 'B1').table.value, columns = Range('F_Tags', 'B1').horizontal.value)
     ftags.drop(0, inplace = True)
@@ -234,7 +235,7 @@ def dfa_reporting():
     
     for cell in f_tag_range:
         url = cell.offset(0, -1).get_address(False, False, False)
-        cell.formula = '=IF(' + url + '="http://www.t-mobile.com/","na",IFERROR(INDEX(F_Tags!C:C,MATCH(working!' + url + ',F_Tags!E:E,0)),"na"))'
+        cell.formula = '=IFERROR(INDEX(F_Tags!G:G,MATCH(working!' + url + ',F_Tags!E:E,0)),"na")'
         
     data['F Tag'] = Range('working', 'F2').vertical.value
     
@@ -250,20 +251,21 @@ def dfa_reporting():
     
     data['F Actions'] = data[f_conversions].sum(axis=1)
     
-    data['F Tag'] = data['F Tag'].apply(lambda x: str(x).split(':')[0])
+    data['F Tag'] = data['F Tag'].apply(lambda x: str(x).split(':'))
     
     data_columns = dimensions + metrics + action_tags
 
     data = data[data_columns]
     data.fillna(0, inplace = True)
     
-    past_data = pd.DataFrame(pd.read_excel(wb.fullname, 'data', index_col = None))
+    wb.save()
+    
+    past_data = pd.DataFrame(pd.read_excel(sheet, 'data', index_col = None))
     appended_data = past_data.append(data)
+    appended_data = appended_data[data_columns]
     appended_data.drop_duplicates(inplace = True)
     
-    Sheet('data').clearcontents()
+    Sheet('data').clear_contents()
     
-    Range('data', 'A1').value = appended_data.columns
+    Range('data', 'A1').value = list(appended_data.columns)
     chunk_df(appended_data, 'data', 'A2')
-    
-    
