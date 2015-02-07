@@ -405,5 +405,5 @@ def dfa_reporting():
         appended_data = past_data.append(data)
         appended_data = appended_data[data_columns]
         appended_data.fillna(0, inplace=True)
-        Sheet('data').clear_contents()
+        Sheet('data').clear()
         chunk_df(appended_data, 'data', 'A1')
