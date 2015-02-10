@@ -1,3 +1,5 @@
+from __future__ import division
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 DFA Weekly Reporting
 Created by: Aaron Schlegel
@@ -7,9 +9,9 @@ Created by: Aaron Schlegel
 Load necessary packages
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+from xlwings import Workbook, Range, Sheet
 import pandas as pd
 import numpy as np
-from xlwings import Workbook, Range, Sheet
 import re
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -82,6 +84,9 @@ def dfa_reporting():
     # dynamic bidding, DBM Cost = 0. Therefore, if DBM cost does not equal 0, replace the row's media cost with
     # DBM cost. If DBM Cost = 0, Media Cost stays the same.
     data['Media Cost'] = np.where(data['DBM Cost USD'] != 0, data['DBM Cost USD'], data['Media Cost'])
+
+    # Adjust spend to Net to Client
+    data['Media Cost'] = data['Media Cost'] / .96759
 
     # DBM Cost column is then removed as it is no longer needed.
     data.drop('DBM Cost USD', 1, inplace=True)
@@ -202,6 +207,7 @@ def dfa_reporting():
     rm = '|'.join(list(Range('Lookup', 'D2:D5').value))
     custom = '|'.join(list(Range('Lookup', 'D6:D15').value))
     rem = '|'.join(list(Range('Lookup', 'D16:D28').value))
+    vid = '|'.join(list(Range('Lookup', 'D29:D38').value))
 
     dynamic = '|'.join(list(Range('Lookup', 'F2:F3').value))
     other_buy = '|'.join(list(Range('Lookup', 'F4').value))
@@ -212,7 +218,8 @@ def dfa_reporting():
 
     creative = np.where(data['Placement'].str.contains(rm) == True, 'Rich Media',
                         np.where(data['Placement'].str.contains(custom) == True, 'Custom',
-                                 np.where(data['Placement'].str.contains(rem) == True, 'Remessaging', 'Standard')))
+                                 np.where(data['Placement'].str.contains(rem) == True, 'Remessaging',
+                                          np.where(data['Placement'].str.contains(vid) == True, 'Video', 'Standard'))))
 
     buy = np.where(data['Placement'].str.contains(dynamic) == True, 'dCPM',
                    np.where(data['Placement'].str.contains(other_buy), 'Flat', ''))
@@ -245,7 +252,7 @@ def dfa_reporting():
 
     store_locator = []
     for item in column_names:
-        locator = re.search('Store Locator', item)
+        locator = re.search('Store Locator 2', item)
         if locator:
             store_locator.append(item)
 
