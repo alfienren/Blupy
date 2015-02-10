@@ -1,5 +1,5 @@
 Weekly Reporting Documentation
-========
+==============================
 
 Introduction
 ------------
