@@ -11,6 +11,9 @@ wCFVTemp = "CFV_Temp"
 wSATemp = "SA_Temp"
 wWorking = "working"
 
+' Now that the routine is complete, delete the three temporary tabs
+' SA_Temp, CFV_Temp and working
+
 Application.DisplayAlerts = False
 On Error Resume Next
 Worksheets(wSATemp).Delete
@@ -20,8 +23,12 @@ Err.Clear
 
 Application.DisplayAlerts = True
 
+' Delete the path and name reference from the Lookup tab
+
 Sheets("Lookup").Activate
 Range("G1").ClearContents
+
+' Go to the Pivot tab
 
 Sheets("Pivot").Activate
 
