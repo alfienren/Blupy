@@ -1,0 +1,732 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Index &mdash; Weekly Reporting Documentation 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.2.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.2.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="Weekly Reporting Documentation 1.0 documentation" href="index.html" />
+    <link rel="prev" title="Calculations and Definitions" href="calculations.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          Weekly Reporting</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="weeklyreporting.html">Weekly Reporting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="weeklyreporting.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="weeklyreporting.html#pulling-dfa-reports">Pulling DFA Reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="weeklyreporting.html#using-the-reporting-template">Using the Reporting Template</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="calculations.html">Calculations and Definitions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Index</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#site-activity-report-fields">Site Activity Report Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-floodlight-variable-fields">Custom Floodlight Variable Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#action-tag-reference">Action Tag Reference</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Index</a><ul>
+<li><a class="reference internal" href="#site-activity-report-fields">Site Activity Report Fields</a></li>
+<li><a class="reference internal" href="#custom-floodlight-variable-fields">Custom Floodlight Variable Fields</a></li>
+<li><a class="reference internal" href="#action-tag-reference">Action Tag Reference</a><ul>
+<li><a class="reference internal" href="#english-traffic-tags">English Traffic Tags</a></li>
+<li><a class="reference internal" href="#spanish-traffic-tags">Spanish Traffic Tags</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="weeklyreporting.html">Weekly Reporting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="weeklyreporting.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="weeklyreporting.html#pulling-dfa-reports">Pulling DFA Reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="weeklyreporting.html#using-the-reporting-template">Using the Reporting Template</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="calculations.html">Calculations and Definitions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Index</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#site-activity-report-fields">Site Activity Report Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-floodlight-variable-fields">Custom Floodlight Variable Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#action-tag-reference">Action Tag Reference</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li><ul>
+<li><a class="reference internal" href="#">Index</a><ul>
+<li><a class="reference internal" href="#site-activity-report-fields">Site Activity Report Fields</a></li>
+<li><a class="reference internal" href="#custom-floodlight-variable-fields">Custom Floodlight Variable Fields</a></li>
+<li><a class="reference internal" href="#action-tag-reference">Action Tag Reference</a><ul>
+<li><a class="reference internal" href="#english-traffic-tags">English Traffic Tags</a></li>
+<li><a class="reference internal" href="#spanish-traffic-tags">Spanish Traffic Tags</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    <div class="col-md-9">
+      
+  <div class="section" id="index">
+<h1>Index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="site-activity-report-fields">
+<h2>Site Activity Report Fields<a class="headerlink" href="#site-activity-report-fields" title="Permalink to this headline">¶</a></h2>
+<p>Site Activity reports should include the following dimensions and metrics to ensure accurate reporting and compatiability
+with reporting processes.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="67%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Report Field</th>
+<th class="head">Required Input</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Floodlight ID</td>
+<td>T-Mobile</td>
+</tr>
+<tr class="row-odd"><td>Filters</td>
+<td>Should include Campaign Filter</td>
+</tr>
+<tr class="row-even"><td>Include</td>
+<td>These should be unchecked</td>
+</tr>
+<tr class="row-odd"><td>Dimensions</td>
+<td><div class="first last line-block">
+<div class="line">Campaign</div>
+<div class="line">Date</div>
+<div class="line">Site (DCM)</div>
+<div class="line">Creative</div>
+<div class="line">Click-through URL</div>
+<div class="line">Ad</div>
+<div class="line">Creative Groups 1</div>
+<div class="line">Creative Groups 2</div>
+<div class="line">Creative ID</div>
+<div class="line">Creative Type</div>
+<div class="line">Creative Type (Creative Field 1)</div>
+<div class="line">Placement</div>
+<div class="line">Placement Cost Structure</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td>Metrics</td>
+<td><div class="first last line-block">
+<div class="line">Media Cost</div>
+<div class="line">Impressions</div>
+<div class="line">Clicks</div>
+<div class="line">DBM Cost USD</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td>Activities</td>
+<td>See Action Tag Reference section</td>
+</tr>
+<tr class="row-even"><td>Activity Metrics</td>
+<td><div class="first last line-block">
+<div class="line">View-through Conversions</div>
+<div class="line">Click-through Conversions</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="custom-floodlight-variable-fields">
+<h2>Custom Floodlight Variable Fields<a class="headerlink" href="#custom-floodlight-variable-fields" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Report Field</th>
+<th class="head">Required Input</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Floodlight ID</td>
+<td><div class="first last line-block">
+<div class="line">T-Mobile</div>
+<div class="line">Conill T-Mobile</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td>Activities</td>
+<td><div class="first last line-block">
+<div class="line">My.TMobile Extended Floodlight - Upgrades</div>
+<div class="line">- 1224347</div>
+<div class="line">New My.TMO Order Confirmation</div>
+<div class="line">- 1793484</div>
+<div class="line">New TMO Order Confirmation</div>
+<div class="line">- 1793583</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td>Filters</td>
+<td>Should include campaign filter</td>
+</tr>
+<tr class="row-odd"><td>Include</td>
+<td>These should be unselected</td>
+</tr>
+<tr class="row-even"><td>Dimensions</td>
+<td><div class="first last line-block">
+<div class="line">Campaign</div>
+<div class="line">Date</div>
+<div class="line">Site (DCM)</div>
+<div class="line">Creative</div>
+<div class="line">Click-through URL</div>
+<div class="line">Ad</div>
+<div class="line">Creative Groups 1</div>
+<div class="line">Creative Groups 2</div>
+<div class="line">Creative ID</div>
+<div class="line">Creative Type</div>
+<div class="line">Placement</div>
+<div class="line">Floodlight Attribution Type</div>
+<div class="line">Activity</div>
+<div class="line">OrderNumber (Floodlight Variable 1)</div>
+<div class="line">Plan (Floodlight Variable 2)</div>
+<div class="line">Device (Floodlight Variable 3)</div>
+<div class="line">Service (Floodlight Variable 4)</div>
+<div class="line">Accessory (Floodlight Variable 5)</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td>Metrics</td>
+<td>Transaction Count</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="action-tag-reference">
+<h2>Action Tag Reference<a class="headerlink" href="#action-tag-reference" title="Permalink to this headline">¶</a></h2>
+<p>The T-Mobile conversion funnel consists of four action categories, denoted A - D. A and B
+actions are considered Awareness Actions, in that the pages tagged with these actions are
+designed to highlight the features and strengths of the brand. Actions categorized C and D
+are Consideration Actions, the thought behind which is these pages are designed to push a
+user further down the funnel towards conversions as these pages are more specific in features,
+plans, devices, etc. There are two sets of A - D actions, one for English and the other for Hispanic.</p>
+<div class="section" id="english-traffic-tags">
+<h3>English Traffic Tags<a class="headerlink" href="#english-traffic-tags" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="19%" />
+<col width="7%" />
+<col width="16%" />
+<col width="34%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Tag Category</th>
+<th class="head">Tag Name</th>
+<th class="head">Tag ID</th>
+<th class="head">Group Name</th>
+<th class="head">Expected URL</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td colspan="5">A: Entry into T-Mobile</td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>T-Mobile Landing Page</td>
+<td>137736</td>
+<td>T-Mobile Landing Page</td>
+<td><a class="reference external" href="http://www.t-mobile.com/">http://www.t-mobile.com/</a></td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>MyT Successful Login - secure</td>
+<td>619230</td>
+<td>096CAG</td>
+<td><a class="reference external" href="https://account.my.t-mobile.com/home">https://account.my.t-mobile.com/home</a></td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>Prepaid Overview</td>
+<td>879952</td>
+<td>096CDW</td>
+<td><a class="reference external" href="http://prepaid-phones.t-mobile.com/">http://prepaid-phones.t-mobile.com/</a></td>
+</tr>
+<tr class="row-even"><td colspan="5">B: Exploration of content directly accessible from the homepage</td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>Shop</td>
+<td>619236</td>
+<td>096PBG</td>
+<td><a class="reference external" href="http://www.t-mobile.com/shop.aspx">http://www.t-mobile.com/shop.aspx</a></td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>Shop - Internet Devices</td>
+<td>1386298</td>
+<td>096PBO</td>
+<td><a class="reference external" href="http://www.t-mobile.com/internet-devices">http://www.t-mobile.com/internet-devices</a></td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>Prepaid Shop</td>
+<td>961169</td>
+<td>096CDW</td>
+<td><a class="reference external" href="http://prepaid-phones.t-mobile.com/buy-prepaid">http://prepaid-phones.t-mobile.com/buy-prepaid</a></td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>Prepaid Plans Overview</td>
+<td>879958</td>
+<td>096CDW</td>
+<td><a class="reference external" href="http://prepaid-phones.t-mobile.com/prepaid-plans">http://prepaid-phones.t-mobile.com/prepaid-plans</a></td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>Shop - Phones</td>
+<td>619603</td>
+<td>096PBO</td>
+<td><a class="reference external" href="http://www.t-mobile.com/shop/phones/">http://www.t-mobile.com/shop/phones/</a></td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>Prepaid Phones Overview</td>
+<td>879962</td>
+<td>096CDW</td>
+<td><a class="reference external" href="http://prepaid-phones.t-mobile.com/prepaid-phones">http://prepaid-phones.t-mobile.com/prepaid-phones</a></td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>T-Mobile Store Locator 2</td>
+<td>308703</td>
+<td>T-Mobile Store Locator</td>
+<td>T-Mobile Store Locator Results Page</td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>T-Mobile Store Locator</td>
+<td>137547</td>
+<td>T-Mobile Store Locator</td>
+<td>T-Mobile Store Locator Results Page</td>
+</tr>
+<tr class="row-odd"><td colspan="5">C: Interaction with detailed information</td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>Shop - phone - device</td>
+<td>619605</td>
+<td>096PCO</td>
+<td><a class="reference external" href="http://www.t-mobile.com/shop/phones/Cell-Phone-Detail">http://www.t-mobile.com/shop/phones/Cell-Phone-Detail</a></td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>Prepaid Phone Details</td>
+<td>972010</td>
+<td>096CDW</td>
+<td><a class="reference external" href="http://prepaid-phones.t-mobile.com/prepaid-phone/">http://prepaid-phones.t-mobile.com/prepaid-phone/</a></td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>Plan Details: Individual</td>
+<td>929198</td>
+<td>Direct Response</td>
+<td><a class="reference external" href="http://www.t-mobile.com/shop/plans/individual-plans.aspx">http://www.t-mobile.com/shop/plans/individual-plans.aspx</a></td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>Plan Details: Family</td>
+<td>929199</td>
+<td>Direct Response</td>
+<td><a class="reference external" href="http://www.t-mobile.com/shop/plans/family-plans.aspx">http://www.t-mobile.com/shop/plans/family-plans.aspx</a></td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>Plan Details: Mobile Broadband</td>
+<td>929201</td>
+<td>Direct Response</td>
+<td><a class="reference external" href="http://www.t-mobile.com/shop/plans/mobile-broadband-plans">http://www.t-mobile.com/shop/plans/mobile-broadband-plans</a></td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>Shop Internet Devices - Details</td>
+<td>1458015</td>
+<td>096PBO</td>
+<td><a class="reference external" href="http://www.t-mobile.com/internet-devices/">http://www.t-mobile.com/internet-devices/</a></td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>BYOD Landing Page</td>
+<td>1007579</td>
+<td>101PCO</td>
+<td><a class="reference external" href="http://explore.t-mobile.com/phone-sim-card">http://explore.t-mobile.com/phone-sim-card</a></td>
+</tr>
+<tr class="row-odd"><td colspan="5">D: Action that indicates an intent or commitment to purchase</td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>T-Mobile Shopping Cart</td>
+<td>335846</td>
+<td>T-Mobile Shopping Cart</td>
+<td>T-Mobile Shopping Cart</td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>Cart - secure</td>
+<td>628174</td>
+<td>096PDG</td>
+<td><a class="reference external" href="https://www.t-mobile.com/shop/cart/">https://www.t-mobile.com/shop/cart/</a></td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>Add to Cart - Step 1</td>
+<td>1398238</td>
+<td>096PBG</td>
+<td><a class="reference external" href="http://www.t-mobile.com/add-to-cart.step1.individual">http://www.t-mobile.com/add-to-cart.step1.individual</a></td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>Add to Cart - Step 2</td>
+<td>1398242</td>
+<td>096PBG</td>
+<td><a class="reference external" href="http://www.t-mobile.com/add-to-cart.step2.individual">http://www.t-mobile.com/add-to-cart.step2.individual</a></td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>Add to Cart - Step 3</td>
+<td>1398246</td>
+<td>096PBG</td>
+<td><a class="reference external" href="http://www.t-mobile.com/add-to-cart.step3.individual">http://www.t-mobile.com/add-to-cart.step3.individual</a></td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>TMO eCOP - Info</td>
+<td>801433</td>
+<td>096PDG</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>My.TMO eCOP - Info</td>
+<td>801425</td>
+<td>096CDG</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>TMO eCOP - Pay and Review</td>
+<td>801428</td>
+<td>096PDG</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>My.TMO eCOP - Pay and Review</td>
+<td>801435</td>
+<td>096CDG</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td colspan="5">E: Purchases on T-Mobile&#8217;s Site</td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>New My.TMO Order Confirmation</td>
+<td>1793484</td>
+<td>T-Mobile Confirmation Page</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>New TMO Order Confirmation</td>
+<td>1793583</td>
+<td>T-Mobile Confirmation Page</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="spanish-traffic-tags">
+<h3>Spanish Traffic Tags<a class="headerlink" href="#spanish-traffic-tags" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="21%" />
+<col width="9%" />
+<col width="14%" />
+<col width="39%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Tag Category</th>
+<th class="head">Tag Name</th>
+<th class="head">Tag ID</th>
+<th class="head">Group Name</th>
+<th class="head">Expected URL</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td colspan="5">A: Entry into T-Mobile</td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>TMO Homepage</td>
+<td>1829149</td>
+<td>ES-A</td>
+<td><a class="reference external" href="http://es.t-mobile.com/">http://es.t-mobile.com/</a></td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>My.TMO Successful Login</td>
+<td>1831073</td>
+<td>ES-A</td>
+<td><a class="reference external" href="http://es.t-mobile.com/">http://es.t-mobile.com/</a></td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>Es- Prepaid Overview</td>
+<td>1830691</td>
+<td>ES-A</td>
+<td><a class="reference external" href="http://es.prepaid-phones.t-mobile.com/">http://es.prepaid-phones.t-mobile.com/</a></td>
+</tr>
+<tr class="row-even"><td colspan="5">B: Exploration of content directly accssible from the homepage</td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>Es- Shop</td>
+<td>1830805</td>
+<td>ES-B</td>
+<td><a class="reference external" href="http://es.t-mobile.com/cell-phone-deals">http://es.t-mobile.com/cell-phone-deals</a></td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>Es- Prepaid Plans Overview</td>
+<td>1830806</td>
+<td>ES-B</td>
+<td><a class="reference external" href="http://es.t-mobile.com/internet-devices">http://es.t-mobile.com/internet-devices</a></td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>Es- Shop Internet Devices</td>
+<td>1831321</td>
+<td>ES-B</td>
+<td><a class="reference external" href="http://es.prepaid-phones.t-mobile.com/buy-prepaid">http://es.prepaid-phones.t-mobile.com/buy-prepaid</a></td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>Es- Shop - Phones</td>
+<td>1830807</td>
+<td>ES-B</td>
+<td><a class="reference external" href="http://es.prepaid-phones.t-mobile.com/prepaid-plans">http://es.prepaid-phones.t-mobile.com/prepaid-plans</a></td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>Es- Prepaid Shop</td>
+<td>1830917</td>
+<td>ES-B</td>
+<td><a class="reference external" href="http://es.t-mobile.com/cell-phones">http://es.t-mobile.com/cell-phones</a></td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>Es- Prepaid Phones Overview</td>
+<td>1831322</td>
+<td>ES-B</td>
+<td><a class="reference external" href="http://es.prepaid-phones.t-mobile.com/prepaid-phones">http://es.prepaid-phones.t-mobile.com/prepaid-phones</a></td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>Es- T-Mobile Store Locator</td>
+<td>1830812</td>
+<td>ES-B</td>
+<td><a class="reference external" href="http://es.t-mobile.com/store-locator">http://es.t-mobile.com/store-locator</a></td>
+</tr>
+<tr class="row-even"><td colspan="5">C: Interaction with detailed information</td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>Es- Shop - phones - device</td>
+<td>1830808</td>
+<td>ES-C</td>
+<td><a class="reference external" href="http://es.t-mobile.com/cell-phones/[device">http://es.t-mobile.com/cell-phones/[device</a>]</td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>Es- Prepaid Phone Details</td>
+<td>1830918</td>
+<td>ES-C</td>
+<td><a class="reference external" href="http://es.prepaid-phones.t-mobile.com/prepaid-phone/[device">http://es.prepaid-phones.t-mobile.com/prepaid-phone/[device</a>]</td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>Es- Plan Details: Individual</td>
+<td>1830810</td>
+<td>ES-C</td>
+<td><a class="reference external" href="http://es.t-mobile.com/cell-phone-plans/individual">http://es.t-mobile.com/cell-phone-plans/individual</a></td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>Es- Plan Details: Family</td>
+<td>1830921</td>
+<td>Es-C</td>
+<td><a class="reference external" href="http://es.t-mobile.com/offer/simple-choice-family-plans-4-for-100">http://es.t-mobile.com/offer/simple-choice-family-plans-4-for-100</a></td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>Es- Plan Details: Mobile Broadband</td>
+<td>1831324</td>
+<td>ES-C</td>
+<td><a class="reference external" href="http://es.t-mobile.com/cell-phone-plans/mobile-internet">http://es.t-mobile.com/cell-phone-plans/mobile-internet</a></td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>Es- Shop internet device details</td>
+<td>1830693</td>
+<td>ES-C</td>
+<td><a class="reference external" href="http://es.t-mobile.com/internet-devices/[device">http://es.t-mobile.com/internet-devices/[device</a>]</td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>Es- BYOD Landing Page</td>
+<td>1831326</td>
+<td>ES-C</td>
+<td><a class="reference external" href="http://es.t-mobile.com/bring-your-own-phone">http://es.t-mobile.com/bring-your-own-phone</a></td>
+</tr>
+<tr class="row-even"><td colspan="5">D: Action that indicates an intent or commitment to purchase</td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>Es- Prepaid Shopping Cart</td>
+<td>1831327</td>
+<td>ES-D</td>
+<td><a class="reference external" href="http://es.prepaid-phones.t-mobile.com/cart">http://es.prepaid-phones.t-mobile.com/cart</a></td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>Es- Add to Cart - Step 1</td>
+<td>1831328</td>
+<td>ES-D</td>
+<td><a class="reference external" href="http://es.t-mobile.com/add-to-cart.step1.[custom">http://es.t-mobile.com/add-to-cart.step1.[custom</a>]</td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>Es- Add to Cart - Step 2</td>
+<td>1831329</td>
+<td>ES-D</td>
+<td><a class="reference external" href="http://es.t-mobile.com/add-to-cart.step2.[custom">http://es.t-mobile.com/add-to-cart.step2.[custom</a>]</td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>Es- Add to Cart - Step 3</td>
+<td>1831330</td>
+<td>ES-D</td>
+<td><a class="reference external" href="http://es.t-mobile.com/add-to-cart.step3.[custom">http://es.t-mobile.com/add-to-cart.step3.[custom</a>]</td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>Es- Postpaid Shopping Cart</td>
+<td>1830694</td>
+<td>ES-D</td>
+<td><a class="reference external" href="http://es.t-mobile.com/shop/cart/">http://es.t-mobile.com/shop/cart/</a></td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>Es- TMO eCOP - Info</td>
+<td>1830922</td>
+<td>ES-D</td>
+<td><a class="reference external" href="https://es.t-mobile.com/sdsecure-checkout/">https://es.t-mobile.com/sdsecure-checkout/</a></td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>Es- TMO eCOP - Pay and Review</td>
+<td>1831809</td>
+<td>ES-D</td>
+<td><a class="reference external" href="http://es.t-mobile.com/">http://es.t-mobile.com/</a></td>
+</tr>
+<tr class="row-even"><td colspan="5">E: Purchases on T-Mobile&#8217;s Site</td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>Es- TMO Confirmation Pag</td>
+<td>1831074</td>
+<td>ES-Confirmation</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>Es- My.TMO Confirmation Page</td>
+<td>1829351</td>
+<td>ES-Confirmation</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2015, Aaron Schlegel.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

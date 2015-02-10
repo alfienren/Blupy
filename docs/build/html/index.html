@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>$project &mdash; Weekly Reporting Documentation 1.0 documentation</title>
+    <title>Weekly Reporting Documentation &mdash; Weekly Reporting Documentation 1.0 documentation</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -33,6 +33,7 @@
     <script type="text/javascript" src="_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="top" title="Weekly Reporting Documentation 1.0 documentation" href="#" />
+    <link rel="next" title="Weekly Reporting" href="weeklyreporting.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -51,7 +52,7 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="#">
-          Weekly Reporting Documentation</a>
+          Weekly Reporting</a>
         <span class="navbar-text navbar-version pull-left"><b>1.0</b></span>
       </div>
 
@@ -67,7 +68,22 @@
      href="#">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"></ul>
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="weeklyreporting.html">Weekly Reporting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="weeklyreporting.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="weeklyreporting.html#pulling-dfa-reports">Pulling DFA Reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="weeklyreporting.html#using-the-reporting-template">Using the Reporting Template</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="calculations.html">Calculations and Definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indices.html">Index</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="indices.html#site-activity-report-fields">Site Activity Report Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indices.html#custom-floodlight-variable-fields">Custom Floodlight Variable Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indices.html#action-tag-reference">Action Tag Reference</a></li>
+</ul>
+</li>
+</ul>
+</ul>
 </li>
               
                 <li class="dropdown">
@@ -79,12 +95,10 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">$project</a><ul>
-<li><a class="reference internal" href="#features">Features</a></li>
-<li><a class="reference internal" href="#installation">Installation</a></li>
-<li><a class="reference internal" href="#contribute">Contribute</a></li>
-<li><a class="reference internal" href="#support">Support</a></li>
-<li><a class="reference internal" href="#license">License</a></li>
+<li><a class="reference internal" href="#">Weekly Reporting Documentation</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#table-of-contents">Table of Contents</a></li>
+<li><a class="reference internal" href="#source">Source</a></li>
 </ul>
 </li>
 </ul>
@@ -93,18 +107,8 @@
               
             
             
-              
-                
-              
             
             
-            
-            
-              <li class="hidden-sm">
-<div id="sourcelink">
-  <a href="_sources/index.txt"
-     rel="nofollow">Source</a>
-</div></li>
             
           </ul>
 
@@ -124,45 +128,84 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="weeklyreporting.html">Weekly Reporting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="weeklyreporting.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="weeklyreporting.html#pulling-dfa-reports">Pulling DFA Reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="weeklyreporting.html#using-the-reporting-template">Using the Reporting Template</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="calculations.html">Calculations and Definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indices.html">Index</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="indices.html#site-activity-report-fields">Site Activity Report Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indices.html#custom-floodlight-variable-fields">Custom Floodlight Variable Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indices.html#action-tag-reference">Action Tag Reference</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li><ul>
+<li><a class="reference internal" href="#">Weekly Reporting Documentation</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#table-of-contents">Table of Contents</a></li>
+<li><a class="reference internal" href="#source">Source</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    <div class="col-md-9">
       
-  <div class="section" id="project">
-<h1>$project<a class="headerlink" href="#project" title="Permalink to this headline">¶</a></h1>
-<p>$project will solve your problem of where to start with documentation,
-by providing a basic explanation of how to do it easily.</p>
-<p>Look how easy it is to use:</p>
+  <div class="section" id="weekly-reporting-documentation">
+<h1>Weekly Reporting Documentation<a class="headerlink" href="#weekly-reporting-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Campaign reports from DFA are pulled weekly to provide the media and analytics teams
+insight into performance of running campaigns. Campaign reporting consists of two
+reports from DFA, Site Activity and Custom Floodlight Variables. These reports are
+combined and then munged in order to provide cleaned, readable data on performance.
+To speed up the process of pulling reports and munging reports, a routine was created
+using VBA and Python. This documentation will detail the code and the logic behind how
+calculations are made.</p>
+</div>
+<div class="section" id="table-of-contents">
+<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div>import project
-# Get your stuff done
-project.do_stuff()</div></blockquote>
-<div class="section" id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>Be awesome</li>
-<li>Make things faster</li>
+<div><div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="weeklyreporting.html">Weekly Reporting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="weeklyreporting.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="weeklyreporting.html#pulling-dfa-reports">Pulling DFA Reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="weeklyreporting.html#using-the-reporting-template">Using the Reporting Template</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="calculations.html">Calculations and Definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indices.html">Index</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="indices.html#site-activity-report-fields">Site Activity Report Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indices.html#custom-floodlight-variable-fields">Custom Floodlight Variable Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indices.html#action-tag-reference">Action Tag Reference</a></li>
+</ul>
+</li>
 </ul>
 </div>
-<div class="section" id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>Install $project by running:</p>
-<blockquote>
-<div>install project</div></blockquote>
+</div></blockquote>
 </div>
-<div class="section" id="contribute">
-<h2>Contribute<a class="headerlink" href="#contribute" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>Issue Tracker: github.com/$project/$project/issues</li>
-<li>Source Code: github.com/$project/$project</li>
-</ul>
-</div>
-<div class="section" id="support">
-<h2>Support<a class="headerlink" href="#support" title="Permalink to this headline">¶</a></h2>
-<p>If you are having issues, please let us know.
-We have a mailing list located at: <a class="reference external" href="mailto:project&#37;&#52;&#48;google-groups&#46;com">project<span>&#64;</span>google-groups<span>&#46;</span>com</a></p>
-</div>
-<div class="section" id="license">
-<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
-<p>The project is licensed under the BSD license.</p>
+<div class="section" id="source">
+<h2>Source<a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h2>
+<p>I keep the working code on Github to better maintain changes and track issues. No
+private data is included. The project can be found here: <a class="reference external" href="https://github.com/TMOptimedia/Weekly_DFA_Reporting">https://github.com/TMOptimedia/Weekly_DFA_Reporting</a>.
+If you would like to contribute by adding issues or submitting pull requests, please email me
+and I will add you to the organization.</p>
 </div>
 </div>
 

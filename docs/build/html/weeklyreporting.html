@@ -1,0 +1,272 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Weekly Reporting &mdash; Weekly Reporting Documentation 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.2.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.2.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="Weekly Reporting Documentation 1.0 documentation" href="index.html" />
+    <link rel="next" title="Calculations and Definitions" href="calculations.html" />
+    <link rel="prev" title="Weekly Reporting Documentation" href="index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          Weekly Reporting</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Weekly Reporting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pulling-dfa-reports">Pulling DFA Reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-the-reporting-template">Using the Reporting Template</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="calculations.html">Calculations and Definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indices.html">Index</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="indices.html#site-activity-report-fields">Site Activity Report Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indices.html#custom-floodlight-variable-fields">Custom Floodlight Variable Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indices.html#action-tag-reference">Action Tag Reference</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Weekly Reporting</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#pulling-dfa-reports">Pulling DFA Reports</a></li>
+<li><a class="reference internal" href="#using-the-reporting-template">Using the Reporting Template</a><ul>
+<li><a class="reference internal" href="#aside-activating-the-developer-ribbon">Aside: Activating the Developer Ribbon</a></li>
+<li><a class="reference internal" href="#using-the-reporting-template-continued">Using the Reporting Template Continued</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Weekly Reporting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pulling-dfa-reports">Pulling DFA Reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-the-reporting-template">Using the Reporting Template</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="calculations.html">Calculations and Definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indices.html">Index</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="indices.html#site-activity-report-fields">Site Activity Report Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indices.html#custom-floodlight-variable-fields">Custom Floodlight Variable Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indices.html#action-tag-reference">Action Tag Reference</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li><ul>
+<li><a class="reference internal" href="#">Weekly Reporting</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#pulling-dfa-reports">Pulling DFA Reports</a></li>
+<li><a class="reference internal" href="#using-the-reporting-template">Using the Reporting Template</a><ul>
+<li><a class="reference internal" href="#aside-activating-the-developer-ribbon">Aside: Activating the Developer Ribbon</a></li>
+<li><a class="reference internal" href="#using-the-reporting-template-continued">Using the Reporting Template Continued</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    <div class="col-md-9">
+      
+  <div class="section" id="weekly-reporting">
+<h1>Weekly Reporting<a class="headerlink" href="#weekly-reporting" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Campaign reporting is typically pulled each Monday for the previous Monday - Sunday date range. Two reports are
+required, a Site Activity and Custom Floodlight Variable report. After the reports are downloaded, various steps
+to manipulate the data are made in order to present the various account teams with readable data and reporting.
+These reports are used by the media team to make optimizations to the campaigns and report to the clients on
+performance.</p>
+</div>
+<div class="section" id="pulling-dfa-reports">
+<h2>Pulling DFA Reports<a class="headerlink" href="#pulling-dfa-reports" title="Permalink to this headline">¶</a></h2>
+<p>Log into DFA using your login information. You will be brought to the DFA Report Summary screen. Click on Report
+Builder at the top.</p>
+<img alt="_images/DBM_Summary_Screen.png" src="_images/DBM_Summary_Screen.png" />
+<p>The Report Builder screen contains all of the reports created by users under the account. You can search for
+reports using the search bar at the top right. For a new campaign, report templates have been provided that can
+be copied and adjusted depending on reporting needs. These reports are named the following:</p>
+<p>Site Activity:          Campaign_Raw_Data_Report_Template
+Custom Floodlight:  Campaign_Custom_Floodlight_Data_Report_Template</p>
+<img alt="_images/DBM_Report_Builder_Screen.png" src="_images/DBM_Report_Builder_Screen.png" />
+<p>Click on the Raw Data report to be taken to the Report Setup screen. Raw Data reports will generally look like the below,
+with various options for changing the file type, date range, report filters and more. At the bottom, you can choose to
+save your changes to the report and Run Now, which will download a copy of the report. You can also choose to have the
+report emailed to you if you prefer.</p>
+<img alt="_images/DBM_Report_Setup_Screen.png" src="_images/DBM_Report_Setup_Screen.png" />
+<p>For a new campaign, you will need to add a filter for Campaign or you will pull all campaigns that ran through the choosen
+date range.</p>
+<img alt="_images/DBM_Campaign_Filter_Report_Setup.png" src="_images/DBM_Campaign_Filter_Report_Setup.png" />
+<p>Click the +add filter button and choose Campaign.</p>
+<img alt="_images/DBM_Campaign_Filter_Report_Setup2.png" src="_images/DBM_Campaign_Filter_Report_Setup2.png" />
+<p>You can now choose your specific campaign to pull reporting.</p>
+<img alt="_images/DBM_Campaign_Filter_Report_Setup3.png" src="_images/DBM_Campaign_Filter_Report_Setup3.png" />
+<p>Other than date range, Campaign should be the only dimension you need to change when starting reporting for a new campaign.
+You can then save the report with a different name to keep your options saved to avoid editing the report each week.</p>
+<p>A list of dimensions and metrics, that should be included in the report can be found in the Index.</p>
+<p>If you haven&#8217;t saved the report as a different name, do that now before selecting Run now.</p>
+<p>The Custom Floodlight report is almost the exact same as the Raw Data report. As before, you should just need to add a
+campaign filter before saving and running the report.</p>
+<img alt="_images/DBM_CFV_Report.png" src="_images/DBM_CFV_Report.png" />
+<p>After your Raw Data and Custom Floodlight Variable reports are finished downloading, you are ready to move onto creating the
+media team pivot!</p>
+</div>
+<div class="section" id="using-the-reporting-template">
+<h2>Using the Reporting Template<a class="headerlink" href="#using-the-reporting-template" title="Permalink to this headline">¶</a></h2>
+<p>For new reports, open the distribution copy of the report template and save it as a copy. Open and copy the entire sheet
+in the Site Activity and Custom Floodlight reports and paste the contents in the tabs labeled SA and CFV.</p>
+<img alt="_images/Template_CopyReports.png" src="_images/Template_CopyReports.png" />
+<p>Make sure to copy the entirety of the Site Activity and Custom Floodlight reports into the template.</p>
+<img alt="_images/Template_ReportsPasted.png" src="_images/Template_ReportsPasted.png" />
+<p>With the data pasted in, you can now run the reporting process! Go to the Developer tab in Excel and click Macros.
+If you do not see the Developer tab in Excel, read the below on how to add it.</p>
+<div class="section" id="aside-activating-the-developer-ribbon">
+<h3>Aside: Activating the Developer Ribbon<a class="headerlink" href="#aside-activating-the-developer-ribbon" title="Permalink to this headline">¶</a></h3>
+<img alt="_images/Template_DeveloperRibbon.png" src="_images/Template_DeveloperRibbon.png" />
+<p>If you do not see the Developer tab at the top of Excel, similar to the above, click on the File tab at the top-left corner
+and click Options.</p>
+<img alt="_images/Template_FileScreen.png" src="_images/Template_FileScreen.png" />
+<p>On the Options screen, click Customize Ribbon and then check the box next to Developer on the right-hand side. Click OK and
+the Developer tab should now display!</p>
+<img alt="_images/Template_DeveloperTab.png" src="_images/Template_DeveloperTab.png" />
+</div>
+<div class="section" id="using-the-reporting-template-continued">
+<h3>Using the Reporting Template Continued<a class="headerlink" href="#using-the-reporting-template-continued" title="Permalink to this headline">¶</a></h3>
+<p>Click on the Developer tab and select Macros.</p>
+<img alt="_images/Template_Macros.png" src="_images/Template_Macros.png" />
+<p>The Macros screen will show several different macros. The reporting process macro is named &#8216;DFA_Reporting&#8217;. Select this macro and
+the report will generate. That&#8217;s all there is to it!</p>
+<img alt="_images/Template_data.png" src="_images/Template_data.png" />
+<p>Depending on the size of the data, processing can take several minutes to complete. The cleaned, merged data will be inputted into
+the data tab. If there is data already present in this tab, the process will combine that data with the new data. You can then save
+the report and make any necessary adjustments such as adding passback data from publishers.</p>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2015, Aaron Schlegel.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

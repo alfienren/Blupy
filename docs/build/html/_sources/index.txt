@@ -1,41 +1,31 @@
-$project
+Weekly Reporting Documentation
 ========
 
-$project will solve your problem of where to start with documentation,
-by providing a basic explanation of how to do it easily.
-
-Look how easy it is to use:
-
-    import project
-    # Get your stuff done
-    project.do_stuff()
-
-Features
---------
-
-- Be awesome
-- Make things faster
-
-Installation
+Introduction
 ------------
 
-Install $project by running:
+Campaign reports from DFA are pulled weekly to provide the media and analytics teams 
+insight into performance of running campaigns. Campaign reporting consists of two 
+reports from DFA, Site Activity and Custom Floodlight Variables. These reports are
+combined and then munged in order to provide cleaned, readable data on performance.
+To speed up the process of pulling reports and munging reports, a routine was created
+using VBA and Python. This documentation will detail the code and the logic behind how
+calculations are made.
 
-    install project
+Table of Contents
+-----------------
 
-Contribute
-----------
+  .. toctree::
+  	 :maxdepth: 2
 
-- Issue Tracker: github.com/$project/$project/issues
-- Source Code: github.com/$project/$project
+  	 weeklyreporting
+  	 calculations
+  	 indices
 
-Support
--------
+Source
+------
 
-If you are having issues, please let us know.
-We have a mailing list located at: project@google-groups.com
-
-License
--------
-
-The project is licensed under the BSD license.
+I keep the working code on Github to better maintain changes and track issues. No
+private data is included. The project can be found here: https://github.com/TMOptimedia/Weekly_DFA_Reporting.
+If you would like to contribute by adding issues or submitting pull requests, please email me 
+and I will add you to the organization.

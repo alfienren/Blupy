@@ -106,7 +106,12 @@ html_theme = 'bootstrap'
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-#html_theme_options = {}
+html_theme_options = {
+	'navbar_title': 'Weekly Reporting',
+	'globaltoc_depth': 2,
+	'navbar_sidebarrel': False,
+	'source_link_position': '',
+}
 
 # Add any paths that contain custom themes here, relative to this directory.
 html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
@@ -135,7 +140,7 @@ html_static_path = ['_static']
 # Add any extra paths that contain custom files (such as robots.txt or
 # .htaccess) here, relative to this directory. These files are copied
 # directly to the root of the documentation.
-#html_extra_path = []
+#html_extra_path = ['_static/fonts']
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
@@ -146,7 +151,8 @@ html_static_path = ['_static']
 #html_use_smartypants = True
 
 # Custom sidebar templates, maps document names to template names.
-#html_sidebars = {}
+html_sidebars = {'**': ['globaltoc.html', 'localtoc.html'],
+				'using/windows': ['sidebar.html']}
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
