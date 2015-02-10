@@ -1,0 +1,871 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Source &mdash; Weekly Reporting Documentation 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.2.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.2.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="Weekly Reporting Documentation 1.0 documentation" href="index.html" />
+    <link rel="prev" title="Index" href="indices.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          Weekly Reporting</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="weeklyreporting.html">Weekly Reporting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="weeklyreporting.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="weeklyreporting.html#pulling-dfa-reports">Pulling DFA Reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="weeklyreporting.html#using-the-reporting-template">Using the Reporting Template</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="calculations.html">Calculations and Definitions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="calculations.html#general-definitions">General Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calculations.html#campaign-specific-definitions">Campaign Specific Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calculations.html#calculation-methods-and-examples">Calculation Methods and Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="indices.html">Index</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="indices.html#site-activity-report-fields">Site Activity Report Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indices.html#custom-floodlight-variable-fields">Custom Floodlight Variable Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indices.html#action-tag-reference">Action Tag Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Source</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#process-raw-bas">Process_Raw.bas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#f-tags-bas">F_Tags.bas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#external-calls-bas">External_Calls.bas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#weekly-reporting-py">weekly_reporting.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#postprocess-bas">Postprocess.bas</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Source</a><ul>
+<li><a class="reference internal" href="#process-raw-bas">Process_Raw.bas</a></li>
+<li><a class="reference internal" href="#f-tags-bas">F_Tags.bas</a></li>
+<li><a class="reference internal" href="#external-calls-bas">External_Calls.bas</a></li>
+<li><a class="reference internal" href="#weekly-reporting-py">weekly_reporting.py</a></li>
+<li><a class="reference internal" href="#postprocess-bas">Postprocess.bas</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="weeklyreporting.html">Weekly Reporting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="weeklyreporting.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="weeklyreporting.html#pulling-dfa-reports">Pulling DFA Reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="weeklyreporting.html#using-the-reporting-template">Using the Reporting Template</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="calculations.html">Calculations and Definitions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="calculations.html#general-definitions">General Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calculations.html#campaign-specific-definitions">Campaign Specific Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calculations.html#calculation-methods-and-examples">Calculation Methods and Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="indices.html">Index</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="indices.html#site-activity-report-fields">Site Activity Report Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indices.html#custom-floodlight-variable-fields">Custom Floodlight Variable Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indices.html#action-tag-reference">Action Tag Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Source</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#process-raw-bas">Process_Raw.bas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#f-tags-bas">F_Tags.bas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#external-calls-bas">External_Calls.bas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#weekly-reporting-py">weekly_reporting.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#postprocess-bas">Postprocess.bas</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li><ul>
+<li><a class="reference internal" href="#">Source</a><ul>
+<li><a class="reference internal" href="#process-raw-bas">Process_Raw.bas</a></li>
+<li><a class="reference internal" href="#f-tags-bas">F_Tags.bas</a></li>
+<li><a class="reference internal" href="#external-calls-bas">External_Calls.bas</a></li>
+<li><a class="reference internal" href="#weekly-reporting-py">weekly_reporting.py</a></li>
+<li><a class="reference internal" href="#postprocess-bas">Postprocess.bas</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    <div class="col-md-9">
+      
+  <div class="section" id="source">
+<h1>Source<a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h1>
+<p>I keep the working code on Github to better maintain changes and track issues. No
+private data is included. The project can be found here: <a class="reference external" href="https://github.com/TMOptimedia/Weekly_DFA_Reporting">https://github.com/TMOptimedia/Weekly_DFA_Reporting</a>.
+If you would like to contribute by adding issues or submitting pull requests, please email me
+and I will add you to the organization.</p>
+<p>Forgoing that, each code module with in-line commented used in the reporting process is presented below.</p>
+<div class="section" id="process-raw-bas">
+<h2>Process_Raw.bas<a class="headerlink" href="#process-raw-bas" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>Sub Process_Raw_Reports()
+
+Dim rFloodlightCell         As Range
+Dim rSAData                 As Range
+Dim rCFVData                As Range
+
+Dim wCFVTemp                As String
+Dim wSATemp                 As String
+Dim wWorking                As String
+
+With Application
+
+    .ScreenUpdating = True
+    .EnableEvents = False
+    .Calculation = xlCalculationManual
+
+End With
+
+wCFVTemp = &quot;CFV_Temp&quot;
+wSATemp = &quot;SA_Temp&quot;
+wWorking = &quot;working&quot;
+
+&#39; Activate the Site Activity Sheet
+
+Sheets(&quot;SA&quot;).Activate
+
+With ActiveSheet
+
+    &#39; Select the Site Activity data, excluding the top rows
+    .Range(&quot;C1&quot;).Select
+    Selection.End(xlDown).Select
+    Range(Selection.End(xlToRight), Selection.End(xlToLeft)).Select
+
+    &#39; Set reference to data to be used later
+    Set rSAData = Range(Selection, Selection.End(xlDown).Offset(-1, 0))
+
+End With
+
+&#39; If the SA_Temp sheet already exists, delete it
+
+Application.DisplayAlerts = False
+On Error Resume Next
+Worksheets(wSATemp).Delete
+Err.Clear
+
+&#39; Add worksheet named SA_Temp
+
+Application.DisplayAlerts = True
+Worksheets.Add.Name = wSATemp
+
+&#39; Activate the new sheet
+
+Sheets(&quot;SA_Temp&quot;).Activate
+
+With ActiveSheet
+
+    &#39; Copy the Site Activity data referenced above into the worksheet starting
+    &#39; at cell A1
+
+    Cells.ClearContents
+    rSAData.Copy
+    .Range(&quot;A1&quot;).PasteSpecial Paste:=xlPasteAll, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+
+End With
+
+&#39; Activate the raw CFV data tab
+
+Sheets(&quot;CFV&quot;).Activate
+
+With ActiveSheet
+
+    &#39; As a simple check to make sure the data entered in the CFV tab is proper, search for the
+    &#39; cell containing &quot;Floodlight Attribution Type&quot;.
+
+    Set rFloodlightCell = Cells.Find(What:=&quot;Floodlight Attribution Type&quot;, After:=ActiveCell, LookIn:=xlValues, _
+        LookAt:=xlWhole, SearchOrder:=xlByColumns, SearchDirection:=xlNext, _
+        MatchCase:=False, SearchFormat:=False)
+
+    If rFloodlightCell Is Nothing Then
+
+        &#39; If the cell is not found, send a message and exit the sub
+
+        MsgBox &quot;Make sure correct CFV data is entered in the tab&quot;
+        Exit Sub
+
+    End If
+
+    &#39; If the Floodlight Attribution Type cell is found, select the range in the CFV tab containing
+    &#39; the data
+
+    rFloodlightCell.End(xlToLeft).Select
+    Range(Selection, Selection.End(xlToRight)).Select
+
+    &#39; Set a reference to the CFV data to be used later
+
+    Set rCFVData = Range(Selection, Selection.End(xlDown).Offset(-1, 0))
+
+End With
+
+&#39; If the CFV_Temp worksheet already exists, delete it
+
+Application.DisplayAlerts = False
+On Error Resume Next
+Worksheets(wCFVTemp).Delete
+Err.Clear
+
+&#39; Create a new worksheet named CFV_Temp
+
+Application.DisplayAlerts = True
+Worksheets.Add.Name = wCFVTemp
+
+&#39; Copy the CFV data referenced earlier
+
+rCFVData.Copy
+
+&#39; Activate the CFV_Temp sheet
+
+Sheets(&quot;CFV_Temp&quot;).Activate
+
+With ActiveSheet
+
+    &#39; Copy the CFV data into the CFV_Temp sheet starting at cell A1
+
+    Range(&quot;A1&quot;).PasteSpecial Paste:=xlPasteAll, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+
+End With
+
+&#39; If worksheet &quot;working&quot; already exists, delete it
+
+Application.DisplayAlerts = False
+On Error Resume Next
+Worksheets(wWorking).Delete
+Err.Clear
+
+&#39; Create new worksheet named &quot;working&quot;
+
+Application.DisplayAlerts = True
+Worksheets.Add.Name = wWorking
+
+End Sub
+</pre></div>
+</div>
+</div>
+<div class="section" id="f-tags-bas">
+<h2>F_Tags.bas<a class="headerlink" href="#f-tags-bas" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>Sub F_Tag_URLs()
+
+&#39; Activate the F Tags sheet
+
+Sheets(&quot;F_Tags&quot;).Activate
+
+Range(&quot;E1&quot;, Range(&quot;E1&quot;).End(xlDown)).Select
+
+&#39; Some of the URLs in the F Tag sheet have extensions at the end, which sometimes
+&#39; causes the lookup to not bring in the correct URL for F Tags. The below searches
+&#39; for these extension strings and removes them
+
+Selection.Replace What:=&quot;.html&quot;, Replacement:=&quot;&quot;, LookAt:=xlPart, _
+    SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:=False, _
+    ReplaceFormat:=False
+
+Selection.Replace What:=&quot;.aspx&quot;, Replacement:=&quot;&quot;, LookAt:=xlPart, _
+    SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:=False, _
+    ReplaceFormat:=False
+
+End Sub
+</pre></div>
+</div>
+</div>
+<div class="section" id="external-calls-bas">
+<h2>External_Calls.bas<a class="headerlink" href="#external-calls-bas" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>Sub Python_Calls()
+
+&#39; Go to the Lookup tab and copy in the path and name of the Excel sheet so the
+&#39; Python module can reference the workbook properly
+
+Sheets(&quot;Lookup&quot;).Activate
+Range(&quot;G1&quot;).Value = ActiveWorkbook.FullName
+
+&#39; Run the Python module
+
+RunPython (&quot;import weekly_reporting; weekly_reporting.dfa_reporting()&quot;)
+
+End Sub
+</pre></div>
+</div>
+</div>
+<div class="section" id="weekly-reporting-py">
+<h2>weekly_reporting.py<a class="headerlink" href="#weekly-reporting-py" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+<span class="sd">&quot;&quot;&quot;&quot;&quot;&quot;</span><span class="s">&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;</span>
+<span class="s">Load necessary packages</span>
+<span class="s">&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">xlwings</span> <span class="kn">import</span> <span class="n">Workbook</span><span class="p">,</span> <span class="n">Range</span><span class="p">,</span> <span class="n">Sheet</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="sd">&quot;&quot;&quot;&quot;&quot;&quot;</span><span class="s">&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;</span>
+<span class="s">function to load data into Excel without overloading memory</span>
+<span class="s">&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;</span>
+
+<span class="k">def</span> <span class="nf">chunk_df</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">sheet</span><span class="p">,</span> <span class="n">startcell</span><span class="p">,</span> <span class="n">chunk_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="n">chunk_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">Range</span><span class="p">(</span><span class="n">sheet</span><span class="p">,</span> <span class="n">startcell</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">df</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">Range</span><span class="p">(</span><span class="n">sheet</span><span class="p">,</span> <span class="n">startcell</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s">r&quot;([a-z]+)([0-9]+)&quot;</span><span class="p">,</span> <span class="n">startcell</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">startcell</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">rw</span><span class="p">:</span><span class="n">rw</span> <span class="o">+</span> <span class="n">chunk_size</span><span class="p">]</span> <span class="k">for</span> <span class="n">rw</span> <span class="ow">in</span>
+                      <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="n">chunk_size</span><span class="p">)):</span>
+            <span class="n">Range</span><span class="p">(</span><span class="n">sheet</span><span class="p">,</span> <span class="n">row</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">col</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">chunk</span>
+            <span class="n">col</span> <span class="o">+=</span> <span class="n">chunk_size</span>
+
+<span class="sd">&quot;&quot;&quot;&quot;&quot;&quot;</span><span class="s">&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;</span>
+<span class="s">Main reporting function</span>
+<span class="s">&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;</span>
+
+<span class="k">def</span> <span class="nf">dfa_reporting</span><span class="p">():</span>
+
+    <span class="c"># Before function is ran, VBA code will create the necessary tabs in order to process correctly. See the</span>
+    <span class="c"># documentation in the VBA modules for more information.</span>
+
+    <span class="n">wb</span> <span class="o">=</span> <span class="n">Workbook</span><span class="o">.</span><span class="n">caller</span><span class="p">()</span> <span class="c"># Initiate workbook object</span>
+    <span class="n">sheet</span> <span class="o">=</span> <span class="n">Range</span><span class="p">(</span><span class="s">&#39;Lookup&#39;</span><span class="p">,</span> <span class="s">&#39;G1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span> <span class="c"># Grab workbook path from Excel sheet</span>
+
+    <span class="n">wb</span><span class="o">.</span><span class="n">save</span><span class="p">()</span> <span class="c"># Workbook needs to be saved in order to load the data into pandas properly</span>
+
+    <span class="c"># Load the Site Activity and Custom Floodlight Variable data into pandas as DataFrames</span>
+
+    <span class="n">sa</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">sheet</span><span class="p">,</span> <span class="s">&#39;SA_Temp&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="bp">None</span><span class="p">))</span>
+    <span class="n">cfv</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">sheet</span><span class="p">,</span> <span class="s">&#39;CFV_Temp&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="bp">None</span><span class="p">))</span>
+
+    <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Orders&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="c"># Create orders column in cfv data. Each OrderNumber counts as 1 order</span>
+    <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Plans&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Plan (string)&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="c"># Count the number of plans in the Plans column</span>
+    <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Devices&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Device (string)&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="c"># Count number of devices in the Plans column</span>
+    <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Services&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Service (string)&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="c"># Count number of services in the Plans column</span>
+    <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Add-a-Line&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Service (string)&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">&#39;ADD&#39;</span><span class="p">)</span> <span class="c"># Count number of Add-a-Lines in the Plans column</span>
+    <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Accessories&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Accessory (string)&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="c"># Count number of Accessories in the Accessories column</span>
+    <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Activations&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Plans&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Add-a-Line&#39;</span><span class="p">]</span> <span class="c">#Activations are defined as the sum of Plans and Add-a-Line</span>
+
+    <span class="c"># Postpaid plans are defined as a Plan + Device. By row, if number of plans is equal to number of devices, Postpaid</span>
+    <span class="c"># plans = number of plans. If plans and devices are not equal, use the minimum number.</span>
+    <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Postpaid Plans&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Plans&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Devices&#39;</span><span class="p">],</span> <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Plans&#39;</span><span class="p">],</span>
+                                     <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Plans&#39;</span><span class="p">],</span> <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Devices&#39;</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="c"># Prepaid plans are defined as the number of Devices with no service and plan. If number of plans and services are</span>
+    <span class="c"># 0, count of devices is prepaid. If service and plan are not equal, prepaid plans = 0.</span>
+    <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Prepaid Plans&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Plans&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Services&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">),</span> <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Devices&#39;</span><span class="p">],</span>
+                                    <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Devices&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Plans&#39;</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Services&#39;</span><span class="p">]),</span>
+                                             <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Devices&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Plans&#39;</span><span class="p">],</span> <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Services&#39;</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">))</span>
+
+    <span class="c"># The DDR campaign counts view-through order credit at 50%. If the campaign name contains &#39;DDR&#39; and the Floodlight</span>
+    <span class="c"># Attribution Type is View-through, the order is multiplied by 0.5.</span>
+    <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Orders&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Campaign&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s">&#39;DDR&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="bp">True</span><span class="p">)</span> <span class="o">&amp;</span>
+                             <span class="p">(</span><span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Floodlight Attribution Type&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s">&#39;View-through&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="bp">True</span><span class="p">),</span>
+                             <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Orders&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Orders&#39;</span><span class="p">])</span>
+
+    <span class="c"># Append the Custom Floodlight Variable data to the Site Activity data. Columns with matching names are merged</span>
+    <span class="c"># together. Columns without matching names are added to the new dataframe.</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">sa</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cfv</span><span class="p">)</span>
+
+    <span class="c"># The DFA field DBM Cost is more accurate for placements using dynamic bidding. If a placement is not using</span>
+    <span class="c"># dynamic bidding, DBM Cost = 0. Therefore, if DBM cost does not equal 0, replace the row&#39;s media cost with</span>
+    <span class="c"># DBM cost. If DBM Cost = 0, Media Cost stays the same.</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Media Cost&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;DBM Cost USD&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;DBM Cost USD&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Media Cost&#39;</span><span class="p">])</span>
+
+    <span class="c"># Adjust spend to Net to Client</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Media Cost&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Media Cost&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="o">.</span><span class="mi">96759</span>
+
+    <span class="c"># DBM Cost column is then removed as it is no longer needed.</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s">&#39;DBM Cost USD&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="c"># Actual URLs are wrapped in BlueKai calls when outputted from DFA. The following finds and removes the code from</span>
+    <span class="c"># the URLs, leaving the cleaned URLs remaining.</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;http://analytics.bluekai.com/site/&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%3F</span><span class="s">%3DADV_DS_</span><span class="si">%e</span><span class="s">pid!_</span><span class="si">%e</span><span class="s">aid!_</span><span class="si">%e</span><span class="s">cid!_</span><span class="si">%e</span><span class="s">adv!&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;15991\?phint&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;http://15991\?phint&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;event%3Dclick&amp;phint&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;aid%3D</span><span class="si">%e</span><span class="s">adv!&amp;phint&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;pid%3D</span><span class="si">%e</span><span class="s">pid!&amp;phint&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;cid%3D</span><span class="si">%e</span><span class="s">buy!&amp;phint&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;crid%3D</span><span class="si">%e</span><span class="s">cid!&amp;done&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;pid%3D</span><span class="si">%25e</span><span class="s">pid!&amp;phint&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;%3D</span><span class="si">%e</span><span class="s">pid!_</span><span class="si">%e</span><span class="s">aid!_</span><span class="si">%e</span><span class="s">cid!_</span><span class="si">%e</span><span class="s">adv!&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%26c</span><span class="s">sdids&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;DADV_DS_ADDDVL4Q_EMUL7Y9E1YA4116&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;DWTR_DD_DDRDSPLYPR_JM2694TSP3U5895&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;DWTR_DD_DDRFCBK_RQLMKXRCUQZ1042&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%3F</span><span class="s">cmpid%3&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;b/refmh_&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+        <span class="s">&#39;</span><span class="si">%3F</span><span class="s">cm_mmc%3DPurchase-_-Display-_-Revere-_-Revere&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+        <span class="s">&#39;</span><span class="si">%3F</span><span class="s">cm_mmc%3DDisplay-_-Purchase-_-GM-_-Tablet_Base&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+        <span class="s">&#39;</span><span class="si">%3F</span><span class="s">cmpid%3DWTR_DD_DDRFCBK_RQLMKXRCUQZ1042</span><span class="si">%26c</span><span class="s">sdids%3D</span><span class="si">%e</span><span class="s">pid!_</span><span class="si">%e</span><span class="s">aid!_</span><span class="si">%e</span><span class="s">cid!_</span><span class="si">%e</span><span class="s">adv!&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+        <span class="s">&#39;</span><span class="si">%3F%26c</span><span class="s">sdids%3DADV_DS_</span><span class="si">%e</span><span class="s">pid!_</span><span class="si">%e</span><span class="s">aid!_</span><span class="si">%e</span><span class="s">cid!_</span><span class="si">%e</span><span class="s">adv!&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+        <span class="s">&#39;</span><span class="si">%3F</span><span class="s">cm_mmc%3DPurchase-_-Display-_-Revere-_-Revere</span><span class="si">%26c</span><span class="s">sdids%3D</span><span class="si">%e</span><span class="s">pid!_</span><span class="si">%e</span><span class="s">aid!_</span><span class="si">%e</span><span class="s">cid!_</span><span class="si">%e</span><span class="s">adv!&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+        <span class="s">&#39;</span><span class="si">%3F</span><span class="s">cm_mmc%3DDisplay-_-Purchase-_-GM-_-Tablet_Base</span><span class="si">%26c</span><span class="s">sdids%3D</span><span class="si">%e</span><span class="s">pid!_</span><span class="si">%e</span><span class="s">aid!_</span><span class="si">%e</span><span class="s">cid!_</span><span class="si">%e</span><span class="s">adv!&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+        <span class="s">&#39;</span><span class="si">%3F</span><span class="s">cmpid%3DWTR_DD_DDRDSPLYPR_JM2694TSP3U5895</span><span class="si">%26c</span><span class="s">sdids%3D</span><span class="si">%e</span><span class="s">pid!_</span><span class="si">%e</span><span class="s">aid!_</span><span class="si">%e</span><span class="s">cid!_</span><span class="si">%e</span><span class="s">adv!&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;&amp;csdids</span><span class="si">%e</span><span class="s">pid!_</span><span class="si">%e</span><span class="s">aid!_</span><span class="si">%e</span><span class="s">cid!_</span><span class="si">%e</span><span class="s">adv!&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;=&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%2F</span><span class="s">&#39;</span><span class="p">,</span> <span class="s">&#39;/&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;%3A&#39;</span><span class="p">,</span> <span class="s">&#39;:&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;%23&#39;</span><span class="p">,</span> <span class="s">&#39;#&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.html&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;?&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;%&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Click-through URL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;DWTR&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+
+    <span class="c"># CFV columns for Plans, Services, etc. that were created earlier have blank values replaced with 0.</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Plans&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Services&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Devices&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Accessories&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Orders&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="c"># The following lines ensure a plan, service, accessory, device, order number, etc. counts are tied to an actual</span>
+    <span class="c"># floodlight string.</span>
+
+    <span class="c"># If the count of plans, services, accessories, devices, or orders is less than 1, the string is set to blank. If</span>
+    <span class="c"># the count is 1 or greater, the string is associated to the count.</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Plan (string)&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Plans&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Plan (string)&#39;</span><span class="p">])</span>
+
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Service (string)&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Services&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Service (string)&#39;</span><span class="p">])</span>
+
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Accessory (string)&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Accessories&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Accessory (string)&#39;</span><span class="p">])</span>
+
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Device (string)&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Devices&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Device (string)&#39;</span><span class="p">])</span>
+
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;OrderNumber (string)&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Orders&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;OrderNumber (string)&#39;</span><span class="p">])</span>
+
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Activity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Orders&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Activity&#39;</span><span class="p">])</span>
+
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Floodlight Attribution Type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Orders&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Floodlight Attribution Type&#39;</span><span class="p">])</span>
+
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Devices&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Device (string)&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s">&#39;nan&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="bp">True</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Devices&#39;</span><span class="p">])</span>
+
+    <span class="c"># Take the action tag names from the Action_Reference tab in the Excel sheet for A - E actions.</span>
+    <span class="n">a_actions</span> <span class="o">=</span> <span class="n">Range</span><span class="p">(</span><span class="s">&#39;Action_Reference&#39;</span><span class="p">,</span> <span class="s">&#39;A2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">vertical</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">b_actions</span> <span class="o">=</span> <span class="n">Range</span><span class="p">(</span><span class="s">&#39;Action_Reference&#39;</span><span class="p">,</span> <span class="s">&#39;B2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">vertical</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">c_actions</span> <span class="o">=</span> <span class="n">Range</span><span class="p">(</span><span class="s">&#39;Action_Reference&#39;</span><span class="p">,</span> <span class="s">&#39;C2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">vertical</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">d_actions</span> <span class="o">=</span> <span class="n">Range</span><span class="p">(</span><span class="s">&#39;Action_Reference&#39;</span><span class="p">,</span> <span class="s">&#39;D2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">vertical</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">e_actions</span> <span class="o">=</span> <span class="n">Range</span><span class="p">(</span><span class="s">&#39;Action_Reference&#39;</span><span class="p">,</span> <span class="s">&#39;E2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">vertical</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="c"># Set the data column names to a variable</span>
+    <span class="n">column_names</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span>
+
+    <span class="c"># For each action tag category (A - E), search the column names to find the action tag. A new list of the A - E</span>
+    <span class="c"># actions are compiled from the matches in the column names.</span>
+    <span class="n">a_actions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">a_actions</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">column_names</span><span class="p">))</span>
+    <span class="n">b_actions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">b_actions</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">column_names</span><span class="p">))</span>
+    <span class="n">c_actions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">c_actions</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">column_names</span><span class="p">))</span>
+    <span class="n">d_actions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">d_actions</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">column_names</span><span class="p">))</span>
+    <span class="n">e_actions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">e_actions</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">column_names</span><span class="p">))</span>
+
+    <span class="c"># With the references set for each action tag category, sum the tags along rows and create columns for each action</span>
+    <span class="c"># tag bucket.</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;A Actions&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">a_actions</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;B Actions&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">b_actions</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;C Actions&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">c_actions</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;D Actions&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">d_actions</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;E Actions&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">e_actions</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c"># Placement Categories</span>
+    <span class="c"># Due to lack of formalized naming conventions, the following builds categories for placements based on words</span>
+    <span class="c"># contained in the placement name.</span>
+
+    <span class="c"># Categories are broken down by Platform (mobile/tablet, social, desktop), followed by placement creative (Rich</span>
+    <span class="c"># Media, Custom, Remessaging, banners, etc.). Lastly, the placement buy type (dCPM, Flat, CPM, etc.)</span>
+
+    <span class="c"># Words to match on are included in the Lookup tab of the Excel sheet.</span>
+    <span class="c"># Example output of categories:</span>
+    <span class="c">#   Desktop - Standard - dCPM</span>
+    <span class="c">#   Mobile - Custom - Flat</span>
+    <span class="n">mobile</span> <span class="o">=</span> <span class="s">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">Range</span><span class="p">(</span><span class="s">&#39;Lookup&#39;</span><span class="p">,</span> <span class="s">&#39;B2:B6&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+    <span class="n">tablet</span> <span class="o">=</span> <span class="s">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">Range</span><span class="p">(</span><span class="s">&#39;Lookup&#39;</span><span class="p">,</span> <span class="s">&#39;B7:B9&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+    <span class="n">social</span> <span class="o">=</span> <span class="s">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">Range</span><span class="p">(</span><span class="s">&#39;Lookup&#39;</span><span class="p">,</span> <span class="s">&#39;B10:B12&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+
+    <span class="n">rm</span> <span class="o">=</span> <span class="s">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">Range</span><span class="p">(</span><span class="s">&#39;Lookup&#39;</span><span class="p">,</span> <span class="s">&#39;D2:D5&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+    <span class="n">custom</span> <span class="o">=</span> <span class="s">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">Range</span><span class="p">(</span><span class="s">&#39;Lookup&#39;</span><span class="p">,</span> <span class="s">&#39;D6:D15&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+    <span class="n">rem</span> <span class="o">=</span> <span class="s">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">Range</span><span class="p">(</span><span class="s">&#39;Lookup&#39;</span><span class="p">,</span> <span class="s">&#39;D16:D28&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+    <span class="n">vid</span> <span class="o">=</span> <span class="s">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">Range</span><span class="p">(</span><span class="s">&#39;Lookup&#39;</span><span class="p">,</span> <span class="s">&#39;D29:D38&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+
+    <span class="n">dynamic</span> <span class="o">=</span> <span class="s">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">Range</span><span class="p">(</span><span class="s">&#39;Lookup&#39;</span><span class="p">,</span> <span class="s">&#39;F2:F3&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+    <span class="n">other_buy</span> <span class="o">=</span> <span class="s">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">Range</span><span class="p">(</span><span class="s">&#39;Lookup&#39;</span><span class="p">,</span> <span class="s">&#39;F4&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+
+    <span class="n">platform</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Placement&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">mobile</span><span class="p">)</span> <span class="o">==</span> <span class="bp">True</span><span class="p">,</span> <span class="s">&#39;Mobile&#39;</span><span class="p">,</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Placement&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">tablet</span><span class="p">)</span> <span class="o">==</span> <span class="bp">True</span><span class="p">,</span> <span class="s">&#39;Tablet&#39;</span><span class="p">,</span>
+                                 <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Placement&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">social</span><span class="p">)</span> <span class="o">==</span> <span class="bp">True</span><span class="p">,</span> <span class="s">&#39;Social&#39;</span><span class="p">,</span> <span class="s">&#39;Desktop&#39;</span><span class="p">)))</span>
+
+    <span class="n">creative</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Placement&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">rm</span><span class="p">)</span> <span class="o">==</span> <span class="bp">True</span><span class="p">,</span> <span class="s">&#39;Rich Media&#39;</span><span class="p">,</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Placement&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">custom</span><span class="p">)</span> <span class="o">==</span> <span class="bp">True</span><span class="p">,</span> <span class="s">&#39;Custom&#39;</span><span class="p">,</span>
+                                 <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Placement&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">rem</span><span class="p">)</span> <span class="o">==</span> <span class="bp">True</span><span class="p">,</span> <span class="s">&#39;Remessaging&#39;</span><span class="p">,</span>
+                                          <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Placement&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">vid</span><span class="p">)</span> <span class="o">==</span> <span class="bp">True</span><span class="p">,</span> <span class="s">&#39;Video&#39;</span><span class="p">,</span> <span class="s">&#39;Standard&#39;</span><span class="p">))))</span>
+
+    <span class="n">buy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Placement&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">dynamic</span><span class="p">)</span> <span class="o">==</span> <span class="bp">True</span><span class="p">,</span> <span class="s">&#39;dCPM&#39;</span><span class="p">,</span>
+                   <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Placement&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">other_buy</span><span class="p">),</span> <span class="s">&#39;Flat&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">))</span>
+
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Platform&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">platform</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;P_Creative&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">creative</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Buy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">buy</span>
+
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Category&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Platform&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39; - &#39;</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;P_Creative&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39; - &#39;</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Buy&#39;</span><span class="p">]</span>
+
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Category&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Category&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39; - &#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Category&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">3</span><span class="p">:],</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Category&#39;</span><span class="p">])</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Category&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Category&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:]</span> <span class="o">==</span> <span class="s">&#39; - &#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Category&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Category&#39;</span><span class="p">])</span>
+
+    <span class="c"># Similar to the logic to get the sum of action tags for each respective category, the following finds the sum</span>
+    <span class="c"># of post-click and impression activity as well as Store Locator Visits.</span>
+
+    <span class="c"># For post-view and click activity, the column names of the data are searched for columns containing &#39;View-through&#39;,</span>
+    <span class="c"># &#39;Click-through&#39; or &#39;Store Locator&#39;. Column matches are then stored in lists.</span>
+    <span class="n">view_through</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">column_names</span><span class="p">:</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">&#39;View-through Conversions&#39;</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">view</span><span class="p">:</span>
+            <span class="n">view_through</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+    <span class="n">click_through</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">column_names</span><span class="p">:</span>
+        <span class="n">click</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">&#39;Click-through Conversions&#39;</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">click</span><span class="p">:</span>
+            <span class="n">click_through</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+    <span class="n">store_locator</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">column_names</span><span class="p">:</span>
+        <span class="n">locator</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">&#39;Store Locator 2&#39;</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">locator</span><span class="p">:</span>
+            <span class="n">store_locator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+    <span class="c"># The matches against the column names are then set</span>
+    <span class="n">view_based</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">view_through</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">column_names</span><span class="p">))</span>
+    <span class="n">click_based</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">click_through</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">column_names</span><span class="p">))</span>
+    <span class="n">SLV_conversions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">store_locator</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">column_names</span><span class="p">))</span>
+
+    <span class="c"># With the matching references set, sum the matches for post-click and impression activity as well as SLV by row,</span>
+    <span class="c"># creating columns for each.</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Post-Click Activity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">click_based</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Post-Impression Activity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">view_based</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Store Locator Visits&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">SLV_conversions</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c"># Create columns for Awareness and Consideration actions. Awareness Actions are the sum of A and B actions,</span>
+    <span class="c"># Consideration is the sum of C and D actions</span>
+    <span class="c"># Traffic Actions are the total of Awareness and Consideration Actions, or A - D actions.</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Awareness Actions&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;A Actions&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;B Actions&#39;</span><span class="p">]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Consideration Actions&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;C Actions&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;D Actions&#39;</span><span class="p">]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Traffic Actions&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Awareness Actions&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Consideration Actions&#39;</span><span class="p">]</span>
+
+    <span class="c"># Estimated Gross Adds are calculated as the count of Devices with 50% view-through credit.</span>
+    <span class="c"># If Floodlight Attribution Type is equal to View-through, the count of Devices is multiplied by 0.5</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;eGAs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Floodlight Attribution Type&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s">&#39;View-through&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="bp">True</span><span class="p">,</span>
+                            <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Device (string)&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+                            <span class="n">data</span><span class="p">[</span><span class="s">&#39;Device (string)&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c"># Message Bucket, Category and Offer</span>
+    <span class="c"># 90% of the time, the message bucket, category and offer can be determined from the creative field 1 column. It</span>
+    <span class="c"># follows a pattern of Bucket_Category_Offer</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Creative Field 1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Creative Field 1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;Creative Type: &#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Creative Field 1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Creative Field 1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;(&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Creative Field 1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Creative Field 1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;)&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+
+    <span class="c"># If Creative Field 1 is equal to (not set), this is either a 1x1 or a placement with logo creative. (not set)</span>
+    <span class="c"># fields are therefore set as &#39;TMO Unique Creative&#39;, which is how this has been handled historically.</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Creative Field 1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Creative Field 1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;not set&#39;</span><span class="p">,</span> <span class="s">&#39;TMO Unique Creative&#39;</span><span class="p">)</span>
+
+    <span class="c"># Message Bucket is determined by splitting Creative Field 1 and taking the first word.</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Message Bucket&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Creative Field 1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c"># Message Category is determined by splitting Creative Field 1 and taking the second word.</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Message Category&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Creative Field 1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c"># Message Offer is determined by splitting Creative Field 1 and taking the third word. If the offer is not set,</span>
+    <span class="c"># it can sometimes be found in the Creative Groups 2 column. For blanks in the Message Offer column, it will try</span>
+    <span class="c"># to pull in the offer from the Creative Groups 2 column.</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Message Offer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Creative Field 1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Message Offer&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Creative Groups 2&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="c"># Create week column by taking the oldest date in the data</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Week&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;Date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+
+    <span class="c"># Add columns for Video Completions and Views, primarily for compatibility between campaigns that run video and</span>
+    <span class="c"># don&#39;t run video. Those that don&#39;t can keep the columns set to zero, but those that have video can then be</span>
+    <span class="c"># adjusted with passback data.</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Video Completions&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Video Views&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c"># Similar to the video columns, add columns for F Tag and F Actions.</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;F Tag&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;F Actions&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">sa_columns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">sa</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+
+    <span class="c"># the dimensions variable is used to tell what data we want to keep. Each string below represents the column</span>
+    <span class="c"># that will be outputted.</span>
+    <span class="n">dimensions</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Week&#39;</span><span class="p">,</span> <span class="s">&#39;Date&#39;</span><span class="p">,</span> <span class="s">&#39;Campaign&#39;</span><span class="p">,</span> <span class="s">&#39;Site (DCM)&#39;</span><span class="p">,</span> <span class="s">&#39;Click-through URL&#39;</span><span class="p">,</span> <span class="s">&#39;F Tag&#39;</span><span class="p">,</span> <span class="s">&#39;Category&#39;</span><span class="p">,</span> <span class="s">&#39;Message Bucket&#39;</span><span class="p">,</span>
+                  <span class="s">&#39;Message Category&#39;</span><span class="p">,</span>
+                  <span class="s">&#39;Message Offer&#39;</span><span class="p">,</span> <span class="s">&#39;Creative&#39;</span><span class="p">,</span> <span class="s">&#39;Ad&#39;</span><span class="p">,</span> <span class="s">&#39;Creative Groups 1&#39;</span><span class="p">,</span> <span class="s">&#39;Creative Groups 2&#39;</span><span class="p">,</span> <span class="s">&#39;Creative ID&#39;</span><span class="p">,</span>
+                  <span class="s">&#39;Creative Type&#39;</span><span class="p">,</span>
+                  <span class="s">&#39;Creative Field 1&#39;</span><span class="p">,</span> <span class="s">&#39;Placement&#39;</span><span class="p">,</span> <span class="s">&#39;Placement Cost Structure&#39;</span><span class="p">,</span> <span class="s">&#39;OrderNumber (string)&#39;</span><span class="p">,</span> <span class="s">&#39;Activity&#39;</span><span class="p">,</span>
+                  <span class="s">&#39;Floodlight Attribution Type&#39;</span><span class="p">,</span>
+                  <span class="s">&#39;Plan (string)&#39;</span><span class="p">,</span> <span class="s">&#39;Device (string)&#39;</span><span class="p">,</span> <span class="s">&#39;Service (string)&#39;</span><span class="p">,</span> <span class="s">&#39;Accessory (string)&#39;</span><span class="p">]</span>
+
+    <span class="c"># Similar to the dimensions variable, metrics lists all the data we want to be outputted.</span>
+    <span class="n">metrics</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Media Cost&#39;</span><span class="p">,</span> <span class="s">&#39;Impressions&#39;</span><span class="p">,</span> <span class="s">&#39;Clicks&#39;</span><span class="p">,</span> <span class="s">&#39;Orders&#39;</span><span class="p">,</span> <span class="s">&#39;Plans&#39;</span><span class="p">,</span> <span class="s">&#39;Add-a-Line&#39;</span><span class="p">,</span> <span class="s">&#39;Activations&#39;</span><span class="p">,</span> <span class="s">&#39;Devices&#39;</span><span class="p">,</span>
+               <span class="s">&#39;Services&#39;</span><span class="p">,</span> <span class="s">&#39;Accessories&#39;</span><span class="p">,</span>
+               <span class="s">&#39;Postpaid Plans&#39;</span><span class="p">,</span> <span class="s">&#39;Prepaid Plans&#39;</span><span class="p">,</span> <span class="s">&#39;eGAs&#39;</span><span class="p">,</span> <span class="s">&#39;Store Locator Visits&#39;</span><span class="p">,</span> <span class="s">&#39;A Actions&#39;</span><span class="p">,</span> <span class="s">&#39;B Actions&#39;</span><span class="p">,</span> <span class="s">&#39;C Actions&#39;</span><span class="p">,</span>
+               <span class="s">&#39;D Actions&#39;</span><span class="p">,</span> <span class="s">&#39;E Actions&#39;</span><span class="p">,</span> <span class="s">&#39;F Actions&#39;</span><span class="p">,</span>
+               <span class="s">&#39;Awareness Actions&#39;</span><span class="p">,</span> <span class="s">&#39;Consideration Actions&#39;</span><span class="p">,</span> <span class="s">&#39;Traffic Actions&#39;</span><span class="p">,</span> <span class="s">&#39;Post-Click Activity&#39;</span><span class="p">,</span>
+               <span class="s">&#39;Post-Impression Activity&#39;</span><span class="p">,</span>
+               <span class="s">&#39;Video Completions&#39;</span><span class="p">,</span> <span class="s">&#39;Video Views&#39;</span><span class="p">]</span>
+
+    <span class="c"># Get all the action tag names so these can be included in the outputted data as well.</span>
+    <span class="n">action_tags</span> <span class="o">=</span> <span class="n">sa_columns</span><span class="p">[</span><span class="n">sa_columns</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s">&#39;DBM Cost USD&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span>
+
+    <span class="c"># new_columns is set as the a master list of the dimensions, metrics and action tags. The data will be outputted</span>
+    <span class="c"># in this order.</span>
+    <span class="n">new_columns</span> <span class="o">=</span> <span class="n">dimensions</span> <span class="o">+</span> <span class="n">metrics</span> <span class="o">+</span> <span class="n">action_tags</span>
+
+    <span class="c"># A new DataFrame is created with the columns, removing any extraneous or working data that was used and making</span>
+    <span class="c"># sure the order of the data is consistent.</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">new_columns</span><span class="p">]</span>
+
+    <span class="c"># Copy the new DataFrame into the working tab of the Excel worksheet.</span>
+    <span class="n">chunk_df</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s">&#39;working&#39;</span><span class="p">,</span> <span class="s">&#39;A1&#39;</span><span class="p">)</span>
+
+    <span class="c"># Create a DataFrame of the F Tag sheet included in the Excel worksheet.</span>
+    <span class="n">ftags</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">Range</span><span class="p">(</span><span class="s">&#39;F_Tags&#39;</span><span class="p">,</span> <span class="s">&#39;B1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">Range</span><span class="p">(</span><span class="s">&#39;F_Tags&#39;</span><span class="p">,</span> <span class="s">&#39;B1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">horizontal</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">ftags</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="c"># Add a new column to the DataFrame to concatenate the Group Name of the tag with the Activity Name. This will</span>
+    <span class="c"># give us a reference we can use to match to the tag to the data.</span>
+    <span class="n">ftags</span><span class="p">[</span><span class="s">&#39;Tag Name (Concatenated)&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ftags</span><span class="p">[</span><span class="s">&#39;Group Name&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s">&quot; : &quot;</span> <span class="o">+</span> <span class="n">ftags</span><span class="p">[</span><span class="s">&#39;Activity Name&#39;</span><span class="p">]</span>
+    <span class="n">Range</span><span class="p">(</span><span class="s">&#39;F_Tags&#39;</span><span class="p">,</span> <span class="s">&#39;G2&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">ftags</span><span class="p">[</span><span class="s">&#39;Tag Name (Concatenated)&#39;</span><span class="p">]</span>
+
+    <span class="c"># The F Tag Range is set as column F in the working data (The F Tag column)</span>
+    <span class="n">f_tag_range</span> <span class="o">=</span> <span class="n">Range</span><span class="p">(</span><span class="s">&#39;working&#39;</span><span class="p">,</span> <span class="s">&#39;F2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">vertical</span>
+
+    <span class="c"># for each cell in the range, an INDEX + MATCH formula is entered to find the F Tag for the URL listed in the column</span>
+    <span class="c"># to the left.</span>
+    <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">f_tag_range</span><span class="p">:</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">offset</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">get_address</span><span class="p">(</span><span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+        <span class="n">cell</span><span class="o">.</span><span class="n">formula</span> <span class="o">=</span> <span class="s">&#39;=IFERROR(INDEX(F_Tags!G:G,MATCH(working!&#39;</span> <span class="o">+</span> <span class="n">url</span> <span class="o">+</span> <span class="s">&#39;,F_Tags!E:E,0)),&quot;na&quot;)&#39;</span>
+
+    <span class="c"># With the F Tag names entered, update the DataFrame&#39;s F Tag column with the inputted data.</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;F Tag&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Range</span><span class="p">(</span><span class="s">&#39;working&#39;</span><span class="p">,</span> <span class="s">&#39;F2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">vertical</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="c"># the F Tags names that were inputted are then matched to the headers of the columns. When a match is found, the</span>
+    <span class="c"># reference is set in a list.</span>
+    <span class="n">f_tags</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;F Tag&#39;</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">tag</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">tag</span><span class="p">:</span>
+                <span class="n">f_tags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+
+    <span class="c"># After all the F Tag names have been iterated through to find the appropriate tag columns, the references are then</span>
+    <span class="c"># set as the intersection of the column names.</span>
+    <span class="n">f_tags</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">f_tags</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
+    <span class="n">f_conversions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">f_tags</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
+
+    <span class="c"># The F Actions column that was created earlier is then updated with the sum of the F Action by row based on the</span>
+    <span class="c"># corresponding columns to that tag.</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;F Actions&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">f_conversions</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c"># Strip everything before the colon in the F Tag column to remove the group name.</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;F Tag&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;F Tag&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c"># New variable to set the desired columns for the new updated data.</span>
+    <span class="n">data_columns</span> <span class="o">=</span> <span class="n">dimensions</span> <span class="o">+</span> <span class="n">metrics</span> <span class="o">+</span> <span class="n">action_tags</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data_columns</span><span class="p">]</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="c"># Workbook is then saved in order for data shuttling to work correctly.</span>
+    <span class="n">wb</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+    <span class="c"># If the data tab in the Excel workbook is blank, the cleaned data will just be placed into the tab.</span>
+    <span class="k">if</span> <span class="n">Range</span><span class="p">(</span><span class="s">&#39;data&#39;</span><span class="p">,</span> <span class="s">&#39;A1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">chunk_df</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s">&#39;data&#39;</span><span class="p">,</span> <span class="s">&#39;A1&#39;</span><span class="p">)</span>
+
+    <span class="c"># If data is already present in the tab, the two data sets are merged together and then copied into the data tab.</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">past_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">sheet</span><span class="p">,</span> <span class="s">&#39;data&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="bp">None</span><span class="p">))</span>
+        <span class="n">appended_data</span> <span class="o">=</span> <span class="n">past_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">appended_data</span> <span class="o">=</span> <span class="n">appended_data</span><span class="p">[</span><span class="n">data_columns</span><span class="p">]</span>
+        <span class="n">appended_data</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">Sheet</span><span class="p">(</span><span class="s">&#39;data&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="n">chunk_df</span><span class="p">(</span><span class="n">appended_data</span><span class="p">,</span> <span class="s">&#39;data&#39;</span><span class="p">,</span> <span class="s">&#39;A1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="postprocess-bas">
+<h2>Postprocess.bas<a class="headerlink" href="#postprocess-bas" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>Sub Postprocess_Report()
+
+Dim wCFVTemp                As String
+Dim wSATemp                 As String
+Dim wWorking                As String
+
+wCFVTemp = &quot;CFV_Temp&quot;
+wSATemp = &quot;SA_Temp&quot;
+wWorking = &quot;working&quot;
+
+&#39; Now that the routine is complete, delete the three temporary tabs
+&#39; SA_Temp, CFV_Temp and working
+
+Application.DisplayAlerts = False
+On Error Resume Next
+Worksheets(wSATemp).Delete
+Worksheets(wCFVTemp).Delete
+Worksheets(wWorking).Delete
+Err.Clear
+
+Application.DisplayAlerts = True
+
+&#39; Delete the path and name reference from the Lookup tab
+
+Sheets(&quot;Lookup&quot;).Activate
+Range(&quot;G1&quot;).ClearContents
+
+&#39; Go to the Pivot tab
+
+Sheets(&quot;Pivot&quot;).Activate
+
+End Sub
+</pre></div>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2015, Aaron Schlegel.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

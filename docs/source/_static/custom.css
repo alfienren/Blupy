@@ -1,23 +1,13 @@
-@font-face {
-    font-family: 'gotham_bookregular';
-    src: url('fonts/gotham-book-webfont.eot');
-    src: url('fonts/gotham-book-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/gotham-book-webfont.woff2') format('woff2'),
-         url('fonts/gotham-book-webfont.woff') format('woff'),
-         url('fonts/gotham-book-webfont.ttf') format('truetype'),
-         url('fonts/gotham-book-webfont.svg#gotham_bookregular') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
+@import url(http://fonts.googleapis.com/css?family=Open+Sans);
 
 @font-face {
-    font-family: 'bariol_boldbold';
-    src: url('fonts/bariol_bold-webfont.eot');
-    src: url('fonts/bariol_bold-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/bariol_bold-webfont.woff2') format('woff2'),
-         url('fonts/bariol_bold-webfont.woff') format('woff'),
-         url('fonts/bariol_bold-webfont.ttf') format('truetype'),
-         url('fonts/bariol_bold-webfont.svg#bariol_boldbold') format('svg');
+    font-family: 'proxima_nova_scosf_rgregular';
+    src: url('fonts/proxima_nova_scosf_regular-webfont.eot');
+    src: url('fonts/proxima_nova_scosf_regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/proxima_nova_scosf_regular-webfont.woff2') format('woff2'),
+         url('fonts/proxima_nova_scosf_regular-webfont.woff') format('woff'),
+         url('fonts/proxima_nova_scosf_regular-webfont.ttf') format('truetype'),
+         url('fonts/proxima_nova_scosf_regular-webfont.svg#proxima_nova_scosf_rgregular') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -27,7 +17,7 @@
 }
 
 #navbar {
-    font-family: 'bariol_boldbold';
+    font-family: 'proxima_nova_scosf_rgregular';
     background-color: red;
 }
 
@@ -53,7 +43,7 @@
 }
 
 #sidebar {
-    font-family: 'gotham_bookregular';
+    font-family: 'Open Sans', sans-serif;
     font-size: 1.25em;
 }
 
@@ -62,15 +52,19 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'bariol_boldbold';
+    font-family: 'proxima_nova_scosf_rgregular';
+}
+
+h2, h3, h4, h5, h6 {
+    padding-bottom: 2%;
 }
 
 h1 {
-    font-size: 3.5em;
+    font-size: 3em;
 }
 
 h2 {
-    font-size: 2.5em;
+    font-size: 2em;
 }
 
 h3 {
@@ -78,8 +72,16 @@ h3 {
 }
 
 p {
-    font-family: 'gotham_bookregular';
-    font-size: 1.3em;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.2em;
+    line-height: 1.75;
+    color: #4b4b57;
+}
+
+.simple li {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.2em;
+    line-height: 1.75;
 }
 
 img {
@@ -87,13 +89,9 @@ img {
     padding-bottom: 2%;
 }
 
-thead {
-    font-size: 1.3em;
-}
-
 table {
-    font-family: 'gotham_bookregular';
-    font-size: 1.1em;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.2em;
 }
 
 td[colspan="5"] {

@@ -76,11 +76,24 @@
 <li class="toctree-l2"><a class="reference internal" href="weeklyreporting.html#using-the-reporting-template">Using the Reporting Template</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Calculations and Definitions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Calculations and Definitions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#general-definitions">General Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#campaign-specific-definitions">Campaign Specific Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calculation-methods-and-examples">Calculation Methods and Examples</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="indices.html">Index</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="indices.html#site-activity-report-fields">Site Activity Report Fields</a></li>
 <li class="toctree-l2"><a class="reference internal" href="indices.html#custom-floodlight-variable-fields">Custom Floodlight Variable Fields</a></li>
 <li class="toctree-l2"><a class="reference internal" href="indices.html#action-tag-reference">Action Tag Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sourcecode.html">Source</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sourcecode.html#process-raw-bas">Process_Raw.bas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sourcecode.html#f-tags-bas">F_Tags.bas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sourcecode.html#external-calls-bas">External_Calls.bas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sourcecode.html#weekly-reporting-py">weekly_reporting.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sourcecode.html#postprocess-bas">Postprocess.bas</a></li>
 </ul>
 </li>
 </ul>
@@ -96,7 +109,12 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Calculations and Definitions</a></li>
+<li><a class="reference internal" href="#">Calculations and Definitions</a><ul>
+<li><a class="reference internal" href="#general-definitions">General Definitions</a></li>
+<li><a class="reference internal" href="#campaign-specific-definitions">Campaign Specific Definitions</a></li>
+<li><a class="reference internal" href="#calculation-methods-and-examples">Calculation Methods and Examples</a></li>
+</ul>
+</li>
 </ul>
 </ul>
 </li>
@@ -140,17 +158,35 @@
 <li class="toctree-l2"><a class="reference internal" href="weeklyreporting.html#using-the-reporting-template">Using the Reporting Template</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Calculations and Definitions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Calculations and Definitions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#general-definitions">General Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#campaign-specific-definitions">Campaign Specific Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calculation-methods-and-examples">Calculation Methods and Examples</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="indices.html">Index</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="indices.html#site-activity-report-fields">Site Activity Report Fields</a></li>
 <li class="toctree-l2"><a class="reference internal" href="indices.html#custom-floodlight-variable-fields">Custom Floodlight Variable Fields</a></li>
 <li class="toctree-l2"><a class="reference internal" href="indices.html#action-tag-reference">Action Tag Reference</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="sourcecode.html">Source</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sourcecode.html#process-raw-bas">Process_Raw.bas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sourcecode.html#f-tags-bas">F_Tags.bas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sourcecode.html#external-calls-bas">External_Calls.bas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sourcecode.html#weekly-reporting-py">weekly_reporting.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sourcecode.html#postprocess-bas">Postprocess.bas</a></li>
+</ul>
+</li>
 </ul>
 </ul>
 </li><ul>
-<li><a class="reference internal" href="#">Calculations and Definitions</a></li>
+<li><a class="reference internal" href="#">Calculations and Definitions</a><ul>
+<li><a class="reference internal" href="#general-definitions">General Definitions</a></li>
+<li><a class="reference internal" href="#campaign-specific-definitions">Campaign Specific Definitions</a></li>
+<li><a class="reference internal" href="#calculation-methods-and-examples">Calculation Methods and Examples</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -161,41 +197,235 @@
 <h1>Calculations and Definitions<a class="headerlink" href="#calculations-and-definitions" title="Permalink to this headline">¶</a></h1>
 <p>Below is a list of the metrics used in reporting and how they are defined. How these metrics are
 calculated in the routine will also be displayed.</p>
+<div class="section" id="general-definitions">
+<h2>General Definitions<a class="headerlink" href="#general-definitions" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="docutils">
 <colgroup>
-<col width="15%" />
-<col width="41%" />
-<col width="43%" />
+<col width="21%" />
+<col width="79%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Metric</th>
 <th class="head">Definition</th>
-<th class="head">Example</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>Postpaid Plans</td>
 <td>Count of Plans associated with a Device
-A Postpaid Plan must have a device
-and a plan</td>
-<td>Device1 &#8211; Plan1 = 1 Postpaid Plan
-Device2 &#8211; Plan2 = 1 Postpaid Plan
-Device3 &#8211;       = 0 Postpaid Plans
-Total: 2 Postpaid Plans</td>
+A Postpaid Plan must have a device and
+a plan</td>
 </tr>
 <tr class="row-odd"><td>Prepaid Plans</td>
-<td>Count of Devices without a Plan or String</td>
-<td>&nbsp;</td>
+<td>Count of Devices without an associated Plan or String</td>
 </tr>
 <tr class="row-even"><td>Services</td>
-<td>Count of service strings in Device
-(string) column</td>
-<td>ServiceString1, ServiceString2 = 2 Services
-ServiceString3                 = 1 Service
-Total: 3 Services</td>
+<td>Count of service strings in Service (string) column in CFV
+report</td>
+</tr>
+<tr class="row-odd"><td>Devices</td>
+<td>Count of device strings in Device (string) column in CFV
+report</td>
+</tr>
+<tr class="row-even"><td>Plans</td>
+<td>Count of plan strings in Plan (string) column in CFV report</td>
+</tr>
+<tr class="row-odd"><td>Accessories</td>
+<td>Count of accessory strings in Accessory (string) column in
+CFV report</td>
+</tr>
+<tr class="row-even"><td>Add-a-Line</td>
+<td>Count of serive strings in Service (string) column
+containing &#8216;ADD&#8217;</td>
+</tr>
+<tr class="row-odd"><td>Activations</td>
+<td>Plans + Add-a-Lines</td>
+</tr>
+<tr class="row-even"><td>Orders</td>
+<td>One order per OrderNumber (string) in CFV report</td>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="section" id="campaign-specific-definitions">
+<h2>Campaign Specific Definitions<a class="headerlink" href="#campaign-specific-definitions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="26%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Campaign</th>
+<th class="head">Metric</th>
+<th class="head">Definition</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>DDR, Demand Gen</td>
+<td>Estimated Gross Adds (eGAs)</td>
+<td>Count of Devices with 50% view-through credit</td>
+</tr>
+<tr class="row-odd"><td>DDR</td>
+<td>Prepaid Gross Adds</td>
+<td>Count of Devices with prepaid subcategory</td>
+</tr>
+<tr class="row-even"><td>DDR</td>
+<td>Postpaid Gross Adds</td>
+<td>Count of Devices with postpaid subcategory</td>
+</tr>
+<tr class="row-odd"><td>DDR</td>
+<td>Prepaid SIMs</td>
+<td>Set of Prepaid Gross Adds with product category of SIM only</td>
+</tr>
+<tr class="row-even"><td>DDR</td>
+<td>Postpaid SIMs</td>
+<td>Set of Postpaid Gross Adds with product category of SIM only</td>
+</tr>
+<tr class="row-odd"><td>DDR</td>
+<td>Prepaid Mobile Internet</td>
+<td>Set of Prepaid Gross Adds with Mobile Internet product category</td>
+</tr>
+<tr class="row-even"><td>DDR</td>
+<td>Postpaid Mobile Internet</td>
+<td>Set of Postpaid Gross Adds with Mobile Internet product category</td>
+</tr>
+<tr class="row-odd"><td>DDR</td>
+<td>Prepaid Phone</td>
+<td>Set of Prepaid Gross Adds with Smartphone product category</td>
+</tr>
+<tr class="row-even"><td>DDR</td>
+<td>Postpaid Phone</td>
+<td>Set of Postpaid Gross Adds with Smartphone product category</td>
+</tr>
+<tr class="row-odd"><td>DDR</td>
+<td>New Device</td>
+<td>Count of Devices with New TMO Order Confirmation floodlight</td>
+</tr>
+<tr class="row-even"><td>DDR</td>
+<td>Total Gross Adds</td>
+<td>Prepaid Gross Adds + Postpaid Gross Adds</td>
+</tr>
+<tr class="row-odd"><td>DDR</td>
+<td>Prepaid Gross Adds</td>
+<td>Prepaid SIMs + Prepaid Mobile Internet + Prepaid Phones</td>
+</tr>
+<tr class="row-even"><td>DDR</td>
+<td>Postpaid Gross Adds</td>
+<td>Postpaid SIMs + Postpaid Mobile Internet + Postpaid Phones</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="calculation-methods-and-examples">
+<h2>Calculation Methods and Examples<a class="headerlink" href="#calculation-methods-and-examples" title="Permalink to this headline">¶</a></h2>
+<p><strong>Plans</strong>, <strong>Devices</strong>, <strong>Services</strong> and <strong>Accessories</strong> are tallied similiarly:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Plans&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Plan (string)&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Devices&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Device (string)&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Services&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Service (string)&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Accessories&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Accessory (string)&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>Each Plan, Device, Service, etc., is separated by a comma, therefore, the metrics are calculated by counting the number
+of commas in the cell and adding 1. If a cell is blank, it is assigned as NaN (not a number) and is not counted.</p>
+<p><strong>Examples:</strong></p>
+<ul class="simple">
+<li>Plan (string): SCWTT5MI, SCWTT5MI = 2 Plans</li>
+<li>Device (string):  MG552LL/A,MG542LL/A,610214633651,610214694980 = 4 Devices</li>
+<li>Accessory (string): blank = 0 Accessories</li>
+</ul>
+<p><strong>Add-a-Lines</strong> are calculated by counting the number of occurrences of the string &#8216;ADD&#8217; in Service (string) column:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Add-a-Line&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Service (string)&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">&#39;ADD&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Examples:</strong></p>
+<ul class="simple">
+<li>Service (string) 1 = ADDUTTVNC,V500DATA,V500DATA,V500DATA = 1 Add-a-Line</li>
+<li>Service (string) 2 = SCUNL4HHS,ADDUTTVNC,V2HDATA,V2HDATA,ADDUTTVNC = 2 Add-a-Lines</li>
+<li>Service (string) 3 = Visual Voicemail,2.5 GB High-Speed Data = 0 Add-a-Lines</li>
+</ul>
+<p><strong>Postpaid Plans</strong> are defined as a Device with an associated Plan:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Postpaid Plans&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Plans&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Devices&#39;</span><span class="p">],</span> <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Plans&#39;</span><span class="p">],</span>
+                             <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Plans&#39;</span><span class="p">],</span> <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Devices&#39;</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The calculation states if the number of Plans is equal to the number of Devices, Plans are therefore equal
+to Postpaid Plans. If the count of Plans and Devices is not equal, the lower count would then be equal to
+the amount of Postpaid Plans.</p>
+<p><strong>Examples:</strong></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="43%" />
+<col width="41%" />
+<col width="16%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Plan (string)</th>
+<th class="head">Device (string)</th>
+<th class="head">Postpaid Plans</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>SIMPLE CHOICE PLAN: UNLIMITED TALK + TEXT</td>
+<td>Apple iPhone 6 Plus - Gold - 64GB</td>
+<td>1</td>
+</tr>
+<tr class="row-odd"><td>SCMIMDG5,SCMIMDG5,SCMIMDG5,SCMIMDG5</td>
+<td>MH2W2LL/A,MH2W2LL/A,MH2W2LL/A,MH2W2LL/A</td>
+<td>4</td>
+</tr>
+<tr class="row-even"><td>SCWTT5MI,SCWTT5MI</td>
+<td>61021463899161</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Prepaid Plans</strong> are defined as the number of Devices without an associated Service and Plan:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Prepaid Plans&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Plans&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Services&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">),</span> <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Devices&#39;</span><span class="p">],</span>
+                                <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Devices&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Plans&#39;</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Services&#39;</span><span class="p">]),</span>
+                                         <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Devices&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Plans&#39;</span><span class="p">],</span> <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Services&#39;</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The logic first checks if the Plan and Service cells are both 0. If so, Prepaid Plans would then be the count of
+Devices. If Plans and Services are not 0, Prepaid Plans are determined by subtracting the count of Plans or Services, whichever
+is largest.</p>
+<p><strong>Examples:</strong></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="47%" />
+<col width="24%" />
+<col width="15%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Plan (string)</th>
+<th class="head">Service (string)</th>
+<th class="head">Device (string)</th>
+<th class="head">Prepaid Plans</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>FUTTVN</td>
+<td>V2HDATA,V2HDATA,V2HDATA,SCUNL4HHS</td>
+<td>610214633644,MG562LL/A</td>
+<td>0</td>
+</tr>
+<tr class="row-odd"><td>SCFUTT4</td>
+<td>ADDUTTVNC</td>
+<td>MG562LL/A,MG562LL/A</td>
+<td>1</td>
+</tr>
+<tr class="row-even"><td>SCFUTTBD</td>
+<td>MG562LL/A,MG552LL/A,610214633644,610214633651</td>
+<td>None</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Activations</strong> are just the sum of Add-a-Lines and Plans:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Activations&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Plans&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">cfv</span><span class="p">[</span><span class="s">&#39;Add-a-Line&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 

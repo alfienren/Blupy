@@ -21,11 +21,5 @@ Table of Contents
   	 weeklyreporting
   	 calculations
   	 indices
+  	 sourcecode
 
-Source
-------
-
-I keep the working code on Github to better maintain changes and track issues. No
-private data is included. The project can be found here: https://github.com/TMOptimedia/Weekly_DFA_Reporting.
-If you would like to contribute by adding issues or submitting pull requests, please email me 
-and I will add you to the organization.
