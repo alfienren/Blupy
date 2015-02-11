@@ -1,7 +1,8 @@
 $ cat .gitignore
 
 test_docs/
+docs/source/_static/fonts
+ddr/
 *.xlsm
 *.xls
 DataMunge.bas
-ddr/
