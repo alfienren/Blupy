@@ -53,6 +53,11 @@ def dfa_reporting():
     sa = pd.DataFrame(pd.read_excel(sheet, 'SA_Temp', index_col=None))
     cfv = pd.DataFrame(pd.read_excel(sheet, 'CFV_Temp', index_col=None))
 
+    '''
+    cfv = pd.DataFrame(Range('CFV_Temp', 'A1').table.value, columns = Range('CFV_Temp', 'A1').horizontal.value)
+    cfv.drop(0, inplace=True)
+    '''
+
     cfv['Orders'] = 1 # Create orders column in cfv data. Each OrderNumber counts as 1 order
     cfv['Plans'] = cfv['Plan (string)'].str.count(',') + 1 # Count the number of plans in the Plans column
     cfv['Devices'] = cfv['Device (string)'].str.count(',') + 1 # Count number of devices in the Plans column
@@ -77,6 +82,21 @@ def dfa_reporting():
     cfv['Orders'] = np.where((cfv['Campaign'].str.contains('DDR') == True) &
                              (cfv['Floodlight Attribution Type'].str.contains('View-through') == True),
                              cfv['Orders'] * 0.5, cfv['Orders'])
+
+    """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+    DDR Custom Floodlight Data Transform
+    """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+    '''
+    Top 15 Devices Report
+    '''
+
+    '''
+    cfv['Device IDs'] = cfv['Device (string)'].str.split(',')
+    cfv['Device IDs'].dropna(inplace = True)
+    devices = list(itertools.chain(*cfv['Device IDs']))
+    while '' in devices: devices.remove('')
+    '''
 
     # Append the Custom Floodlight Variable data to the Site Activity data. Columns with matching names are merged
     # together. Columns without matching names are added to the new dataframe.
