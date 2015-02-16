@@ -5,4 +5,5 @@ docs/source/_static/fonts
 ddr/
 *.xlsm
 *.xls
+*.csv
 DataMunge.bas
