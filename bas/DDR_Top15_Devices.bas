@@ -44,10 +44,24 @@ Range("A1").Value = "Rank"
 Range("B1").Value = "Devices"
 Range("C1").Value = "Devices Count"
 Range("D1").Value = "Device Name"
+Range("F1").Value = "Subcategory - Device"
+Range("H1").Value = "Rank"
+Range("I1").Value = "Plans"
+Range("J1").Value = "Plans Count"
 
-Range("A1:E1").Font.Bold = True
+Range("A1:F1").Font.Bold = True
 
-With Range("A1:E1").Interior
+With Range("A1:F1").Interior
+    .Pattern = xlSolid
+    .PatternColorIndex = xlAutomatic
+    .ThemeColor = xlThemeColorDark2
+    .TintAndShade = -9.99786370433668E-02
+    .PatternTintAndShade = 0
+End With
+
+Range("H1:J1").Font.Bold = True
+
+With Range("H1:J1").Interior
     .Pattern = xlSolid
     .PatternColorIndex = xlAutomatic
     .ThemeColor = xlThemeColorDark2
@@ -66,7 +80,8 @@ Application.DisplayAlerts = False
 wDeviceReport.Sheets("Sheet1").Delete
 Application.DisplayAlerts = True
 
-Columns("A:E").EntireColumn.AutoFit
+Columns("A:F").EntireColumn.AutoFit
+Columns("H:J").EntireColumn.AutoFit
 Columns("B:B").NumberFormat = "0"
 
 With Range("A1").CurrentRegion
