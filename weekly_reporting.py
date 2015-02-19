@@ -51,19 +51,17 @@ def dfa_reporting():
     # Load the Site Activity and Custom Floodlight Variable data into pandas as DataFrames
 
     sa = pd.DataFrame(pd.read_excel(sheet, 'SA_Temp', index_col=None))
-    cfv = pd.DataFrame(pd.read_excel(sheet, 'CFV_Temp', index_col=None))
 
-    '''
     cfv = pd.DataFrame(Range('CFV_Temp', 'A1').table.value, columns = Range('CFV_Temp', 'A1').horizontal.value)
     cfv.drop(0, inplace=True)
-    '''
+    #cfv = pd.DataFrame(pd.read_excel(sheet, 'CFV_Temp', index_col=None))
 
     cfv['Orders'] = 1 # Create orders column in cfv data. Each OrderNumber counts as 1 order
-    cfv['Plans'] = cfv['Plan (string)'].str.count(',') + 1 # Count the number of plans in the Plans column
-    cfv['Devices'] = cfv['Device (string)'].str.count(',') + 1 # Count number of devices in the Plans column
-    cfv['Services'] = cfv['Service (string)'].str.count(',') + 1 # Count number of services in the Plans column
-    cfv['Add-a-Line'] = cfv['Service (string)'].str.count('ADD') # Count number of Add-a-Lines in the Plans column
-    cfv['Accessories'] = cfv['Accessory (string)'].str.count(',') + 1 # Count number of Accessories in the Accessories column
+    cfv['Plans'] = np.where(cfv['Plan (string)'] != '', cfv['Plan (string)'].str.count(',') + 1, 0) # Count the number of plans in the Plans column
+    cfv['Services'] = np.where(cfv['Service (string)'] != '', cfv['Service (string)'].str.count(',') + 1, 0) # Count number of services in the Service column
+    cfv['Accessories'] = np.where(cfv['Accessory (string)'] != '', cfv['Accessory (string)'].str.count(',') + 1, 0) # Count number of Accessories in the Accessories column
+    cfv['Devices'] = np.where(cfv['Device (string)'] != '', cfv['Device (string)'].str.count(',') + 1, 0) # Count number of devices in the Plans column
+    cfv['Add-a-Line'] = cfv['Service (string)'].str.count('ADD') # Count number of Add-a-Lines in the Service column
     cfv['Activations'] = cfv['Plans'] + cfv['Add-a-Line'] #Activations are defined as the sum of Plans and Add-a-Line
 
     # Postpaid plans are defined as a Plan + Device. By row, if number of plans is equal to number of devices, Postpaid
@@ -79,28 +77,91 @@ def dfa_reporting():
 
     # The DDR campaign counts view-through order credit at 50%. If the campaign name contains 'DDR' and the Floodlight
     # Attribution Type is View-through, the order is multiplied by 0.5.
-    cfv['Orders'] = np.where((cfv['Campaign'].str.contains('DDR') == True) &
+    cfv['Orders'] = np.where(((cfv['Campaign'].str.contains('DDR') == True) | (cfv['Campaign'].str.contains('Q1_Brand Remessaging') == True)) &
                              (cfv['Floodlight Attribution Type'].str.contains('View-through') == True),
                              cfv['Orders'] * 0.5, cfv['Orders'])
 
+    # Estimated Gross Adds are calculated as the count of Devices with 50% view-through credit.
+    # If Floodlight Attribution Type is equal to View-through, the count of Devices is multiplied by 0.5
+    cfv['eGAs'] = np.where(cfv['Floodlight Attribution Type'].str.contains('View-through') == True,
+                            (cfv['Device (string)'].str.count(',') + 1) / 2,
+                            cfv['Device (string)'].str.count(',') + 1)
+
     """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-    DDR Custom Floodlight Data Transform
+    DDR specific reporting
     """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-    '''
-    Top 15 Devices Report
-    '''
+    devices = cfv['Device (string)'].str.split(',').apply(pd.Series).stack()
+    devices.index = devices.index.droplevel(-1)
+    devices.name = "Device IDs"
 
-    '''
-    cfv['Device IDs'] = cfv['Device (string)'].str.split(',')
-    cfv['Device IDs'].dropna(inplace = True)
-    devices = list(itertools.chain(*cfv['Device IDs']))
-    while '' in devices: devices.remove('')
-    '''
+    cfv_new = cfv[cfv.columns[0:17]].join(devices)
+    cfv_new = cfv.append(cfv_new)
+
+    ddr = pd.DataFrame(pd.read_csv(sheet[:sheet.rindex('\\')] + '\\_\\devices.csv'))
+    cfv_new = pd.merge(cfv_new, ddr, how = 'left', left_on = 'Device IDs', right_on = 'Device SKU')
+
+    cfv_new['Prepaid GAs'] = np.where((cfv_new['Product Subcategory'].str.contains('Prepaid') == True) &
+                                 (cfv_new['Floodlight Attribution Type'].str.contains('View-through') == True), 0.5,
+                                  np.where(cfv_new['Product Subcategory'].str.contains('Prepaid') == True, 1, 0))
+
+    cfv_new['Postpaid GAs'] = np.where((cfv_new['Product Subcategory'].str.contains('Postpaid') == True) &
+                                  (cfv_new['Floodlight Attribution Type'].str.contains('View-through') == True), 0.5,
+                                  np.where(cfv_new['Product Subcategory'].str.contains('Postpaid') == True, 1, 0))
+
+    cfv_new['DDR GAs'] = cfv_new['Postpaid GAs'] + cfv_new['Prepaid GAs']
+
+    cfv_new['Prepaid SIMs'] = np.where((cfv_new['Product Category'].str.contains('SIM card') == True) &
+                                  (cfv_new['Product Subcategory'].str.contains('Prepaid') == True) &
+                                  (cfv_new['Floodlight Attribution Type'].str.contains('View-through') == True), 0.5,
+                                  np.where((cfv_new['Product Category'].str.contains('SIM card') == True) &
+                                           (cfv_new['Product Subcategory'].str.contains('Prepaid') == True), 1, 0))
+
+    cfv_new['Postpaid SIMs'] = np.where((cfv_new['Product Category'].str.contains('SIM card') == True) &
+                                   (cfv_new['Floodlight Attribution Type'].str.contains('View-through') == True) &
+                                   (cfv_new['Product Subcategory'].str.contains('Postpaid') == True), 0.5,
+                                   np.where((cfv_new['Product Category'].str.contains('SIM card') == True) &
+                                            (cfv_new['Product Subcategory'].str.contains('Postpaid') == True), 1, 0))
+
+    cfv_new['Prepaid Mobile Internet'] = np.where((cfv_new['Product Category'].str.contains('Mobile Internet') == True) &
+                                             (cfv_new['Product Subcategory'].str.contains('Prepaid') == True) &
+                                             (cfv_new['Floodlight Attribution Type'].str.contains('View-through') == True), 0.5,
+                                             np.where((cfv_new['Product Category'].str.contains('Mobile Internet') == True) &
+                                                      (cfv_new['Product Subcategory'].str.contains('Prepaid') == True), 1, 0))
+
+    cfv_new['Postpaid Mobile Internet'] = np.where((cfv_new['Product Category'].str.contains('Mobile Internet') == True) &
+                                              (cfv_new['Product Subcategory'].str.contains('Postpaid') == True) &
+                                              (cfv_new['Floodlight Attribution Type'].str.contains('View-through') == True), 0.5,
+                                              np.where((cfv_new['Product Category'].str.contains('Mobile Internet') == True) &
+                                                       (cfv_new['Product Subcategory'].str.contains('Postpaid') == True), 1, 0))
+
+    cfv_new['Prepaid Phone'] = np.where((cfv_new['Product Category'].str.contains('Smartphone') == True) &
+                                   (cfv_new['Product Subcategory'].str.contains('Prepaid') == True) &
+                                   (cfv_new['Floodlight Attribution Type'].str.contains('View-through') == True), 0.5,
+                                   np.where((cfv_new['Product Category'].str.contains('Smartphone') == True) &
+                                            (cfv_new['Product Subcategory'].str.contains('Prepaid') == True), 1, 0))
+
+    cfv_new['Postpaid Phone'] = np.where((cfv_new['Product Category'].str.contains('Smartphone') == True) &
+                                    (cfv_new['Product Subcategory'].str.contains('Postpaid') == True) &
+                                    (cfv_new['Floodlight Attribution Type'].str.contains('View-through') == True), 0.5,
+                                    np.where((cfv_new['Product Category'].str.contains('Smartphone') == True) &
+                                             (cfv_new['Product Subcategory'].str.contains('Postpaid') == True), 1, 0))
+
+    cfv_new['DDR New Devices'] = np.where((cfv_new['Device IDs'].notnull() == True) &
+                                 (cfv_new['Activity'].str.contains('New TMO Order') == True) &
+                                 (cfv_new['Floodlight Attribution Type'].str.contains('View-through') == True), 0.5,
+                                 np.where((cfv_new['Device IDs'].notnull() == True) &
+                                          (cfv_new['Activity'].str.contains('New TMO Order') == True), 1, 0))
+
+    cfv_new['DDR Add-a-Line'] = np.where((cfv_new['Device IDs'].notnull() == True) &
+                                    (cfv_new['Activity'].str.contains('New My.TMO Order') == True) &
+                                    (cfv_new['Floodlight Attribution Type'].str.contains('View-through') == True), 0.5,
+                                     np.where((cfv_new['Device IDs'].notnull() == True) &
+                                              (cfv_new['Activity'].str.contains('New My.TMO Order') == True), 1, 0))
 
     # Append the Custom Floodlight Variable data to the Site Activity data. Columns with matching names are merged
     # together. Columns without matching names are added to the new dataframe.
-    data = sa.append(cfv)
+    data = sa.append(cfv_new)
 
     # The DFA field DBM Cost is more accurate for placements using dynamic bidding. If a placement is not using
     # dynamic bidding, DBM Cost = 0. Therefore, if DBM cost does not equal 0, replace the row's media cost with
@@ -296,12 +357,6 @@ def dfa_reporting():
     data['Consideration Actions'] = data['C Actions'] + data['D Actions']
     data['Traffic Actions'] = data['Awareness Actions'] + data['Consideration Actions']
 
-    # Estimated Gross Adds are calculated as the count of Devices with 50% view-through credit.
-    # If Floodlight Attribution Type is equal to View-through, the count of Devices is multiplied by 0.5
-    data['eGAs'] = np.where(data['Floodlight Attribution Type'].str.contains('View-through') == True,
-                            (data['Device (string)'].str.count(',') + 1) / 2,
-                            data['Device (string)'].str.count(',') + 1)
-
     # Message Bucket, Category and Offer
     # 90% of the time, the message bucket, category and offer can be determined from the creative field 1 column. It
     # follows a pattern of Bucket_Category_Offer
@@ -344,11 +399,12 @@ def dfa_reporting():
     # that will be outputted.
     dimensions = ['Week', 'Date', 'Campaign', 'Site (DCM)', 'Click-through URL', 'F Tag', 'Category', 'Message Bucket',
                   'Message Category',
-                  'Message Offer', 'Creative', 'Ad', 'Creative Groups 1', 'Creative Groups 2', 'Creative ID',
+                  'Message Offer', 'Creative', 'Ad', 'Creative Groups 2',
                   'Creative Type',
                   'Creative Field 1', 'Placement', 'Placement Cost Structure', 'OrderNumber (string)', 'Activity',
                   'Floodlight Attribution Type',
                   'Plan (string)', 'Device (string)', 'Service (string)', 'Accessory (string)']
+                   #'Creative Groups 1' 'Creative ID'
 
     # Similar to the dimensions variable, metrics lists all the data we want to be outputted.
     metrics = ['Media Cost', 'Impressions', 'Clicks', 'Orders', 'Plans', 'Add-a-Line', 'Activations', 'Devices',
@@ -356,8 +412,9 @@ def dfa_reporting():
                'Postpaid Plans', 'Prepaid Plans', 'eGAs', 'Store Locator Visits', 'A Actions', 'B Actions', 'C Actions',
                'D Actions', 'E Actions', 'F Actions',
                'Awareness Actions', 'Consideration Actions', 'Traffic Actions', 'Post-Click Activity',
-               'Post-Impression Activity',
-               'Video Completions', 'Video Views']
+               'Post-Impression Activity', 'Video Completions', 'Video Views', 'Prepaid GAs', 'Postpaid GAs',
+               'Prepaid SIMs', 'Postpaid SIMs', 'Prepaid Mobile Internet', 'Postpaid Mobile Internet', 'Prepaid Phone',
+               'Postpaid Phone', 'DDR New Devices', 'DDR Add-a-Line']
 
     # Get all the action tag names so these can be included in the outputted data as well.
     action_tags = sa_columns[sa_columns.index('DBM Cost USD') + 1:]
