@@ -2,7 +2,7 @@ $ cat .gitignore
 
 test_docs/
 docs/source/_static/fonts
-ddr/
+campaign_docs/
 *.xlsm
 *.xls
 *.csv
