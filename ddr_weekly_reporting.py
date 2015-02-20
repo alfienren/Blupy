@@ -14,7 +14,7 @@ def ddr_top_15_devices():
     cfv = pd.DataFrame(Range('CFV_Temp', 'A1').table.value, columns = Range('CFV_Temp', 'A1').horizontal.value)
     cfv.drop(0, inplace=True)
 
-    sheet = Range('Lookup', 'G1').value
+    sheet = Range('Lookup', 'AA1').value
 
     ddr = pd.DataFrame(pd.read_csv(sheet[:sheet.rindex('\\')] + '\\_\\devices.csv'))
 

@@ -44,7 +44,7 @@ def dfa_reporting():
     # documentation in the VBA modules for more information.
 
     wb = Workbook.caller() # Initiate workbook object
-    sheet = Range('Lookup', 'G1').value # Grab workbook path from Excel sheet
+    sheet = Range('Lookup', 'AA1').value # Grab workbook path from Excel sheet
 
     wb.save() # Workbook needs to be saved in order to load the data into pandas properly
 
@@ -98,7 +98,7 @@ def dfa_reporting():
     cfv_new = cfv[cfv.columns[0:17]].join(devices)
     cfv_new = cfv.append(cfv_new)
 
-    ddr = pd.DataFrame(pd.read_csv(sheet[:sheet.rindex('\\')] + '\\_\\devices.csv'))
+    ddr = pd.DataFrame(pd.read_csv(sheet[:sheet.rindex('/')] + '/_/devices.csv'))
     cfv_new = pd.merge(cfv_new, ddr, how = 'left', left_on = 'Device IDs', right_on = 'Device SKU')
 
     cfv_new['Prepaid GAs'] = np.where((cfv_new['Product Subcategory'].str.contains('Prepaid') == True) &
@@ -162,6 +162,12 @@ def dfa_reporting():
     # Append the Custom Floodlight Variable data to the Site Activity data. Columns with matching names are merged
     # together. Columns without matching names are added to the new dataframe.
     data = sa.append(cfv_new)
+
+    campaign_specific_lookup = pd.DataFrame(Range('Lookup', 'H3').table.value, columns= Range('Lookup', 'H3').horizontal.value)
+    campaign_specific_lookup.drop(0, inplace=True)
+    campaign_specific_lookup.drop('Campaign', axis = 1, inplace = True)
+
+    data = pd.merge(data, campaign_specific_lookup, how = 'left', left_on='Placement', right_on='Placement_category')
 
     # The DFA field DBM Cost is more accurate for placements using dynamic bidding. If a placement is not using
     # dynamic bidding, DBM Cost = 0. Therefore, if DBM cost does not equal 0, replace the row's media cost with
@@ -290,7 +296,7 @@ def dfa_reporting():
     rm = '|'.join(list(Range('Lookup', 'D2:D5').value))
     custom = '|'.join(list(Range('Lookup', 'D6:D15').value))
     rem = '|'.join(list(Range('Lookup', 'D16:D28').value))
-    vid = '|'.join(list(Range('Lookup', 'D29:D38').value))
+    vid = '|'.join(list(Range('Lookup', 'D29:D44').value))
 
     dynamic = '|'.join(list(Range('Lookup', 'F2:F3').value))
     other_buy = '|'.join(list(Range('Lookup', 'F4').value))
@@ -400,11 +406,11 @@ def dfa_reporting():
     dimensions = ['Week', 'Date', 'Campaign', 'Site (DCM)', 'Click-through URL', 'F Tag', 'Category', 'Message Bucket',
                   'Message Category',
                   'Message Offer', 'Creative', 'Ad', 'Creative Groups 2',
-                  'Creative Type',
-                  'Creative Field 1', 'Placement', 'Placement Cost Structure', 'OrderNumber (string)', 'Activity',
+                  'Creative Type', 'Creative Groups 1' 'Creative ID',
+                  'Creative Field 1', 'Placement', 'Placement ID', 'Placement Cost Structure', 'OrderNumber (string)', 'Activity',
                   'Floodlight Attribution Type',
                   'Plan (string)', 'Device (string)', 'Service (string)', 'Accessory (string)']
-                   #'Creative Groups 1' 'Creative ID'
+
 
     # Similar to the dimensions variable, metrics lists all the data we want to be outputted.
     metrics = ['Media Cost', 'Impressions', 'Clicks', 'Orders', 'Plans', 'Add-a-Line', 'Activations', 'Devices',
