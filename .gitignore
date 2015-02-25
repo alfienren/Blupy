@@ -4,6 +4,7 @@ test_docs/
 docs/source/_static/fonts
 campaign_docs/
 *.xlsm
+*.xlsx
 *.xls
 *.csv
 DataMunge.bas

@@ -16,7 +16,8 @@ def ddr_top_15_devices():
 
     sheet = Range('Lookup', 'AA1').value
 
-    ddr = pd.DataFrame(pd.read_csv(sheet[:sheet.rindex('\\')] + '\\_\\devices.csv'))
+    ddr = pd.DataFrame(pd.read_excel(sheet[:sheet.rindex('\\')] + '\\_\\devices.xlsx', 'Device Lookup'))
+    excluded_devices = str(Range('Lookup', 'L2').value)
 
     cfv['Device IDs'] = cfv['Device (string)'].str.split(',')
 
@@ -38,6 +39,7 @@ def ddr_top_15_devices():
 
     while '' in ddr_devices: ddr_devices.remove('')
     while '' in ddr_plans: ddr_plans.remove('')
+    while excluded_devices in ddr_devices: ddr_devices.remove(excluded_devices)
 
     device_counts = pd.DataFrame(pd.value_counts(pd.Series(ddr_devices).values, sort = True)[0:15])
     device_counts['Device Name'] = 1
@@ -65,11 +67,11 @@ def ddr_top_15_devices():
 
     for cell in Range('Summary', 'D2').vertical:
         id = cell.offset(0, -2).get_address(False, False, False)
-        cell.formula = '=IFERROR(INDEX(DDR!B:B,MATCH(Summary!' + id + ',DDR!H:H,0)),"na")'
+        cell.formula = '=IFERROR(INDEX(DDR!C:C,MATCH(Summary!' + id + ',DDR!B:B,0)),"na")'
 
     for cell in Range('Summary', 'E2').vertical:
         id = cell.offset(0, -3).get_address(False, False, False)
-        cell.formula = '=IFERROR(INDEX(DDR!G:G,MATCH(Summary!' + id + ',DDR!H:H,0)),"na")'
+        cell.formula = '=IFERROR(INDEX(DDR!K:K,MATCH(Summary!' + id + ',DDR!B:B,0)),"na")'
 
     for cell in Range('Summary', 'F2').vertical:
         subcategory = cell.offset(0, -1).get_address(False, False, False)
