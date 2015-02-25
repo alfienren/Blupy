@@ -207,7 +207,7 @@ def dfa_reporting():
     rm = '|'.join(list(Range('Lookup', 'D2:D5').value))
     custom = '|'.join(list(Range('Lookup', 'D6:D15').value))
     rem = '|'.join(list(Range('Lookup', 'D16:D28').value))
-    vid = '|'.join(list(Range('Lookup', 'D29:D38').value))
+    vid = '|'.join(list(Range('Lookup', 'D29:D44').value))
 
     dynamic = '|'.join(list(Range('Lookup', 'F2:F3').value))
     other_buy = '|'.join(list(Range('Lookup', 'F4').value))
