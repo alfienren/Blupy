@@ -14,13 +14,13 @@ def passback_generation():
 
     wb = Workbook.caller()
 
-    placements = pd.DataFrame(Range('passback_placements', 'A1').table.value,
-                              columns=Range('passback_placements', 'A1').horizontal.value)
+    placements = pd.DataFrame(Range('passback', 'A1').table.value,
+                              columns=Range('passback', 'A1').horizontal.value)
 
     placements.drop(0, inplace=True)
 
-    site_lookup = pd.DataFrame(Range('site_lookup', 'A1').table.value,
-                               columns=Range('site_lookup', 'A1').horizontal.value)
+    site_lookup = pd.DataFrame(Range('Lookup', 'N3').table.value,
+                               columns=Range('Lookup', 'N3').horizontal.value)
 
     site_lookup.drop(0, inplace=True)
 
@@ -34,8 +34,8 @@ def passback_generation():
     ref['Video Plays'] = np.nan
     ref['100% Video Completes'] = np.nan
 
-    start = Range('passback_placements', 'F1').value
-    end = Range('passback_placements', 'F2').value
+    start = Range('passback', 'L1').value
+    end = Range('passback', 'L2').value
 
     delta = end - start
 
