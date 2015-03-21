@@ -3,9 +3,9 @@ Option Explicit
 
 Sub PreRun()
 
-Sheets("passback_placements").Activate
+Sheets("passback").Activate
 
-range("F1:F2").Replace What:=".", Replacement:="/", LookAt:=xlPart, _
+range("L1:L2").Replace What:=".", Replacement:="/", LookAt:=xlPart, _
         SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:=False, _
         ReplaceFormat:=False
         

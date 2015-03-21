@@ -24,17 +24,17 @@ End With
 
 Set wSource = ThisWorkbook
 
-Sheets("passback_placements").Activate
+Sheets("passback").Activate
 
-range("F1:F2").Replace What:="/", Replacement:=".", LookAt:=xlPart, _
+range("L1:L2").Replace What:="/", Replacement:=".", LookAt:=xlPart, _
         SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:=False, _
         ReplaceFormat:=False
 
-Set rStart = range("F1")
-Set rEnd = range("F2")
+Set rStart = range("L1")
+Set rEnd = range("L2")
         
 DateString = Format(Now, "mm_dd_yy")
-FolderName = wSource.path & "\" & "Passback Templates " & range("F2").Value
+FolderName = wSource.path & "\" & "Passback Templates " & range("L2").Value
 
 On Error Resume Next
 Kill FolderName & "\*.*"
@@ -43,9 +43,9 @@ On Error GoTo 0
 
 MkDir FolderName
 
-Sheets(4).Activate
+Sheets(10).Activate
 
-For i = 4 To Sheets.Count
+For i = 10 To Sheets.Count
     Sheets(i).Select (False)
 Next
 
