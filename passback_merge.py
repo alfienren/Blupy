@@ -26,4 +26,3 @@ def passback_merge():
 
     data = pd.DataFrame(pd.read_excel(sheet, 'data', index_col=None))
 
-    
