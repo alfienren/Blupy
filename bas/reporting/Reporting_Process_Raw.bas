@@ -1,4 +1,4 @@
-Attribute VB_Name = "Process_Raw"
+Attribute VB_Name = "Reporting_Process_Raw"
 Option Explicit
 
 Sub Process_Raw_Reports()
@@ -10,6 +10,8 @@ Dim rCFVData                As Range
 Dim wCFVTemp                As String
 Dim wSATemp                 As String
 Dim wWorking                As String
+Dim wDDR                    As String
+Dim wSummary                As String
 
 With Application
     
@@ -22,6 +24,8 @@ End With
 wCFVTemp = "CFV_Temp"
 wSATemp = "SA_Temp"
 wWorking = "working"
+wDDR = "DDR"
+wSummary = "Summary"
 
 Sheets("SA").Activate
 
@@ -38,6 +42,8 @@ End With
 Application.DisplayAlerts = False
 On Error Resume Next
 Worksheets(wSATemp).Delete
+Worksheets(wDDR).Delete
+Worksheets(wSummary).Delete
 Err.Clear
 
 Application.DisplayAlerts = True
@@ -95,5 +101,9 @@ Err.Clear
 
 Application.DisplayAlerts = True
 Worksheets.Add.Name = wWorking
+
+Sheets("Lookup").Activate
+
+Range("AA1").Value = ActiveWorkbook.path
 
 End Sub
