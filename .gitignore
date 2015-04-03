@@ -7,4 +7,5 @@ campaign_docs/
 *.xlsx
 *.xls
 *.csv
+*.pyc
 DataMunge.bas
