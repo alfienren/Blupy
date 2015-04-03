@@ -44,7 +44,7 @@ def dfa_reporting():
     # documentation in the VBA modules for more information.
 
     wb = Workbook.caller() # Initiate workbook object
-    sheet = Range('Lookup', 'AA1').value # Grab workbook path from Excel sheet
+    sheet = Range('Lookup', 'G1').value # Grab workbook path from Excel sheet
 
     wb.save() # Workbook needs to be saved in order to load the data into pandas properly
 
@@ -86,11 +86,12 @@ def dfa_reporting():
     cfv['eGAs'] = np.where(cfv['Floodlight Attribution Type'].str.contains('View-through') == True,
                             (cfv['Device (string)'].str.count(',') + 1) / 2,
                             cfv['Device (string)'].str.count(',') + 1)
-
+    cfv_new = cfv
     """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
     DDR specific reporting
     """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+    '''
     devices = cfv['Device (string)'].str.split(',').apply(pd.Series).stack()
     devices.index = devices.index.droplevel(-1)
     devices.name = "Device IDs"
@@ -183,14 +184,15 @@ def dfa_reporting():
 
     # Append the Custom Floodlight Variable data to the Site Activity data. Columns with matching names are merged
     # together. Columns without matching names are added to the new dataframe.
-    data = sa.append(cfv_new)
+
 
     campaign_specific_lookup = pd.DataFrame(Range('Lookup', 'H3').table.value, columns= Range('Lookup', 'H3').horizontal.value)
     campaign_specific_lookup.drop(0, inplace=True)
     campaign_specific_lookup.drop('Campaign', axis = 1, inplace = True)
 
     data = pd.merge(data, campaign_specific_lookup, how = 'left', left_on='Placement', right_on='Placement_category')
-
+    '''
+    data = sa.append(cfv_new)
     # The DFA field DBM Cost is more accurate for placements using dynamic bidding. If a placement is not using
     # dynamic bidding, DBM Cost = 0. Therefore, if DBM cost does not equal 0, replace the row's media cost with
     # DBM cost. If DBM Cost = 0, Media Cost stays the same.
@@ -428,7 +430,7 @@ def dfa_reporting():
     dimensions = ['Week', 'Date', 'Campaign', 'Site (DCM)', 'Click-through URL', 'F Tag', 'Category', 'Message Bucket',
                   'Message Category', 'Creative Type', 'Creative Groups 1', 'Creative ID', 'Message Offer', 'Creative',
                   'Ad', 'Creative Groups 2',
-                  'Creative Field 1', 'Placement', 'Placement ID', 'Placement Cost Structure', 'OrderNumber (string)', 'Activity',
+                  'Creative Field 1', 'Placement', 'Placement Cost Structure', 'OrderNumber (string)', 'Activity',
                   'Floodlight Attribution Type',
                   'Plan (string)', 'Device (string)', 'Service (string)', 'Accessory (string)']
 
@@ -439,9 +441,7 @@ def dfa_reporting():
                'Postpaid Plans', 'Prepaid Plans', 'eGAs', 'Store Locator Visits', 'A Actions', 'B Actions', 'C Actions',
                'D Actions', 'E Actions', 'F Actions',
                'Awareness Actions', 'Consideration Actions', 'Traffic Actions', 'Post-Click Activity',
-               'Post-Impression Activity', 'Video Completions', 'Video Views', 'Prepaid GAs', 'Postpaid GAs',
-               'Prepaid SIMs', 'Postpaid SIMs', 'Prepaid Mobile Internet', 'Postpaid Mobile Internet', 'Prepaid Phone',
-               'Postpaid Phone', 'DDR New Devices', 'DDR Add-a-Line']
+               'Post-Impression Activity', 'Video Completions', 'Video Views']
 
     # Get all the action tag names so these can be included in the outputted data as well.
     action_tags = sa_columns[sa_columns.index('DBM Cost USD') + 1:]
