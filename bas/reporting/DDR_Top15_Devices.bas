@@ -8,12 +8,14 @@ Dim wDDR                    As String
 Dim TempFilePath            As String
 Dim TempFileName            As String
 Dim FileExtStr              As String
+Dim wOriginal               As Workbook
 
 Dim vFileName               As Variant
-Dim wOriginal               As Workbook
 Dim wDeviceReport           As Workbook
 Dim lFileFormat             As Long
 Dim ws                      As Worksheet
+
+Set wOriginal = ActiveWorkbook
 
 With Application
     
@@ -69,7 +71,7 @@ With Range("H1:J1").Interior
     .PatternTintAndShade = 0
 End With
 
-TempFilePath = Application.ActiveWorkbook.Path & "\"
+TempFilePath = Application.ActiveWorkbook.path & "\"
 TempFileName = "Top 15 Devices Report" & Format(Date, "mmddyyyy") & ".xlsx"
 
 Set wDeviceReport = Workbooks.Add
@@ -96,4 +98,13 @@ Range("A1").Select
 
 wDeviceReport.SaveAs FileName:=TempFilePath & TempFileName
 
+wOriginal.Sheets("Summary").Activate
+
+Application.DisplayAlerts = False
+On Error Resume Next
+Worksheets(wSummary).Delete
+Worksheets(wDDR).Delete
+Err.Clear
+
 End Sub
+

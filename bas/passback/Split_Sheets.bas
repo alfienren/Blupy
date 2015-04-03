@@ -11,8 +11,8 @@ Dim sheet           As Worksheet
 Dim DateString      As String
 Dim FolderName      As String
 Dim i               As Integer
-Dim rStart          As range
-Dim rEnd            As range
+Dim rStart          As Range
+Dim rEnd            As Range
 
 With Application
 
@@ -26,15 +26,15 @@ Set wSource = ThisWorkbook
 
 Sheets("passback").Activate
 
-range("L1:L2").Replace What:="/", Replacement:=".", LookAt:=xlPart, _
+Range("L1:L2").Replace What:="/", Replacement:=".", LookAt:=xlPart, _
         SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:=False, _
         ReplaceFormat:=False
 
-Set rStart = range("L1")
-Set rEnd = range("L2")
+Set rStart = Range("L1")
+Set rEnd = Range("L2")
         
 DateString = Format(Now, "mm_dd_yy")
-FolderName = wSource.path & "\" & "Passback Templates " & range("L2").Value
+FolderName = wSource.path & "\" & "Passback Templates " & Range("L2").Value
 
 On Error Resume Next
 Kill FolderName & "\*.*"
@@ -90,7 +90,7 @@ Application.DisplayAlerts = False
             Call Format_Templates
             
             .SaveAs FolderName _
-                & "\" & wDestination.Sheets(1).range("C2") & "_" & rStart & " - " & rEnd & Filestr, _
+                & "\" & wDestination.Sheets(1).Range("C2") & "_" & rStart & " - " & rEnd & Filestr, _
                     FileFormat:=FileFormat
             .Close False
         End With
