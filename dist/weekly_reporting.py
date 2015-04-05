@@ -44,7 +44,7 @@ def dfa_reporting():
     # documentation in the VBA modules for more information.
 
     wb = Workbook.caller() # Initiate workbook object
-    sheet = Range('Lookup', 'G1').value # Grab workbook path from Excel sheet
+    sheet = Range('Lookup', 'AA1').value # Grab workbook path from Excel sheet
 
     wb.save() # Workbook needs to be saved in order to load the data into pandas properly
 
@@ -87,111 +87,7 @@ def dfa_reporting():
                             (cfv['Device (string)'].str.count(',') + 1) / 2,
                             cfv['Device (string)'].str.count(',') + 1)
     cfv_new = cfv
-    """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-    DDR specific reporting
-    """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-    '''
-    devices = cfv['Device (string)'].str.split(',').apply(pd.Series).stack()
-    devices.index = devices.index.droplevel(-1)
-    devices.name = "Device IDs"
-
-    cfv_new = cfv[cfv.columns[0:17]].join(devices)
-    cfv_new = cfv.append(cfv_new)
-
-    ddr = pd.DataFrame(pd.read_excel(sheet[:sheet.rindex('\\')] + '\\_\\devices.xlsx', 'Device Lookup'))
-    excluded_devices = str(Range('Lookup', 'L2').value)
-    cfv_new = pd.merge(cfv_new, ddr, how = 'left', left_on = 'Device IDs', right_on = 'Key')
-
-    cfv_new['Prepaid GAs'] = np.where(((cfv_new['Device IDs'].str.contains(excluded_devices) == False) &
-                                        (cfv_new['Device IDs'].notnull() == True) & (cfv_new['Product Subcategory'].str.contains('Prepaid') == True) &
-                                        (cfv_new['Floodlight Attribution Type'].str.contains('View-through') == True)), 0.5, np.where(((cfv_new['Device IDs'].str.contains(excluded_devices) == False) & (cfv_new['Device IDs'].notnull() == True) &
-                                                 (cfv_new['Product Subcategory'].str.contains('Prepaid') == True) &
-                                                  (cfv_new['Floodlight Attribution Type'].str.contains('Click-through') == True)), 1, 0))
-
-    cfv_new['Postpaid GAs'] = np.where(((cfv_new['Device IDs'].str.contains(excluded_devices) == False) &
-                                          (cfv_new['Device IDs'].notnull() == True) & (cfv_new['Product Subcategory'].str.contains('Postpaid') == True) &
-                                            (cfv_new['Floodlight Attribution Type'].str.contains('View-through') == True)), 0.5, np.where(((cfv_new['Device IDs'].str.contains(excluded_devices) == False) &
-                                                      (cfv_new['Device IDs'].notnull() == True) & (cfv_new['Product Subcategory'].str.contains('Postpaid') == True)), 1, 0))
-
-    cfv_new['DDR GAs'] = cfv_new['Postpaid GAs'] + cfv_new['Prepaid GAs']
-
-    cfv_new['Prepaid SIMs'] = np.where(((cfv_new['Device IDs'].str.contains(excluded_devices) == False) &
-                                         (cfv_new['Device IDs'].notnull() == True) & (cfv_new['Product Category'].str.contains('SIM card') == True) &
-                                            (cfv_new['Product Subcategory'].str.contains('Prepaid') == True) &
-                                            (cfv_new['Floodlight Attribution Type'].str.contains('View-through') == True)), 0.5,
-                                                np.where(((cfv_new['Device IDs'].str.contains(excluded_devices) == False) &
-                                                       (cfv_new['Device IDs'].notnull() == True) & (cfv_new['Product Category'].str.contains('SIM card') == True) &
-                                                        (cfv_new['Product Subcategory'].str.contains('Prepaid') == True) &
-                                                       (cfv_new['Floodlight Attribution Type'].str.contains('Click-through') == True)), 1, 0))
-
-    cfv_new['Postpaid SIMs'] = np.where(((cfv_new['Device IDs'].str.contains(excluded_devices) == False) &
-                                          (cfv_new['Device IDs'].notnull() == True) & (cfv_new['Product Category'].str.contains('SIM card') == True) &
-                                            (cfv_new['Floodlight Attribution Type'].str.contains('View-through') == True) &
-                                            (cfv_new['Product Subcategory'].str.contains('Postpaid') == True)), 0.5,
-                                                np.where(((cfv_new['Device IDs'].str.contains(excluded_devices) == False) &
-                                                       (cfv_new['Device IDs'].notnull() == True) & (cfv_new['Product Category'].str.contains('SIM card') == True) &
-                                                        (cfv_new['Product Subcategory'].str.contains('Postpaid') == True) &
-                                                       (cfv_new['Floodlight Attribution Type'].str.contains('Click-through') == True)), 1, 0))
-
-    cfv_new['Prepaid Mobile Internet'] = np.where(((cfv_new['Device IDs'].str.contains(excluded_devices) == False) &
-                                                    (cfv_new['Device IDs'].notnull() == True) & (cfv_new['Product Category'].str.contains('Mobile Internet') == True) &
-                                                    (cfv_new['Product Subcategory'].str.contains('Prepaid') == True) &
-                                                    (cfv_new['Floodlight Attribution Type'].str.contains('View-through') == True)), 0.5,
-                                                        np.where(((cfv_new['Device IDs'].str.contains(excluded_devices) == False) &
-                                                               (cfv_new['Device IDs'].notnull() == True) & (cfv_new['Product Category'].str.contains('Mobile Internet') == True) &
-                                                                (cfv_new['Product Subcategory'].str.contains('Prepaid') == True)), 1, 0))
-
-    cfv_new['Postpaid Mobile Internet'] = np.where(((cfv_new['Device IDs'].str.contains(excluded_devices) == False) &
-                                                     (cfv_new['Device IDs'].notnull() == True) & (cfv_new['Product Category'].str.contains('Mobile Internet') == True) &
-                                                        (cfv_new['Product Subcategory'].str.contains('Postpaid') == True) &
-                                                        (cfv_new['Floodlight Attribution Type'].str.contains('View-through') == True)), 0.5,
-                                                            np.where(((cfv_new['Device IDs'].str.contains(excluded_devices) == False) &
-                                                                   (cfv_new['Device IDs'].notnull() == True) & (cfv_new['Product Category'].str.contains('Mobile Internet') == True) &
-                                                                    (cfv_new['Product Subcategory'].str.contains('Postpaid') == True) &
-                                                                   (cfv_new['Floodlight Attribution Type'].str.contains('Click-through') == True)), 1, 0))
-
-    cfv_new['Prepaid Phone'] = np.where(((cfv_new['Device IDs'].str.contains(excluded_devices) == False) &
-                                          (cfv_new['Device IDs'].notnull() == True) & (cfv_new['Product Category'].str.contains('Smartphone') == True) &
-                                            (cfv_new['Product Subcategory'].str.contains('Prepaid') == True) &
-                                            (cfv_new['Floodlight Attribution Type'].str.contains('View-through') == True)), 0.5,
-                                                np.where((((cfv_new['Device IDs'].str.contains(excluded_devices) == False) &
-                                                       (cfv_new['Device IDs'].notnull() == True) & (cfv_new['Product Category'].str.contains('Smartphone') == True) &
-                                                        (cfv_new['Product Subcategory'].str.contains('Prepaid') == True) &
-                                                       (cfv_new['Floodlight Attribution Type'].str.contains('Click-through') == True))), 1, 0))
-
-    cfv_new['Postpaid Phone'] = np.where(((cfv_new['Device IDs'].str.contains(excluded_devices) == False) &
-                                           (cfv_new['Device IDs'].notnull() == True) & (cfv_new['Product Category'].str.contains('Smartphone') == True) &
-                                            (cfv_new['Product Subcategory'].str.contains('Postpaid') == True) &
-                                            (cfv_new['Floodlight Attribution Type'].str.contains('View-through') == True)), 0.5,
-                                                np.where(((cfv_new['Device IDs'].notnull() == True) & (cfv_new['Product Category'].str.contains('Smartphone') == True) &
-                                             (cfv_new['Product Subcategory'].str.contains('Postpaid') == True) &
-                                                      (cfv_new['Floodlight Attribution Type'].str.contains('Click-through') == True)), 1, 0))
-
-    cfv_new['DDR New Devices'] = np.where(((cfv_new['Device IDs'].str.contains(excluded_devices) == False) & (cfv_new['Device IDs'].notnull() == True) &
-                                 (cfv_new['Activity'].str.contains('New TMO Order') == True) &
-                                 (cfv_new['Floodlight Attribution Type'].str.contains('View-through') == True)), 0.5,
-                                          np.where(((cfv_new['Device IDs'].str.contains(excluded_devices) == False) & (cfv_new['Device IDs'].notnull() == True) &
-                                          (cfv_new['Activity'].str.contains('New TMO Order') == True) &
-                                           (cfv_new['Floodlight Attribution Type'].str.contains('Click-through') == True)), 1, 0))
-
-    cfv_new['DDR Add-a-Line'] = np.where(((cfv_new['Device IDs'].str.contains(excluded_devices) == False) & (cfv_new['Device IDs'].notnull() == True) &
-                                    (cfv_new['Activity'].str.contains('New My.TMO Order') == True) &
-                                    (cfv_new['Floodlight Attribution Type'].str.contains('View-through') == True)), 0.5,
-                                     np.where(((cfv_new['Device IDs'].str.contains(excluded_devices) == False) & (cfv_new['Device IDs'].notnull() == True) &
-                                              (cfv_new['Activity'].str.contains('New My.TMO Order') == True) &
-                                               (cfv_new['Floodlight Attribution Type'].str.contains('Click-through') == True)), 1, 0))
-
-    # Append the Custom Floodlight Variable data to the Site Activity data. Columns with matching names are merged
-    # together. Columns without matching names are added to the new dataframe.
-
-
-    campaign_specific_lookup = pd.DataFrame(Range('Lookup', 'H3').table.value, columns= Range('Lookup', 'H3').horizontal.value)
-    campaign_specific_lookup.drop(0, inplace=True)
-    campaign_specific_lookup.drop('Campaign', axis = 1, inplace = True)
-
-    data = pd.merge(data, campaign_specific_lookup, how = 'left', left_on='Placement', right_on='Placement_category')
-    '''
     data = sa.append(cfv_new)
     # The DFA field DBM Cost is more accurate for placements using dynamic bidding. If a placement is not using
     # dynamic bidding, DBM Cost = 0. Therefore, if DBM cost does not equal 0, replace the row's media cost with
