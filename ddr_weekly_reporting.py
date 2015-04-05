@@ -3,9 +3,11 @@ DDR Custom Floodlight Data Transform
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 import itertools
+
 import pandas as pd
 import numpy as np
 from xlwings import Workbook, Range, Sheet
+
 
 def ddr_top_15_devices():
 
