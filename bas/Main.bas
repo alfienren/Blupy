@@ -28,27 +28,3 @@ Else
 End If
 
 End Sub
-
-Sub Generate_Passback_Templates()
-
-Call PreRun
-
-RunPython ("import passback_template_generation; passback_template_generation.passback_generation()")
-
-Call SplitSheets
-
-RunPython ("import email_passback_templates; email_passback_templates.email_passback_templates()")
-
-End Sub
-
-Sub Merge_Received_Templates()
-
-Dim path    As Variant
-
-path = InputBox("Enter path of received passback templates")
-
-Sheets("Lookup").Activate
-
-Range("AB1").Value = path
-
-End Sub
