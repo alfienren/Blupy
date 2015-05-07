@@ -4,7 +4,7 @@ from xlwings import Workbook, Range, Sheet
 import os
 import pandas as pd
 
-def macro():
+def weekly_reporting():
 
     wb = Workbook.caller()
 
@@ -42,4 +42,4 @@ if __name__ == '__main__':
     # Expects the Excel file next to this source file, adjust accordingly.
     path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'dfa_test.xlsm'))
     Workbook.set_mock_caller(path)
-    macro()
+    weekly_reporting()
