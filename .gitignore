@@ -1,11 +1,9 @@
 $ cat .gitignore
 
-test_docs/
+test/
 docs/source/_static/fonts
-campaign_docs/
 *.xlsm
 *.xlsx
 *.xls
 *.csv
 *.pyc
-DataMunge.bas
