@@ -1,5 +1,3 @@
-__author__ = 'aarschle1'
-
 import numpy as np
 
 def output(data):
@@ -23,9 +21,5 @@ def output(data):
     # adjusted with passback data.
     data['Video Completions'] = 0
     data['Video Views'] = 0
-
-    # Similar to the video columns, add columns for F Tag and F Actions.
-    data['F Tag'] = 0
-    data['F Actions'] = 0
 
     return data

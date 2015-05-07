@@ -1,5 +1,3 @@
-__author__ = 'aarschle1'
-
 import numpy as np
 import pandas as pd
 from xlwings import Range

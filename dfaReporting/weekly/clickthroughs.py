@@ -1,4 +1,4 @@
-__author__ = 'aarschle1'
+import pandas as pd
 
 def clickthrough(data):
 
