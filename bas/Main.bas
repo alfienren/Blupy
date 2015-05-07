@@ -6,7 +6,6 @@ Sub DFA_Reporting()
 Dim rDDR    As Range
 
 Call Process_Raw_Reports
-Call F_Tag_URLs
 
 Call Python_Weekly_Reporting
 

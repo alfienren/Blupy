@@ -6,7 +6,7 @@ Sub Python_Weekly_Reporting()
 Sheets("Lookup").Activate
 Range("AA1").Value = ActiveWorkbook.FullName
 
-RunPython ("import weekly_reporting; weekly_reporting.dfa_reporting()")
+RunPython ("import __main__; __main__.weekly_reporting()")
 
 End Sub
 
