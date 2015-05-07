@@ -29,19 +29,20 @@ def f_tags(data):
 
     # the F Tags names that were inputted are then matched to the headers of the columns. When a match is found, the
     # reference is set in a list.
-    ftags['Tag Name (Concatenated)'] = ftags['Group Name'] + " : " + ftags['Activity Name']
+    data['Tag Name (Concatenated)'] = data['Group Name'] + " : " + data['F Tag']
+    data['Tag Name (Concatenated)'].fillna('na', inplace = True)
 
-    f_tags = []
+    f_tag = []
     for i in data['Tag Name (Concatenated)']:
-        for j in data.columns:
+        for j in list(data.columns):
             tag = re.search(i, j)
             if tag:
-                f_tags.append(j)
+                f_tag.append(j)
 
     # After all the F Tag names have been iterated through to find the appropriate tag columns, the references are then
     # set as the intersection of the column names.
-    f_tags = list(set(f_tags).intersection(data.columns))
-    f_conversions = list(set(f_tags).intersection(data.columns))
+    f_tag = list(set(f_tag).intersection(data.columns))
+    f_conversions = list(set(f_tag).intersection(data.columns))
 
     # The F Actions column that was created earlier is then updated with the sum of the F Action by row based on the
     # corresponding columns to that tag.

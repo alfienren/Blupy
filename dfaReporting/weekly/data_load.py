@@ -8,7 +8,7 @@ def cfv_data():
     # Load the Site Activity and Custom Floodlight Variable data into pandas as DataFrames
 
     cfv = pd.DataFrame(Range('CFV_Temp', 'A1').table.value, columns = Range('CFV_Temp', 'A1').horizontal.value)
-    cfv.drop(0, inplace=True)
+    cfv.drop(0, inplace = True)
 
     return cfv
 

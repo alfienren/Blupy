@@ -5,12 +5,15 @@ from xlwings import Range
 def cfv_munge(cfv):
 
     cfv['Orders'] = 1 # Create orders column in cfv data. Each OrderNumber counts as 1 order
-    cfv['Plans'] = np.where(cfv['Plan (string)'] != '', cfv['Plan (string)'].str.count(',') + 1, 0) # Count the number of plans in the Plans column
-    cfv['Services'] = np.where(cfv['Service (string)'] != '', cfv['Service (string)'].str.count(',') + 1, 0) # Count number of services in the Service column
-    cfv['Accessories'] = np.where(cfv['Accessory (string)'] != '', cfv['Accessory (string)'].str.count(',') + 1, 0) # Count number of Accessories in the Accessories column
-    cfv['Devices'] = np.where(cfv['Device (string)'] != '', cfv['Device (string)'].str.count(',') + 1, 0) # Count number of devices in the Plans column
+    cfv['Plans'] = np.where(cfv['Plan (string)'] != np.NaN, cfv['Plan (string)'].str.count(',') + 1, 0) # Count the number of plans in the Plans column
+    cfv['Services'] = np.where(cfv['Service (string)'] != np.NaN, cfv['Service (string)'].str.count(',') + 1, 0) # Count number of services in the Service column
+    cfv['Accessories'] = np.where(cfv['Accessory (string)'] != np.NaN, cfv['Accessory (string)'].str.count(',') + 1, 0) # Count number of Accessories in the Accessories column
+    cfv['Devices'] = np.where(cfv['Device (string)'] != np.NaN, cfv['Device (string)'].str.count(',') + 1, 0) # Count number of devices in the Plans column
     cfv['Add-a-Line'] = cfv['Service (string)'].str.count('ADD') # Count number of Add-a-Lines in the Service column
     cfv['Activations'] = cfv['Plans'] + cfv['Add-a-Line'] #Activations are defined as the sum of Plans and Add-a-Line
+
+    #cfv[['Orders', 'Plans', 'Services', 'Accessories', 'Devices', 'Add-a-Line', 'Activations']] = \
+    #    cfv[['Orders', 'Plans', 'Services', 'Accessories', 'Devices', 'Add-a-Line', 'Activations']].astype(int)
 
     # Postpaid plans are defined as a Plan + Device. By row, if number of plans is equal to number of devices, Postpaid
     # plans = number of plans. If plans and devices are not equal, use the minimum number.
