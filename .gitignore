@@ -1,5 +1,6 @@
 $ cat .gitignore
 
+_/
 test/
 docs/source/_static/fonts
 *.xlsm
