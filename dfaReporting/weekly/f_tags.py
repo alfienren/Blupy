@@ -17,16 +17,6 @@ def f_tags(data):
     data = pd.merge(data, ftags, how='left', left_on = 'Click-through URL', right_on = 'Expected URL')
     data.rename(columns={'Activity Name': 'F Tag'}, inplace = True)
 
-    # for each cell in the range, an INDEX + MATCH formula is entered to find the F Tag for the URL listed in the column
-    # to the left.
-    '''
-    for cell in Range('working', 'F2').vertical:
-        url = cell.offset(0, -1).get_address(False, False, False)
-        cell.formula = '=IFERROR(INDEX(F_Tags!G:G,MATCH(working!' + url + ',F_Tags!E:E,0)),"na")'
-    '''
-    # With the F Tag names entered, update the DataFrame's F Tag column with the inputted data.
-    #data['F Tag'] = Range('working', 'F2').vertical.value
-
     # the F Tags names that were inputted are then matched to the headers of the columns. When a match is found, the
     # reference is set in a list.
     data['Tag Name (Concatenated)'] = data['Group Name'] + " : " + data['F Tag']

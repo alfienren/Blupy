@@ -14,7 +14,8 @@ def cfv_data():
 
 def sa_data():
 
-    sa = pd.DataFrame(pd.read_excel(Range('Lookup', 'AA1').value, 'SA_Temp', index_col=None))
+    sheet = Range('Lookup', 'AA1').value
+    sa = pd.read_excel(sheet, 'SA_Temp', index_col=None)
 
     return sa
 

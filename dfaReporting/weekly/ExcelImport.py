@@ -1,5 +1,3 @@
-__author__ = 'aarschle1'
-
 from xlwings import Range
 import re
 

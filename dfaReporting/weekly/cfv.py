@@ -12,9 +12,6 @@ def cfv_munge(cfv):
     cfv['Add-a-Line'] = cfv['Service (string)'].str.count('ADD') # Count number of Add-a-Lines in the Service column
     cfv['Activations'] = cfv['Plans'] + cfv['Add-a-Line'] #Activations are defined as the sum of Plans and Add-a-Line
 
-    #cfv[['Orders', 'Plans', 'Services', 'Accessories', 'Devices', 'Add-a-Line', 'Activations']] = \
-    #    cfv[['Orders', 'Plans', 'Services', 'Accessories', 'Devices', 'Add-a-Line', 'Activations']].astype(int)
-
     # Postpaid plans are defined as a Plan + Device. By row, if number of plans is equal to number of devices, Postpaid
     # plans = number of plans. If plans and devices are not equal, use the minimum number.
     cfv['Postpaid Plans'] = np.where(cfv['Plans'] == cfv['Devices'], cfv['Plans'],
