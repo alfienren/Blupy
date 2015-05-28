@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from xlwings import Range
 
 def categories(data):
@@ -10,9 +11,9 @@ def categories(data):
     # Example output of categories:
     #   Desktop - Standard - dCPM
     #   Mobile - Custom - Flat
-    mobile = '|'.join(list(Range('Lookup', 'B2:B6').value))
-    tablet = '|'.join(list(Range('Lookup', 'B7:B9').value))
-    social = '|'.join(list(Range('Lookup', 'B10:B12').value))
+    mobile = '|'.join(list(Range('Lookup', 'B2:B12').value))
+    tablet = '|'.join(list(Range('Lookup', 'B13:B15').value))
+    social = '|'.join(list(Range('Lookup', 'B16:B18').value))
 
     rm = '|'.join(list(Range('Lookup', 'D2:D5').value))
     custom = '|'.join(list(Range('Lookup', 'D6:D15').value))
@@ -43,27 +44,14 @@ def categories(data):
     data['Category'] = np.where(data['Category'].str[:3] == ' - ', data['Category'].str[3:], data['Category'])
     data['Category'] = np.where(data['Category'].str[-3:] == ' - ', data['Category'].str[:-3], data['Category'])
 
-    # Message Bucket, Category and Offer
-    # 90% of the time, the message bucket, category and offer can be determined from the creative field 1 column. It
-    # follows a pattern of Bucket_Category_Offer
-    data['Creative Field 1'] = data['Creative Field 1'].str.replace('Creative Type: ', '')
-    data['Creative Field 1'] = data['Creative Field 1'].str.replace('(', '')
-    data['Creative Field 1'] = data['Creative Field 1'].str.replace(')', '')
+    return data
 
-    # If Creative Field 1 is equal to (not set), this is either a 1x1 or a placement with logo creative. (not set)
-    # fields are therefore set as 'TMO Unique Creative', which is how this has been handled historically.
-    data['Creative Field 1'] = data['Creative Field 1'].str.replace('not set', 'TMO Unique Creative')
+def sites(data):
 
-    # Message Bucket is determined by splitting Creative Field 1 and taking the first word.
-    data['Message Bucket'] = data['Creative Field 1'].str.split('_').str.get(0)
+    sites = pd.DataFrame(Range('Lookup', 'N1').table.value, columns = Range('Lookup', 'N1').horizontal.value)
+    sites.drop(0, inplace = True)
 
-    # Message Category is determined by splitting Creative Field 1 and taking the second word.
-    data['Message Category'] = data['Creative Field 1'].str.split('_').str.get(1)
-
-    # Message Offer is determined by splitting Creative Field 1 and taking the third word. If the offer is not set,
-    # it can sometimes be found in the Creative Groups 2 column. For blanks in the Message Offer column, it will try
-    # to pull in the offer from the Creative Groups 2 column.
-    data['Message Offer'] = data['Creative Field 1'].str.split('_').str.get(2)
-    data['Message Offer'].fillna(data['Creative Groups 2'], inplace=True)
+    data = pd.merge(data, sites, left_on= 'Site (DCM)', right_on= 'DFA', how= 'left')
+    data.drop('DFA', axis = 1, inplace = True)
 
     return data
