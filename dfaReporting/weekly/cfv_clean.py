@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from xlwings import Range
 
-def cfv_munge(cfv):
+def cfv_data(cfv):
 
     cfv['Orders'] = 1 # Create orders column in cfv data. Each OrderNumber counts as 1 order
     cfv['Plans'] = np.where(cfv['Plan (string)'] != np.NaN, cfv['Plan (string)'].str.count(',') + 1, 0) # Count the number of plans in the Plans column
@@ -35,6 +35,7 @@ def cfv_munge(cfv):
                             (cfv['Device (string)'].str.count(',') + 1) / 2,
                             cfv['Device (string)'].str.count(',') + 1)
 
+    '''
     if 'DDR' in cfv['Campaign']:
 
         devices = cfv['Device (string)'].str.split(',').apply(pd.Series).stack()
@@ -128,5 +129,6 @@ def cfv_munge(cfv):
                                          np.where(((cfv['Device IDs'].str.contains(excluded_devices) == False) & (cfv['Device IDs'].notnull() == True) &
                                                   (cfv['Activity'].str.contains('New My.TMO Order') == True) &
                                                    (cfv['Floodlight Attribution Type'].str.contains('Click-through') == True)), 1, 0))
+    '''
 
     return cfv
