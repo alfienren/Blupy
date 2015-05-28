@@ -2,7 +2,6 @@ from weekly import data_load, ExcelImport, cfv, categorization, action_tags, cli
     dfa_data_output, f_tags
 from xlwings import Workbook, Range, Sheet
 import pandas as pd
-import os
 
 def weekly_reporting():
 
@@ -36,7 +35,7 @@ def weekly_reporting():
         appended_data.fillna(0, inplace=True)
         Sheet('data').clear()
         ExcelImport.chunk_df(appended_data, 'data', 'A1', 5000)
-        
+
 '''
 if __name__ == '__main__':
     # To run from Python, not needed when called from Excel.
