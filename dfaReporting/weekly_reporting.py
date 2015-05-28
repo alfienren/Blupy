@@ -1,5 +1,5 @@
 from weekly import data_load, data_import, cfv_clean, categorization, action_tags, clickthroughs, floodlight_transform, \
-    data_output, f_tags
+    data_output, f_tags, messages
 from xlwings import Workbook, Range, Sheet
 import pandas as pd
 
@@ -17,10 +17,12 @@ def weekly_reporting():
     data = floodlight_transform.floodlight_data(data)
     data = action_tags.actions(data)
     data = categorization.categories(data)
+    data = categorization.sites(data)
+    data = messages.messaging(data)
     data = f_tags.f_tags(data)
     data = data_output.output(data)
 
-    columns = data_load.columns(sa)
+    columns = data_output.columns(sa)
     data = data[columns]
     data.fillna(0, inplace=True)
 

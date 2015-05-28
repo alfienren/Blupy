@@ -9,7 +9,7 @@ def f_tags(data):
     ftags.drop(0, inplace=True)
 
     ftags['Expected URL'] = ftags['Expected URL'].str.replace('.html', '')
-    ftags['Expected URL'] = ftags['Expected URL'].str.replace('http://explore', 'http://www')
+    #ftags['Expected URL'] = ftags['Expected URL'].str.replace('http://explore', 'http://www')
 
     # Add a new column to the DataFrame to concatenate the Group Name of the tag with the Activity Name. This will
     # give us a reference we can use to match to the tag to the data.
