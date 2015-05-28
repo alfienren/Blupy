@@ -1,4 +1,4 @@
-from weekly import data_load, data_import, cfv_clean, categorization, action_tags, clickthroughs, floodlight_transform, \
+from weekly import data_load, cfv_clean, categorization, action_tags, clickthroughs, floodlight_transform, \
     data_output, f_tags, messages
 from xlwings import Workbook, Range, Sheet
 import pandas as pd
@@ -27,7 +27,7 @@ def weekly_reporting():
     data.fillna(0, inplace=True)
 
     if Range('data', 'A1').value is None:
-        data_import.chunk_df(data, 'data', 'A1', 5000)
+        data_output.chunk_df(data, 'data', 'A1', 5000)
 
     # If data is already present in the tab, the two data sets are merged together and then copied into the data tab.
     else:
@@ -36,7 +36,7 @@ def weekly_reporting():
         appended_data = appended_data[columns]
         appended_data.fillna(0, inplace=True)
         Sheet('data').clear()
-        data_import.chunk_df(appended_data, 'data', 'A1', 5000)
+        data_output.chunk_df(appended_data, 'data', 'A1', 5000)
 
 '''
 if __name__ == '__main__':

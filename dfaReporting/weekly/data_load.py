@@ -1,5 +1,6 @@
 from xlwings import Range
 import pandas as pd
+import re
 
 def cfv():
     # Before function is ran, VBA code will create the necessary tabs in order to process correctly. See the
