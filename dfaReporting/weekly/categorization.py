@@ -44,6 +44,14 @@ def categories(data):
     data['Category'] = np.where(data['Category'].str[:3] == ' - ', data['Category'].str[3:], data['Category'])
     data['Category'] = np.where(data['Category'].str[-3:] == ' - ', data['Category'].str[:-3], data['Category'])
 
+    data['Platform'] = np.where((data['Platform'].str.contains(mobile) == True) | (data['Platform'].str.contains(tablet) == True), 'Mobile',
+                                  np.where(data['Platform'].str.contains(social) == True), 'Social', 'Desktop')
+
+    data['P_Creative'] = np.where(data['P_Creative'].str.contains(vid) == True, 'Video',
+                                  np.where(data['P_Creative'].str.contains(social) == True, np.NaN, 'Display'))
+
+    data['Category Adjusted'] = data['Platform'] + ' - ' + data['P_Creative']
+
     return data
 
 def sites(data):

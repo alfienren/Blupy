@@ -1,5 +1,5 @@
-from weekly import data_load, ExcelImport, cfv, categorization, action_tags, clickthroughs, floodlight, \
-    dfa_data_output, f_tags
+from weekly import data_load, data_import, cfv_clean, categorization, action_tags, clickthroughs, floodlight_transform, \
+    data_output, f_tags
 from xlwings import Workbook, Range, Sheet
 import pandas as pd
 
@@ -7,25 +7,25 @@ def weekly_reporting():
 
     wb = Workbook.caller()
     wb.save()
-    sa = data_load.sa_data()
+    sa = data_load.sa()
 
-    floodlights = data_load.cfv_data()
-    floodlights = cfv.cfv_munge(floodlights)
+    cfv_variables = data_load.cfv()
+    cfv_variables = cfv_clean.cfv_data(cfv_variables)
 
-    data = sa.append(floodlights)
+    data = sa.append(cfv_variables)
     data = clickthroughs.clickthrough(data)
-    data = floodlight.floodlight(data)
+    data = floodlight_transform.floodlight_data(data)
     data = action_tags.actions(data)
     data = categorization.categories(data)
     data = f_tags.f_tags(data)
-    data = dfa_data_output.output(data)
+    data = data_output.output(data)
 
     columns = data_load.columns(sa)
     data = data[columns]
     data.fillna(0, inplace=True)
 
     if Range('data', 'A1').value is None:
-        ExcelImport.chunk_df(data, 'data', 'A1', 5000)
+        data_import.chunk_df(data, 'data', 'A1', 5000)
 
     # If data is already present in the tab, the two data sets are merged together and then copied into the data tab.
     else:
@@ -34,7 +34,7 @@ def weekly_reporting():
         appended_data = appended_data[columns]
         appended_data.fillna(0, inplace=True)
         Sheet('data').clear()
-        ExcelImport.chunk_df(appended_data, 'data', 'A1', 5000)
+        data_import.chunk_df(appended_data, 'data', 'A1', 5000)
 
 '''
 if __name__ == '__main__':

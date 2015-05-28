@@ -1,6 +1,6 @@
 import numpy as np
 
-def floodlight(data):
+def floodlight_data(data):
 
     # CFV columns for Plans, Services, etc. that were created earlier have blank values replaced with 0.
     data['Plans'].fillna(0, inplace=True)

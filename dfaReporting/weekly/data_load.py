@@ -1,7 +1,7 @@
 from xlwings import Range
 import pandas as pd
 
-def cfv_data():
+def cfv():
     # Before function is ran, VBA code will create the necessary tabs in order to process correctly. See the
     # documentation in the VBA modules for more information.
     # Workbook needs to be saved in order to load the data into pandas properly
@@ -12,7 +12,7 @@ def cfv_data():
 
     return cfv
 
-def sa_data():
+def sa():
 
     sheet = Range('Lookup', 'AA1').value
     sa = pd.read_excel(sheet, 'SA_Temp', index_col=None)
@@ -21,11 +21,13 @@ def sa_data():
 
 def columns(sa):
 
-    dimensions = ['Week', 'Date', 'Campaign', 'Site (DCM)', 'Click-through URL', 'F Tag', 'Category', 'Message Bucket',
-                  'Message Category', 'Creative Type', 'Creative Groups 1', 'Creative ID', 'Message Offer', 'Creative',
-                  'Ad', 'Creative Groups 2', 'Creative Field 1', 'Placement', 'Placement ID',
-                  'Placement Cost Structure', 'OrderNumber (string)',  'Activity','Floodlight Attribution Type',
-                  'Plan (string)', 'Device (string)', 'Service (string)', 'Accessory (string)']
+    dimensions = ['Week', 'Date', 'Campaign', 'Site (DCM)', 'Click-through URL', 'F Tag', 'Category', 'Category Adjusted',
+                  'Message Bucket', 'Message Category', 'Creative Type', 'Creative Groups 1', 'Creative ID',
+                  'Message Offer', 'Creative', 'Ad', 'Creative Groups 2', 'Creative Field 1', 'Placement', 'Placement ID',
+                  'Placement Cost Structure']
+
+    cfv_floodlight_columns = ['OrderNumber (string)',  'Activity','Floodlight Attribution Type',
+                              'Plan (string)', 'Device (string)', 'Service (string)', 'Accessory (string)']
 
     if 'DDR' in sa['Campaign'] == True:
 
@@ -40,14 +42,14 @@ def columns(sa):
 
     else:
 
-        metrics = ['Media Cost', 'NTC Media Cost', 'Impressions', 'Clicks', 'Orders', 'Plans', 'Add-a-Line',
-                   'Activations', 'Devices', 'Services', 'Accessories', 'Postpaid Plans', 'Prepaid Plans', 'eGAs',
-                   'Store Locator Visits', 'A Actions', 'B Actions', 'C Actions', 'D Actions', 'E Actions', 'F Actions',
-                   'Awareness Actions', 'Consideration Actions', 'Traffic Actions', 'Post-Click Activity',
-                   'Post-Impression Activity', 'Video Views', 'Video Completions']
+        metrics = ['Media Cost', 'NTC Media Cost', 'Impressions', 'Clicks', 'Video Views', 'Video Completions',
+                   'Orders', 'Plans', 'Add-a-Line', 'Activations', 'Devices', 'Services', 'Accessories',
+                   'Postpaid Plans', 'Prepaid Plans', 'eGAs', 'Store Locator Visits', 'A Actions', 'B Actions',
+                   'C Actions', 'D Actions', 'E Actions', 'F Actions', 'Awareness Actions', 'Consideration Actions',
+                   'Traffic Actions', 'Post-Click Activity', 'Post-Impression Activity']
 
     sa_columns = list(sa.columns)
     tag_columns = sa_columns[sa_columns.index('DBM Cost USD') + 1:]
-    new_columns = dimensions + metrics + tag_columns
+    new_columns = dimensions + metrics + tag_columns + cfv_floodlight_columns
 
     return new_columns
