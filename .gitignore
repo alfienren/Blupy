@@ -6,5 +6,7 @@ docs/source/_static/fonts
 *.xlsm
 *.xlsx
 *.xls
+*.xml
 *.csv
 *.pyc
+*.ini
