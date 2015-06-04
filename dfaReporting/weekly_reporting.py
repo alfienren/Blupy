@@ -27,7 +27,7 @@ def weekly_reporting():
     data.fillna(0, inplace=True)
 
     if Range('data', 'A1').value is None:
-        data_output.chunk_df(data, 'data', 'A1', 5000)
+        data_output.chunk_df(data, 'data', 'A1', 3000)
 
     # If data is already present in the tab, the two data sets are merged together and then copied into the data tab.
     else:
@@ -36,13 +36,4 @@ def weekly_reporting():
         appended_data = appended_data[columns]
         appended_data.fillna(0, inplace=True)
         Sheet('data').clear()
-        data_output.chunk_df(appended_data, 'data', 'A1', 5000)
-
-'''
-if __name__ == '__main__':
-    # To run from Python, not needed when called from Excel.
-    # Expects the Excel file next to this source file, adjust accordingly.
-    path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'DFA_Weekly_Reporting.xlsm'))
-    Workbook.set_mock_caller(path)
-    weekly_reporting()
-'''
+        data_output.chunk_df(appended_data, 'data', 'A1', 3000)

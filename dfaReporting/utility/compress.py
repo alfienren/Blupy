@@ -11,7 +11,8 @@ def compress_data():
     output_path = path[:path.rindex('\\')]
 
     data = pd.read_excel(path, 'data', index_col = None)
-    joinpath = os.path.join(output_path, 'compressed_data.xlsm')
+    sheet_name = 'Campaigns_Pivot_' + str(data['Date'].max()) + '.xlsm'
+    joinpath = os.path.join(output_path, sheet_name)
 
     columns = list(data.columns)
     columns = columns[:columns.index('Post-Impression Activity') + 1]
@@ -22,14 +23,17 @@ def compress_data():
     xlws = xlwb.Worksheets('Sheet1')
     xlws.Name = 'data'
 
+    Range('Tools', 'ZZ1').horizontal.clear()
+
     xlOpenXMLWorkbookMacroEnabled = 52
     xlwb.SaveAs(joinpath, FileFormat = xlOpenXMLWorkbookMacroEnabled)
-    xlwb.Close()
 
     wb = Workbook(joinpath)
     wb.set_current()
     data = data[columns]
     data_output.chunk_df(data, 'data', 'A1', 2000)
+
+
 
 
 
