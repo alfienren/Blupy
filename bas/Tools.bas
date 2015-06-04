@@ -16,7 +16,13 @@ Call Python_Compress_Data
 
 Set wOutput = ActiveWorkbook
 
-Call CopyModule(wOriginal, "Process_Raw", wOutput)
+Call CopyModule(wOriginal, "Pivot_Generate", wOutput)
+
+With ActiveWorkbook
+
+    Call GeneratePivot
+
+End With
 
 ActiveWorkbook.Save
 ActiveWorkbook.Close
