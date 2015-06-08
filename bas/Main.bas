@@ -26,6 +26,8 @@ Call Python_Weekly_Reporting
 '
 'End If
 
+Call Postprocess_Reports
+
 End Sub
 
 Sub Compress_Data()
