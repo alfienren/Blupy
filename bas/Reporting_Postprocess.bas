@@ -1,4 +1,4 @@
-Attribute VB_Name = "Postprocess"
+Attribute VB_Name = "Reporting_Postprocess"
 Option Explicit
 
 Sub Postprocess_Report()

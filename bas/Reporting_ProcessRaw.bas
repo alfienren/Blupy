@@ -1,4 +1,4 @@
-Attribute VB_Name = "Process_Raw"
+Attribute VB_Name = "Reporting_Process_Raw"
 Option Explicit
 
 Sub Process_Raw_Reports()
