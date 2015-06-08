@@ -8,12 +8,16 @@ Dim sDataSheet      As String
 
 sData = Application.InputBox(Prompt:="Enter path of workbook containing data to merge", Title:="Merge Data", Type:=2)
 
-sDataSheet = Application.InputBox(Prompt:="Enter name of tab containing data", Title:="Worksheet Name", Type:=2)
+If Right(sData, 4) <> ".csv" Then
+
+    sDataSheet = Application.InputBox(Prompt:="Enter name of tab containing data", Title:="Worksheet Name", Type:=2)
+    Range("AC2").Value = sDataSheet
+
+End If
 
 Sheets("Lookup").Activate
 Range("AA2").Value = ThisWorkbook.FullName
 Range("AB2").Value = sData
-Range("AC2").Value = sDataSheet
 
 If sData <> vbNullString Then
 
