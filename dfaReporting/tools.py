@@ -7,3 +7,7 @@ def data_compression():
 def data_split():
 
     split_data.split()
+
+def data_merge():
+
+    merge.merge_data()
