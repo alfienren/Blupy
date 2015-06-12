@@ -1,14 +1,14 @@
 import pandas as pd
 import os
 from win32com.client import Dispatch
-from xlwings import Workbook, Range
+from xlwings import Workbook, Range, Sheet
 from weekly import data_output
 
 def split():
 
     Workbook.caller()
 
-    pivot_script = r'C:\Users\aarschle1\Google Drive\Optimedia\T-Mobile\Projects\Weekly_Reporting\bas\Pivot_Generate.bas'
+    pivot_script = 'C:/Users/aarschle1/Google Drive/Optimedia/T-Mobile/Projects/Weekly_Reporting/bas/Tools_PivotGenerate.bas'
 
     sheet = Range('Lookup', 'AA1').value
     column = Range('Lookup', 'AB1').value
@@ -32,20 +32,26 @@ def split():
     xl.Visible = True
 
     xlOpenXMLWorkbookMacroEnabled = 52
+    j = 0
 
-    for i in range(0, len(split.groups)):
+    for i in split.groups:
 
         xlwb = xl.Workbooks.Add()
         xlws = xlwb.Worksheets('Sheet1')
         xlws.Name = 'data'
 
-        save_path = os.path.join(path, split.groups.keys()[i])
+        module = xlwb.VBProject.VBComponents.Add(1)
+        module.CodeModule.AddFromFile(pivot_script)
+
+        wb = Workbook(xlwb.FullName)
+        #wb.set_current()
+        data_output.chunk_df(split.get_group(i), 'data', 'A1', 2500)
+        xlwb.Application.Run('Tools_PivotGenerate')
+
+        save_path = os.path.join(path, split.groups.keys()[j])
         xlwb.SaveAs(save_path, FileFormat = xlOpenXMLWorkbookMacroEnabled)
 
-        wb = Workbook(save_path)
-        wb.set_current()
-        data_output.chunk_df(split.get_group(i), 'data', 'A1', 2500)
-        xlwb.VBProject.VBComponents.Add(pivot_script)
+        j += 1
+
         wb.save()
         wb.close()
-

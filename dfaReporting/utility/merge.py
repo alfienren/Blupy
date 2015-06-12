@@ -26,7 +26,7 @@ def merge_data():
     else:
 
         data_to_merge = pd.read_csv(data_workbook, na_values=[0])
-    
+
     data = data_to_merge.append(new_data)
 
     if Range('data', 'A1').value is None:
