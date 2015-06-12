@@ -1,5 +1,8 @@
 from weekly import data_load, cfv_clean, categorization, action_tags, clickthroughs, floodlight_transform, \
     data_output, f_tags, messages
+from utility import compress, merge, split_data
+from attribution import ebay
+
 from xlwings import Workbook, Range, Sheet
 import pandas as pd
 
@@ -37,3 +40,19 @@ def weekly_reporting():
         appended_data.fillna(0, inplace=True)
         Sheet('data').clear()
         data_output.chunk_df(appended_data, 'data', 'A1', 3000)
+
+def data_compression():
+
+    compress.compress_data()
+
+def data_split():
+
+    split_data.split()
+
+def data_merge():
+
+    merge.merge_data()
+
+def ebay_costfeed():
+
+    ebay.costfeed()
