@@ -31,11 +31,8 @@ def merge_data():
 
     if Range('data', 'A1').value is None:
 
-        data_output.chunk_df(data, 'data', 'A1', 2500)
-
-    else:
-
         Sheet('data').clear_contents()
-        data_output.chunk_df(data, 'data', 'A1', 2500)
+
+    data_output.chunk_df(data, 'data', 'A1', 2500)
 
 

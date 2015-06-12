@@ -49,8 +49,8 @@ def costfeed():
     mail.Subject = 'eBay Cost Feed Uploaded to FTP'
     mail.Body = '''Hello,
 
-The eBay Cost Feed reference table for the period ''' + str(start.date().strftime('%d/%m/%Y')) + ' - ' + \
-                str(end.date().strftime('%d/%m/%Y')) + ' has been uploaded to the FTP.'
+The eBay Cost Feed reference table for the period ''' + str(start.date().strftime('%m/%d/%Y')) + ' - ' + \
+                str(end.date().strftime('%m/%d/%Y')) + ' has been uploaded to the FTP.'
 
     mail.To = confirmation_emails
     mail.Send()
