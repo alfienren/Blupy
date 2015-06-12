@@ -6,7 +6,7 @@ Sub Python_Weekly_Reporting()
 Sheets("Lookup").Activate
 Range("AA1").Value = ActiveWorkbook.FullName
 
-RunPython ("import weekly_reporting; weekly_reporting.weekly_reporting()")
+RunPython ("import main; main.weekly_reporting()")
 
 End Sub
 
@@ -18,6 +18,24 @@ End Sub
 
 Sub Python_Compress_Data()
 
-RunPython ("import tools; tools.data_compression()")
+RunPython ("import main; main.data_compression()")
+
+End Sub
+
+Sub Python_Split_Data()
+
+RunPython ("import main; main.data_split()")
+
+End Sub
+
+Sub Python_Merge_Data()
+
+RunPython ("import main; main.data_merge()")
+
+End Sub
+
+Sub Python_eBay_CostFeed()
+
+RunPython ("import main; main.ebay_costfeed()")
 
 End Sub
