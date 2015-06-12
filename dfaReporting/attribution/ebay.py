@@ -14,7 +14,7 @@ def costfeed():
     user = Range('Lookup', 'S2').value
     password = Range('Lookup', 'S3').value
     confirmation_emails = Range('Lookup', 'U1').vertical.value
-    filename = 'EBAY_COST_FEED_', datetime.date.today().strftime('%Y%m%d'), '.txt'
+    filename = 'EBAY_COST_FEED_' + datetime.date.today().strftime('%Y%m%d') + '.txt'
     output_path = os.path.join(path[:path.rindex('\\')], filename)
     ftp_path = str('STOR' + filename)
 
