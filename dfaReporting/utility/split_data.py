@@ -43,15 +43,15 @@ def split():
         module = xlwb.VBProject.VBComponents.Add(1)
         module.CodeModule.AddFromFile(pivot_script)
 
-        wb = Workbook(xlwb.FullName)
+        #wb = Workbook(xlwb.FullName)
         #wb.set_current()
-        data_output.chunk_df(split.get_group(i), 'data', 'A1', 2500)
-        xlwb.Application.Run('Tools_PivotGenerate')
-
+        #data_output.chunk_df(split.get_group(i), 'data', 'A1', 2500)
         save_path = os.path.join(path, split.groups.keys()[j])
+        data.to_excel(xlwb.FullName, 'data')
+        xlwb.Application.Run(str(xlwb.Name) + '!Tools_PivotGenerate.GeneratePivot')
         xlwb.SaveAs(save_path, FileFormat = xlOpenXMLWorkbookMacroEnabled)
 
         j += 1
-
-        wb.save()
-        wb.close()
+        xlwb.Close()
+        #wb.save()
+        #wb.close()
