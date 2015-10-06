@@ -1,16 +1,22 @@
 import numpy as np
 import pandas as pd
-from xlwings import Range
+from dfa import load_dfa_reports
 
 def cfv_data(cfv):
 
     cfv['Orders'] = 1 # Create orders column in cfv data. Each OrderNumber counts as 1 order
-    cfv['Plans'] = np.where(cfv['Plan (string)'] != np.NaN, cfv['Plan (string)'].str.count(',') + 1, 0) # Count the number of plans in the Plans column
-    cfv['Services'] = np.where(cfv['Service (string)'] != np.NaN, cfv['Service (string)'].str.count(',') + 1, 0) # Count number of services in the Service column
-    cfv['Accessories'] = np.where(cfv['Accessory (string)'] != np.NaN, cfv['Accessory (string)'].str.count(',') + 1, 0) # Count number of Accessories in the Accessories column
-    cfv['Devices'] = np.where(cfv['Device (string)'] != np.NaN, cfv['Device (string)'].str.count(',') + 1, 0) # Count number of devices in the Plans column
-    cfv['Add-a-Line'] = cfv['Service (string)'].str.count('ADD') # Count number of Add-a-Lines in the Service column
-    cfv['Activations'] = cfv['Plans'] + cfv['Add-a-Line'] #Activations are defined as the sum of Plans and Add-a-Line
+    # Count the number of plans in the Plans column
+    cfv['Plans'] = np.where(cfv['Plan (string)'] != np.NaN, cfv['Plan (string)'].str.count(',') + 1, 0)
+    # Count number of services in the Service column
+    cfv['Services'] = np.where(cfv['Service (string)'] != np.NaN, cfv['Service (string)'].str.count(',') + 1, 0)
+    # Count number of Accessories in the Accessories column
+    cfv['Accessories'] = np.where(cfv['Accessory (string)'] != np.NaN, cfv['Accessory (string)'].str.count(',') + 1, 0)
+    # Count number of devices in the Plans column
+    cfv['Devices'] = np.where(cfv['Device (string)'] != np.NaN, cfv['Device (string)'].str.count(',') + 1, 0)
+    # Count number of Add-a-Lines in the Service column
+    cfv['Add-a-Line'] = cfv['Service (string)'].str.count('ADD')
+    # Activations are defined as the sum of Plans and Add-a-Line
+    cfv['Activations'] = cfv['Plans'] + cfv['Add-a-Line']
 
     # Postpaid plans are defined as a Plan + Device. By row, if number of plans is equal to number of devices, Postpaid
     # plans = number of plans. If plans and devices are not equal, use the minimum number.
@@ -25,7 +31,7 @@ def cfv_data(cfv):
 
     # The DDR campaign counts view-through order credit at 50%. If the campaign name contains 'DDR' and the Floodlight
     # Attribution Type is View-through, the order is multiplied by 0.5.
-    cfv['Orders'] = np.where(((cfv['Campaign'].str.contains('DDR') == True) | (cfv['Campaign'].str.contains('Q1_Brand Remessaging') == True)) &
+    cfv['Orders'] = np.where(((cfv['Campaign'].str.contains('DDR') == True) | (cfv['Campaign'].str.contains('Brand Remessaging') == True)) &
                              (cfv['Floodlight Attribution Type'].str.contains('View-through') == True),
                              cfv['Orders'] * 0.5, cfv['Orders'])
 
@@ -35,20 +41,33 @@ def cfv_data(cfv):
                             (cfv['Device (string)'].str.count(',') + 1) / 2,
                             cfv['Device (string)'].str.count(',') + 1)
 
-    if 'DDR' in cfv['Campaign']:
+    return cfv
 
-        devices = cfv['Device (string)'].str.split(',').apply(pd.Series).stack()
-        devices.index = devices.index.droplevel(-1)
-        devices.name = "Device IDs"
+def get_creative_field(cfv):
 
-        cfv = cfv[cfv.columns[0:17]].join(devices)
-        cfv = cfv.append(cfv)
+    sa = load_dfa_reports.raw_sa()
+    sa = sa[['Placement', 'Creative Field 1']]
 
-        sheet = Range('Lookup', 'A1').value
+    cfv = pd.merge(cfv, sa, how = 'left', on = 'Placement')
 
-        ddr = pd.DataFrame(pd.read_excel(sheet[:sheet.rindex('\\')] + '\\_\\devices.xlsx', 'Device Lookup'))
-        excluded_devices = str(Range('Lookup', 'L2').value)
-        cfv = pd.merge(cfv, ddr, how = 'left', left_on = 'Device IDs', right_on = 'Key')
+    return cfv
+
+#def cfv_ddr(cfv):
+
+        # if 'DDR' in cfv['Campaign']:
+        #
+        #     devices = cfv['Device (string)'].str.split(',').apply(pd.Series).stack()
+        #     devices.index = devices.index.droplevel(-1)
+        #     devices.name = "Device IDs"
+        #
+        #     cfv = cfv[cfv.columns[0:17]].join(devices)
+        #     cfv = cfv.append(cfv)
+        #
+        #     sheet = Range('Lookup', 'A1').value
+        #
+        #     ddr = pd.DataFrame(pd.read_excel(sheet[:sheet.rindex('\\')] + '\\_\\devices.xlsx', 'Device Lookup'))
+        #     excluded_devices = str(Range('Lookup', 'L2').value)
+        #     cfv = pd.merge(cfv, ddr, how = 'left', left_on = 'Device IDs', right_on = 'Key')
 
         # cfv['Prepaid GAs'] = np.where(((cfv['Device IDs'].str.contains(excluded_devices) == False) &
         #                                     (cfv['Device IDs'].notnull() == True) & (cfv['Product Subcategory'].str.contains('Prepaid') == True) &
@@ -129,4 +148,4 @@ def cfv_data(cfv):
         #                                           (cfv['Activity'].str.contains('New My.TMO Order') == True) &
         #                                            (cfv['Floodlight Attribution Type'].str.contains('Click-through') == True)), 1, 0))
 
-    return cfv
+#   return cfv
