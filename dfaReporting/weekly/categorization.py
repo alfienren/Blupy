@@ -56,10 +56,10 @@ def categories(data):
 
 def sites(data):
 
-    sites = pd.DataFrame(Range('Lookup', 'N1').table.value, columns = Range('Lookup', 'N1').horizontal.value)
-    sites.drop(0, inplace = True)
+    site_ref = pd.DataFrame(Range('Lookup', 'N1').table.value, columns = Range('Lookup', 'N1').horizontal.value)
+    site_ref.drop(0, inplace = True)
 
-    data = pd.merge(data, sites, left_on= 'Site (DCM)', right_on= 'DFA', how= 'left')
+    data = pd.merge(data, site_ref, left_on= 'Site (DCM)', right_on= 'DFA', how= 'left')
     data.drop('DFA', axis = 1, inplace = True)
 
     return data

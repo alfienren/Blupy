@@ -1,5 +1,3 @@
-import pandas as pd
-
 def messaging(data):
 
     # Message Bucket, Category and Offer
