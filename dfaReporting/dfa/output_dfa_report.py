@@ -1,9 +1,6 @@
 import numpy as np
-import pandas as pd
-import re
-from xlwings import Range
 
-def columns(sa):
+def columns():
 
     dimensions = ['Week', 'Date', 'Month', 'Quarter', 'Campaign', 'Language', 'Site (DCM)', 'Site', 'Click-through URL',
                   'F Tag', 'Category', 'Message Bucket', 'Message Category', 'Creative Bucket', 'Creative Theme',
@@ -37,26 +34,4 @@ def columns(sa):
     new_columns = dimensions + metrics + tag_columns + cfv_floodlight_columns
 
     return new_columns
-
-def output(data):
-
-    # The DFA field DBM Cost is more accurate for placements using dynamic bidding. If a placement is not using
-    # dynamic bidding, DBM Cost = 0. Therefore, if DBM cost does not equal 0, replace the row's media cost with
-    # DBM cost. If DBM Cost = 0, Media Cost stays the same.
-    data['Media Cost'] = np.where(data['DBM Cost USD'] != 0, data['DBM Cost USD'], data['Media Cost'])
-
-    # Adjust spend to Net to Client
-    data['NTC Media Cost'] = 0
-
-    # DBM Cost column is then removed as it is no longer needed.
-    data.drop('DBM Cost USD', 1, inplace=True)
-
-    # Add columns for Video Completions and Views, primarily for compatibility between campaigns that run video and
-    # don't run video. Those that don't can keep the columns set to zero, but those that have video can then be
-    # adjusted with passback data.
-
-    data['Video Completions'] = 0
-    data['Video Views'] = 0
-
-    return data
 
