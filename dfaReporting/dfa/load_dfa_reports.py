@@ -2,7 +2,7 @@ from xlwings import Range
 import pandas as pd
 import re
 
-def cfv():
+def raw_cfv():
 
     # Before function is ran, VBA code will create the necessary tabs in order to process correctly. See the
     # documentation in the VBA modules for more information.
@@ -14,7 +14,7 @@ def cfv():
 
     return cfv
 
-def sa():
+def raw_sa():
 
     sheet = Range('Lookup', 'AA1').value
     sa = pd.read_excel(sheet, 'SA_Temp', index_col=None)
