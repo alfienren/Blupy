@@ -1,26 +1,14 @@
 import numpy as np
-import datetime
-import arrow
 import pandas as pd
 import re
 from xlwings import Range
 
-
-def mondays(dates):
-
-    d = dates.toordinal()
-    last_monday = d - 7
-    monday = last_monday - (last_monday % 7)
-    monday = datetime.date.fromordinal(monday) + datetime.timedelta(1)
-
-    return monday
-
 def columns(sa):
 
-    dimensions = ['Week', 'Date', 'Campaign', 'Site (DCM)', 'Site', 'Click-through URL', 'F Tag', 'Category', 'Category Adjusted',
-                  'Message Bucket', 'Message Category', 'Message Offer', 'Creative Type', 'Creative Groups 1',
-                  'Creative ID', 'Creative', 'Ad', 'Creative Groups 2', 'Creative Field 1', 'Placement', 'Placement ID',
-                  'Placement Cost Structure']
+    dimensions = ['Week', 'Date', 'Month', 'Quarter', 'Campaign', 'Language', 'Site (DCM)', 'Site', 'Click-through URL',
+                  'F Tag', 'Category', 'Message Bucket', 'Message Category', 'Creative Bucket', 'Creative Theme',
+                  'Creative Type', 'Creative Groups 1', 'Creative ID', 'Creative', 'Ad', 'Creative Groups 2',
+                  'Creative Field 1', 'Placement', 'Placement ID', 'Placement Cost Structure']
 
     cfv_floodlight_columns = ['OrderNumber (string)',  'Activity','Floodlight Attribution Type',
                               'Plan (string)', 'Device (string)', 'Service (string)', 'Accessory (string)']
@@ -63,12 +51,6 @@ def output(data):
     # DBM Cost column is then removed as it is no longer needed.
     data.drop('DBM Cost USD', 1, inplace=True)
 
-    # Create week column by taking the oldest date in the data
-    data['Date2'] = pd.to_datetime(data['Date'])
-    data['Week'] = data['Date2'].apply(lambda x: mondays(x))
-    #data['Month'] = data['Date2'].apply(lambda x: arrow.get(x).format('MMMM'))
-    data.drop('Date2', axis = 1, inplace = True)
-
     # Add columns for Video Completions and Views, primarily for compatibility between campaigns that run video and
     # don't run video. Those that don't can keep the columns set to zero, but those that have video can then be
     # adjusted with passback data.
@@ -78,18 +60,3 @@ def output(data):
 
     return data
 
-def chunk_df(df, sheet, startcell, chunk_size):
-
-    if len(df) <= (chunk_size + 1):
-        Range(sheet, startcell, index=False, header=True).value = df
-
-    else:
-        Range(sheet, startcell, index=False).value = list(df.columns)
-        c = re.match(r"([a-z]+)([0-9]+)", startcell[0] + str(int(startcell[1]) + 1), re.I)
-        row = c.group(1)
-        col = int(c.group(2))
-
-        for chunk in (df[rw:rw + chunk_size] for rw in
-                      range(0, len(df), chunk_size)):
-            Range(sheet, row + str(col), index=False, header=False).value = chunk
-            col += chunk_size
