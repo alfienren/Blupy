@@ -18,16 +18,15 @@ def create_report():
 
     data = clickthroughs.strip_clickthroughs(data)
 
-    data = floodlights.floodlight_data(data)
-    data = action_tags.actions(data)
+    data = floodlights.custom_floodlight_tags(data)
+    data = floodlights.action_tags(data)
 
     data = categorization.placements(data)
     data = categorization.sites(data)
     data = categorization.creative(data)
+    data = categorization.language(data)
+    data = categorization.date_columns(data)
 
-    data = f_tags.f_tags(data)
-    data = data_output.output(data)
+    data = floodlights.f_tags(data)
 
-    columns = data_output.columns(sa)
-    data = data[columns]
-    data.fillna(0, inplace=True)
+    return data
