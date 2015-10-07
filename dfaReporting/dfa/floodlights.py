@@ -134,3 +134,10 @@ def f_tags(data):
     data.drop(['Activity ID', 'Group Name', 'Expected URL', 'Tag', 'Tag Name (Concatenated)'], axis = 1)
 
     return data
+
+def run_action_floodlight_tags(data):
+
+    data = action_tags(data)
+    data = custom_floodlight_tags(data)
+
+    return data
