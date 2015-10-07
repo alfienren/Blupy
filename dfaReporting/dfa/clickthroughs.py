@@ -1,6 +1,4 @@
-import pandas as pd
-
-def clickthrough(data):
+def strip_clickthroughs(data):
 
     data['Click-through URL'] = data['Click-through URL'].str.replace('http://analytics.bluekai.com/site/', '')
     data['Click-through URL'] = data['Click-through URL'].str.replace('%3F%3DADV_DS_%epid!_%eaid!_%ecid!_%eadv!', '')

@@ -5,6 +5,7 @@ from dfa import load_dfa_reports
 def cfv_data(cfv):
 
     cfv['Orders'] = 1 # Create orders column in cfv data. Each OrderNumber counts as 1 order
+
     # Count the number of plans in the Plans column
     cfv['Plans'] = np.where(cfv['Plan (string)'] != np.NaN, cfv['Plan (string)'].str.count(',') + 1, 0)
     # Count number of services in the Service column
@@ -149,3 +150,10 @@ def get_creative_field(cfv):
         #                                            (cfv['Floodlight Attribution Type'].str.contains('Click-through') == True)), 1, 0))
 
 #   return cfv
+
+def run_cfv_macro(cfv):
+
+    cfv = cfv_data(cfv)
+    cfv = get_creative_field(cfv)
+
+    return cfv
