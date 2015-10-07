@@ -1,1 +1,1 @@
-__all__ = ['categorization', 'cfv_report', 'clickthroughs', 'floodlights']
+__all__ = ['categorization', 'cfv_report', 'clickthroughs', 'floodlights', 'report_columns', 'qa']
