@@ -1,7 +1,6 @@
+import os
 import pandas as pd
 from xlwings import Workbook, Range
-from weekly import data_output
-import os
 from win32com.client import Dispatch
 
 def compress_data():
