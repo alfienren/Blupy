@@ -127,6 +127,7 @@ def mondays(dates):
 
 def date_columns(data):
 
+    # Week
     # Month
     # Quarter
 
@@ -145,13 +146,21 @@ def date_columns(data):
         'December': 'Q4'
     }
 
-    # Create week column by taking the oldest date in the data
-
     data['Date2'] = pd.to_datetime(data['Date'])
 
     data['Month'] = data['Date2'].apply(lambda x: arrow.get(x).format('MMMM'))
     data['Quarter'] = data['Month'].apply(lambda x: quarters[x])
     data['Week'] = data['Date2'].apply(lambda x: mondays(x))
     data.drop('Date2', axis = 1, inplace = True)
+
+    return data
+
+def categorize_report(data):
+
+    data = placements(data)
+    data = sites(data)
+    data = creative(data)
+    data = language(data)
+    data = date_columns(data)
 
     return data
