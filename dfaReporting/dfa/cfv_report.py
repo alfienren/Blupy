@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-from dfa import load_dfa_reports
 
 def cfv_data(cfv):
 
@@ -41,15 +40,6 @@ def cfv_data(cfv):
     cfv['eGAs'] = np.where(cfv['Floodlight Attribution Type'].str.contains('View-through') == True,
                             (cfv['Device (string)'].str.count(',') + 1) / 2,
                             cfv['Device (string)'].str.count(',') + 1)
-
-    return cfv
-
-def get_creative_field(cfv):
-
-    sa = load_dfa_reports.raw_sa()
-    sa = sa[['Placement', 'Creative Field 1']]
-
-    cfv = pd.merge(cfv, sa, how = 'left', on = 'Placement')
 
     return cfv
 
@@ -154,6 +144,5 @@ def get_creative_field(cfv):
 def run_cfv_macro(cfv):
 
     cfv = cfv_data(cfv)
-    cfv = get_creative_field(cfv)
 
     return cfv

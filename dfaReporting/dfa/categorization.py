@@ -1,8 +1,10 @@
+import datetime
+
 import numpy as np
 import pandas as pd
 import arrow
-import datetime
 from xlwings import Range
+
 
 def placements(data):
 
@@ -103,7 +105,7 @@ def creative(data):
 
 def sites(data):
 
-    site_ref = pd.DataFrame(Range('Lookup', 'N1').table.value, columns = Range('Lookup', 'N1').horizontal.value)
+    site_ref = pd.DataFrame(Range('Lookup', 'U1').table.value, columns = Range('Lookup', 'U1').horizontal.value)
     site_ref.drop(0, inplace = True)
 
     data = pd.merge(data, site_ref, left_on= 'Site (DCM)', right_on= 'DFA', how= 'left')
@@ -113,7 +115,7 @@ def sites(data):
 
 def language(data):
 
-    spanish_campaigns = '|'.join(list('Spanish', 'Hispanic', 'SL'))
+    spanish_campaigns = '|'.join(list(['Spanish', 'Hispanic', 'SL']))
 
     data['Language'] = np.where(data['Campaign'].str.contains(spanish_campaigns) == True, 'SL', 'EL')
 

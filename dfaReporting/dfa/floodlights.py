@@ -1,7 +1,9 @@
+import re
+
 from xlwings import Range
 import numpy as np
 import pandas as pd
-import re
+
 
 def custom_floodlight_tags(data):
 
