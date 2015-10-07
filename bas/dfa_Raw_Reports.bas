@@ -11,6 +11,7 @@ Dim wCFVTemp                As String
 Dim wSATemp                 As String
 Dim wDDR                    As String
 Dim wSummary                As String
+Dim wQA                     As String
 
 With Application
     
@@ -24,6 +25,7 @@ wCFVTemp = "CFV_Temp"
 wSATemp = "SA_Temp"
 wDDR = "DDR"
 wSummary = "Summary"
+wQA = "Data_QA_Output"
 
 Sheets("SA").Activate
 
@@ -42,6 +44,7 @@ On Error Resume Next
 Worksheets(wSATemp).Delete
 Worksheets(wDDR).Delete
 Worksheets(wSummary).Delete
+Worksheet(wQA).Delete
 Err.Clear
 
 Application.DisplayAlerts = True
