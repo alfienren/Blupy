@@ -1,7 +1,7 @@
-Attribute VB_Name = "DDR_Top15_Devices"
+Attribute VB_Name = "DDR_Devices"
 Option Explicit
 
-Sub DDR_Top_15_Devices()
+Sub Top_15_Devices()
 
 Dim wSummary                As String
 Dim wDDR                    As String
