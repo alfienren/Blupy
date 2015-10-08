@@ -7,6 +7,8 @@ Dim rDDR    As Range
 
 Call Process_Raw_Reports
 
+Call Select_Feed_File
+
 Call Python_Weekly_Reporting
 
 'Sheets("data").Activate
@@ -26,7 +28,7 @@ Call Python_Weekly_Reporting
 '
 'End If
 
-Call Postprocess_Reports
+Call Postprocess_Report
 
 End Sub
 
