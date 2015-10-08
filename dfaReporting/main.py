@@ -35,17 +35,16 @@ def weekly_reporting():
     # Workbook needs to be saved in order to load the data into pandas properly
     # Load the Site Activity and Custom Floodlight Variable data into pandas as DataFrames
 
-    cfv = pd.DataFrame(Range('CFV_Temp', 'A1').table.value, columns = Range('CFV_Temp', 'A1').horizontal.value)
-    cfv.drop(0, inplace = True)
-
     sheet = Range('Lookup', 'AA1').value
+
+    cfv = pd.read_excel(sheet, 'CFV_Temp', index_col=None)
     sa = pd.read_excel(sheet, 'SA_Temp', index_col=None)
 
     sa_creative = sa[['Placement', 'Creative Field 1']]
 
     cfv = pd.merge(cfv, sa_creative, how = 'left', on = 'Placement')
 
-    cfv = cfv_report.run_cfv_macro(cfv)
+    cfv = cfv_report.clean_cfv(cfv)
 
     data = sa.append(cfv)
 
