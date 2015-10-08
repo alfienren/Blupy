@@ -1,4 +1,4 @@
-Attribute VB_Name = "tmo_feed"
+Attribute VB_Name = "data_feeds"
 Sub eBayCostFeed()
 
 Dim rDR     As Range
@@ -46,5 +46,28 @@ Range("AA1").Clear
 Range("AC1").Clear
 
 Sheets("data").Activate
+
+End Sub
+
+Sub Select_Feed_File()
+
+Set sFile = Application.FileDialog(msoFileDialogFilePicker)
+
+With sFile
+
+    .Title = "Select downloaded device feed text file"
+    
+    .AllowMultiSelect = False
+    
+    If .Show <> -1 Then
+        Exit Sub
+    End If
+    
+    FileSelected = .SelectedItems(1)
+    
+End With
+
+Sheets("Action_Reference").Activate
+Range("AE1").Value = FileSelected
 
 End Sub
