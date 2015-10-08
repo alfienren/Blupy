@@ -36,11 +36,9 @@ def order():
                'Postpaid Plans', 'Prepaid Plans', 'eGAs', 'Store Locator Visits', 'A Actions', 'B Actions', 'C Actions',
                'D Actions', 'E Actions', 'F Actions', 'Awareness Actions', 'Consideration Actions',
                'Traffic Actions', 'Post-Click Activity', 'Post-Impression Activity', 'Video Views',
-               'Video Completions']
-
-    # , 'Prepaid GAs', 'Postpaid GAs', 'Prepaid SIMs', 'Postpaid SIMs',
-    #            'Prepaid Mobile Internet', 'Postpaid Mobile Internet', 'Prepaid Phone', 'Postpaid Phone',
-    #            'DDR New Devices', 'DDR Add-a-Line'
+               'Video Completions', 'Prepaid GAs', 'Postpaid GAs', 'Prepaid SIMs', 'Postpaid SIMs',
+               'Prepaid Mobile Internet', 'Postpaid Mobile Internet', 'Prepaid Phone', 'Postpaid Phone',
+               'DDR New Devices', 'DDR Add-a-Line']
 
     new_columns = dimensions + metrics + cfv_floodlight_columns
 
