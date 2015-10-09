@@ -1,12 +1,10 @@
 import re
-
 from xlwings import Workbook, Range, Sheet
 import pandas as pd
-
 from dfa import *
 from utility import *
 from datafeeds import *
-
+from campaign_reports import *
 
 def chunk_df(df, sheet, startcell, chunk_size):
 
@@ -35,14 +33,15 @@ def weekly_reporting():
     # Workbook needs to be saved in order to load the data into pandas properly
     # Load the Site Activity and Custom Floodlight Variable data into pandas as DataFrames
 
-    sheet = Range('Lookup', 'AA1').value
+    sheet = Range('Action_Reference', 'AG1').value
 
-    cfv = pd.read_excel(sheet, 'CFV_Temp', index_col=None)
+    cfv2 = pd.read_excel(sheet, 'CFV_Temp', index_col=None)
     sa = pd.read_excel(sheet, 'SA_Temp', index_col=None)
 
     sa_creative = sa[['Placement', 'Creative Field 1']]
+    sa_creative.drop_duplicates(subset = 'Placement', inplace = True)
 
-    cfv = pd.merge(cfv, sa_creative, how = 'left', on = 'Placement')
+    cfv = pd.merge(cfv2, sa_creative, how = 'left', on = 'Placement')
 
     cfv = cfv_report.clean_cfv(cfv)
 
@@ -72,7 +71,7 @@ def weekly_reporting():
 
     else:
 
-        past_data = pd.read_excel(Range('Lookup', 'AA1').value, 'data', index_col=None)
+        past_data = pd.read_excel(Range('Action_Reference', 'AG1').value, 'data', index_col=None)
         appended_data = past_data.append(data)
         appended_data = appended_data[columns]
         appended_data.fillna(0, inplace=True)
@@ -80,6 +79,8 @@ def weekly_reporting():
         chunk_df(appended_data, 'data', 'A1', 5000)
 
     qa.placement_qa(data)
+
+    ddr_devices.top_15_devices(cfv2)
 
 def data_compression():
 
