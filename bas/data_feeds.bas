@@ -1,5 +1,5 @@
 Attribute VB_Name = "data_feeds"
-Sub eBayCostFeed()
+Sub TMO_Cost_Feed()
 
 Dim rDR     As Range
 Dim rBrand  As Range
@@ -7,7 +7,7 @@ Dim rPath   As Variant
 
 Sheets("data").Activate
 
-Columns("C:C").Select
+Columns("E:E").Select
 
 Set rDR = Selection.Find(What:="DR", After:=ActiveCell, LookIn:=xlFormulas, LookAt _
     :=xlPart, SearchOrder:=xlByRows, SearchDirection:=xlNext, MatchCase:= _

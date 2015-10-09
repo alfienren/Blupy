@@ -3,8 +3,6 @@ Option Explicit
 
 Sub Top_15_Devices()
 
-Dim wSummary                As String
-Dim wDDR                    As String
 Dim TempFilePath            As String
 Dim TempFileName            As String
 Dim FileExtStr              As String
@@ -25,35 +23,19 @@ With Application
     
 End With
 
-wSummary = "Summary"
-wDDR = "DDR"
-
-Application.DisplayAlerts = False
-On Error Resume Next
-Worksheets(wSummary).Delete
-Worksheets(wDDR).Delete
-Err.Clear
-
-Application.DisplayAlerts = True
-Worksheets.Add.Name = wSummary
-Worksheets.Add.Name = wDDR
-
-Call Python_DDR_Top_Devices
-
 Sheets("Summary").Activate
 
 Range("A1").Value = "Rank"
 Range("B1").Value = "Devices"
 Range("C1").Value = "Devices Count"
 Range("D1").Value = "Device Name"
-Range("F1").Value = "Subcategory - Device"
 Range("H1").Value = "Rank"
 Range("I1").Value = "Plans"
 Range("J1").Value = "Plans Count"
 
-Range("A1:F1").Font.Bold = True
+Range("A1:D1").Font.Bold = True
 
-With Range("A1:F1").Interior
+With Range("A1:D1").Interior
     .Pattern = xlSolid
     .PatternColorIndex = xlAutomatic
     .ThemeColor = xlThemeColorDark2
@@ -99,12 +81,6 @@ Range("A1").Select
 wDeviceReport.SaveAs FileName:=TempFilePath & TempFileName
 
 wOriginal.Sheets("Summary").Activate
-
-Application.DisplayAlerts = False
-On Error Resume Next
-Worksheets(wSummary).Delete
-Worksheets(wDDR).Delete
-Err.Clear
 
 End Sub
 

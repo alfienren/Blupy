@@ -11,23 +11,7 @@ Call Select_Feed_File
 
 Call Python_Weekly_Reporting
 
-'Sheets("data").Activate
-'Columns("C:C").Select
-'Set rDDR = Selection.Find(What:="DDR", After:=ActiveCell, LookIn:=xlFormulas, _
-'                LookAt:=xlPart, SearchOrder:=xlByRows, SearchDirection:=xlNext, _
-'                MatchCase:=False, SearchFormat:=False)
-'
-'If rDDR Is Nothing Then
-'
-'    Call Postprocess_Report
-'
-'Else
-'
-'    Call DDR_Top_15_Devices
-'    Call Postprocess_Report
-'
-'End If
-
+Call Top_15_Devices
 Call Postprocess_Report
 
 End Sub
