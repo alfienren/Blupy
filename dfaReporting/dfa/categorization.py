@@ -1,5 +1,4 @@
 import datetime
-
 import numpy as np
 import pandas as pd
 import arrow
@@ -115,7 +114,7 @@ def sites(data):
 
 def language(data):
 
-    spanish_campaigns = '|'.join(list(['Spanish', 'Hispanic', 'SL']))
+    spanish_campaigns = '|'.join(list(['Spanish', 'Hispanic', 'SL', 'Univision']))
 
     data['Language'] = np.where(data['Campaign'].str.contains(spanish_campaigns) == True, 'SL', 'EL')
 
