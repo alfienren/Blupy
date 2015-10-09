@@ -13,6 +13,9 @@ def device_feed():
 
 def top_15_devices(cfv):
 
+    Sheet.add('DDR')
+    Sheet.add('Summary')
+
     device_feed_path = device_feed()
 
     excluded_devices = str(Range('Lookup', 'L2').value)
@@ -41,12 +44,10 @@ def top_15_devices(cfv):
 
     device_counts = pd.DataFrame(pd.value_counts(pd.Series(ddr_devices).values, sort = True)[0:15])
     device_counts['Device Name'] = 1
-    device_counts['Subcategory'] = 1
-    device_counts['Subcategory - Device'] = 1
 
     plan_counts = pd.DataFrame(pd.value_counts(pd.Series(ddr_plans).values, sort = True)[0:15])
 
-    Range('DDR', 'A1').value = device_feed_path
+    Range('DDR', 'A1', index = False).value = device_feed_path
 
     Range('Summary', 'B1').value = device_counts
 
@@ -54,25 +55,20 @@ def top_15_devices(cfv):
 
     Sheet('Summary').activate()
 
+    # Rank
+
     i = 0
     for cell in Range('Summary', 'A2:' + 'A' + str(len(device_counts) + 1)):
-        i = i + 1
+        i += 1
         cell.value = i
 
     j = 0
-    for cell in Range('Summary', 'H2:' + 'H' + str(len(device_counts) + 1)):
-        j = j + 1
+    for cell in Range('Summary', 'H2:' + 'H' + str(len(plan_counts) + 1)):
+        j += 1
         cell.value = j
+
+    # Device Name
 
     for cell in Range('Summary', 'D2').vertical:
         id = cell.offset(0, -2).get_address(False, False, False)
-        cell.formula = '=IFERROR(INDEX(DDR!C:C,MATCH(Summary!' + id + ',DDR!B:B,0)),"na")'
-
-    for cell in Range('Summary', 'E2').vertical:
-        id = cell.offset(0, -3).get_address(False, False, False)
-        cell.formula = '=IFERROR(INDEX(DDR!K:K,MATCH(Summary!' + id + ',DDR!B:B,0)),"na")'
-
-    for cell in Range('Summary', 'F2').vertical:
-        subcategory = cell.offset(0, -1).get_address(False, False, False)
-        device = cell.offset(0, -2).get_address(False, False, False)
-        cell.formula = '=' + subcategory + '&" - "&' + device
+        cell.formula = '=IFERROR(INDEX(DDR!A:A,MATCH(Summary!' + id + ',DDR!G:G,0)),"na")'
