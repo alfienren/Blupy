@@ -18,7 +18,7 @@ def top_15_devices(cfv):
 
     device_feed_path = device_feed()
 
-    excluded_devices = str(Range('Lookup', 'L2').value)
+    excluded_devices = str(Range('Lookup', 'S2').value)
 
     cfv['Device IDs'] = cfv['Device (string)'].str.split(',')
 
