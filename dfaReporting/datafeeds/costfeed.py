@@ -1,11 +1,9 @@
 import os
 import datetime
-
 import pandas as pd
 from xlwings import Workbook, Range
 
-
-def costfeed():
+def tmo():
 
     Workbook.caller()
 
@@ -23,12 +21,12 @@ def costfeed():
         ddr = pd.read_excel(ddrpath, 'Working Data', parse_cols='X, U, AH')
         ddr['Date'] = pd.to_datetime(ddr['Date'])
 
-        data = pd.read_excel(path, 'data', parse_cols= 'B, V, Y')
+        data = pd.read_excel(path, 'data', parse_cols= 'B, X, AA')
         data = data.append(ddr)
 
     else:
 
-        data = pd.read_excel(path, 'data', parse_cols= 'B, V, Y')
+        data = pd.read_excel(path, 'data', parse_cols= 'B, X, AA')
 
     data.rename(columns={'NTC Media Cost':'Spend'}, inplace= True)
     data.dropna(inplace= True)
