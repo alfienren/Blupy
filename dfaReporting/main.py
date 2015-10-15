@@ -94,6 +94,6 @@ def data_merge():
 
     merge.merge_data()
 
-def ebay_costfeed():
+def tmo_costfeed():
 
-    costfeed()
+    costfeed.tmo()
