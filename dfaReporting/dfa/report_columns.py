@@ -37,7 +37,7 @@ def order():
                'Awareness Actions', 'Consideration Actions', 'Traffic Actions', 'Post-Click Activity',
                'Post-Impression Activity', 'Video Views', 'Video Completions', 'Prepaid GAs', 'Postpaid GAs',
                'Prepaid SIMs', 'Postpaid SIMs', 'Prepaid Mobile Internet', 'Postpaid Mobile Internet',
-               'Prepaid Phone', 'Postpaid Phone', 'DDR GAs', 'DDR New Devices', 'DDR Add-a-Line']
+               'Prepaid Phone', 'Postpaid Phone', 'Total GAs', 'DDR New Devices', 'DDR Add-a-Line']
 
     new_columns = dimensions + metrics + cfv_floodlight_columns
 
