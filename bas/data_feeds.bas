@@ -40,7 +40,7 @@ Sheets("Action_Reference").Activate
 Range("AA1").Value = ThisWorkbook.FullName
 Range("AC1").Value = FileSelected
 
-Call Python_eBay_CostFeed
+Call Python_TMO_CostFeed
 
 Range("AA1").Clear
 Range("AC1").Clear
