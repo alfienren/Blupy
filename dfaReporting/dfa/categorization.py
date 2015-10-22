@@ -1,8 +1,10 @@
 import datetime
+
 import numpy as np
 import pandas as pd
 import arrow
 from xlwings import Range
+
 
 def placements(data):
 
@@ -24,44 +26,15 @@ def placements(data):
                         np.where(data['Placement'].str.contains(standard) == True, 'Display',
                                  'Display'))
 
-    data['Category'] = data['Platform'] + ' - ' + data['Creative']
+    data['Creative2'] = np.where(data['Placement'].str.contains(rm) == True, 'Rich Media',
+                                 np.where(data['Placement'].str.contains(custom) == True, 'Custom',
+                                          np.where(data['Placement'].str.contains(rem) == True, 'Remessaging',
+                                                   np.where(data['Placement'].str.contains(social) == True, 'Social',
+                                                            'Standard'))))
 
-    # Categories are broken down by Platform (mobile/tablet, social, desktop), followed by placement creative (Rich
-    # Media, Custom, Remessaging, banners, etc.). Lastly, the placement buy type (dCPM, Flat, CPM, etc.)
+    data['Category'] = data['Platform'] + ' - ' + data['Creative'] + ' - ' + data['Creative2']
 
-    # Words to match on are included in the Lookup tab of the Excel sheet.
-    # Example output of categories:
-    #   Desktop - Standard - dCPM
-    #   Mobile - Custom - Flat
-
-    # platform = np.where(data['Placement'].str.contains(mobile) == True, 'Mobile',
-    #                     np.where(data['Placement'].str.contains(tablet) == True, 'Tablet',
-    #                              np.where(data['Placement'].str.contains(social) == True, 'Social', 'Desktop')))
-    #
-    # creative = np.where(data['Placement'].str.contains(rm) == True, 'Rich Media',
-    #                     np.where(data['Placement'].str.contains(custom) == True, 'Custom',
-    #                              np.where(data['Placement'].str.contains(rem) == True, 'Remessaging',
-    #                                       np.where(data['Placement'].str.contains(vid) == True, 'Video', 'Standard'))))
-    #
-    # buy = np.where(data['Placement'].str.contains(dynamic) == True, 'dCPM',
-    #                np.where(data['Placement'].str.contains(other_buy), 'Flat', ''))
-
-    # data['Platform'] = platform
-    # data['P_Creative'] = creative
-    # data['Buy'] = buy
-    #
-    # data['Category'] = data['Platform'] + ' - ' + data['P_Creative'] + ' - ' + data['Buy']
-    #
-    # data['Category'] = np.where(data['Category'].str[:3] == ' - ', data['Category'].str[3:], data['Category'])
-    # data['Category'] = np.where(data['Category'].str[-3:] == ' - ', data['Category'].str[:-3], data['Category'])
-    #
-    # data['Platform'] = np.where((data['Platform'].str.contains(mobile) == True) | (data['Platform'].str.contains(tablet) == True), 'Mobile',
-    #                               np.where(data['Platform'].str.contains(social) == True, 'Social', 'Desktop'))
-    #
-    # data['P_Creative'] = np.where(data['P_Creative'].str.contains(vid) == True, 'Video',
-    #                               np.where(data['P_Creative'].str.contains(social) == True, np.NaN, 'Display'))
-    #
-    # data['Category Adjusted'] = data['Platform'] + ' - ' + data['P_Creative']
+    data['Category_Adjusted'] = data['Platform'] + ' - ' + data['Creative']
 
     return data
 
@@ -96,7 +69,7 @@ def creative(data):
 
 def sites(data):
 
-    site_ref = pd.DataFrame(Range('Lookup', 'U1').table.value, columns = Range('Lookup', 'U1').horizontal.value)
+    site_ref = pd.DataFrame(Range('Lookup', 'Q1').table.value, columns = Range('Lookup', 'Q1').horizontal.value)
     site_ref.drop(0, inplace = True)
 
     data = pd.merge(data, site_ref, left_on= 'Site (DCM)', right_on= 'DFA', how= 'left')
@@ -150,7 +123,7 @@ def date_columns(data):
 
 def dr_placement_message_type(data):
 
-    message_type = pd.DataFrame(Range('Lookup', 'O3').table.value, columns = Range('Lookup', 'O3').horizontal.value)
+    message_type = pd.DataFrame(Range('Lookup', 'K3').table.value, columns = Range('Lookup', 'K3').horizontal.value)
     message_type.drop(0, inplace= True)
 
     data = pd.merge(data, message_type, left_on= 'Placement', right_on= 'Placement_category', how= 'left')

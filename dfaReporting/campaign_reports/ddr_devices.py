@@ -1,7 +1,9 @@
+import itertools
+
 import pandas as pd
 import numpy as np
-import itertools
 from xlwings import Range, Sheet
+
 
 def device_feed():
 
@@ -18,7 +20,7 @@ def top_15_devices(cfv):
 
     device_feed_path = device_feed()
 
-    excluded_devices = str(Range('Lookup', 'S2').value)
+    excluded_devices = str(Range('Lookup', 'O2').value)
 
     cfv['Device IDs'] = cfv['Device (string)'].str.split(',')
 
