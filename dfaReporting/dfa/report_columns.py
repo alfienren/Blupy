@@ -24,9 +24,10 @@ def additional(data):
 def order():
 
     dimensions = ['Week', 'Date', 'Month', 'Quarter', 'Campaign', 'Language', 'Site (DCM)', 'Site', 'Click-through URL',
-                  'F Tag', 'Category', 'Message Bucket', 'Message Category', 'Creative Bucket', 'Creative Theme',
-                  'Creative Type', 'Creative Groups 1', 'Creative ID', 'Creative', 'Ad', 'Creative Groups 2',
-                  'Creative Field 1', 'Placement', 'Placement ID', 'Placement Cost Structure']
+                  'F Tag', 'Category', 'Category_Adjusted', 'Message Bucket', 'Message Category', 'Creative Bucket',
+                  'Creative Theme', 'Creative Type', 'Creative Groups 1', 'Creative ID', 'Ad', 'Creative Groups 2',
+                  'Creative Field 1', 'Placement Messaging Type', 'Placement', 'Placement ID',
+                  'Placement Cost Structure']
 
     cfv_floodlight_columns = ['OrderNumber (string)',  'Activity','Floodlight Attribution Type',
                               'Plan (string)', 'Device (string)', 'Service (string)', 'Accessory (string)']
