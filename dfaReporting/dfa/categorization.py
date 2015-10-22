@@ -4,13 +4,17 @@ import pandas as pd
 import arrow
 from xlwings import Range
 
-
 def placements(data):
 
-    desktop = '|'.join(list(Range('Lookup', 'H2').vertical.value))
-    mobile =  '|'.join(list(Range('Lookup', 'I2').vertical.value))
-    video = '|'.join(list(Range('Lookup', 'J2').vertical.value))
-    standard = '|'.join(list(Range('Lookup', 'K2').vertical.value))
+    desktop = '|'.join(list(Range('Lookup', 'A2').vertical.value))
+    mobile =  '|'.join(list(Range('Lookup', 'B2').vertical.value))
+    video = '|'.join(list(Range('Lookup', 'C2').vertical.value))
+    standard = '|'.join(list(Range('Lookup', 'D2').vertical.value))
+
+    rm = '|'.join(list(Range('Lookup', 'E2').vertical.value))
+    custom = '|'.join(list(Range('Lookup', 'F2').vertical.value))
+    rem = '|'.join(list(Range('Lookup', 'G2').vertical.value))
+    social = '|'.join(list(Range('Lookup', 'H2').vertical.value))
 
     data['Platform'] = np.where(data['Placement'].str.contains(desktop) == True, 'Desktop',
                         np.where(data['Placement'].str.contains(mobile) == True, 'Mobile',
@@ -18,7 +22,7 @@ def placements(data):
 
     data['Creative'] = np.where(data['Placement'].str.contains(video) == True, 'Video',
                         np.where(data['Placement'].str.contains(standard) == True, 'Display',
-                                 'Video'))
+                                 'Display'))
 
     data['Category'] = data['Platform'] + ' - ' + data['Creative']
 
@@ -30,18 +34,6 @@ def placements(data):
     #   Desktop - Standard - dCPM
     #   Mobile - Custom - Flat
 
-    # mobile = '|'.join(list(Range('Lookup', 'B2:B12').value))
-    # tablet = '|'.join(list(Range('Lookup', 'B13:B15').value))
-    # social = '|'.join(list(Range('Lookup', 'B16:B18').value))
-    #
-    # rm = '|'.join(list(Range('Lookup', 'D2:D5').value))
-    # custom = '|'.join(list(Range('Lookup', 'D6:D15').value))
-    # rem = '|'.join(list(Range('Lookup', 'D16:D28').value))
-    # vid = '|'.join(list(Range('Lookup', 'D29:D44').value))
-    #
-    # dynamic = '|'.join(list(Range('Lookup', 'F2:F3').value))
-    # other_buy = '|'.join(list(Range('Lookup', 'F4').value))
-    #
     # platform = np.where(data['Placement'].str.contains(mobile) == True, 'Mobile',
     #                     np.where(data['Placement'].str.contains(tablet) == True, 'Tablet',
     #                              np.where(data['Placement'].str.contains(social) == True, 'Social', 'Desktop')))
@@ -156,11 +148,22 @@ def date_columns(data):
 
     return data
 
+def dr_placement_message_type(data):
+
+    message_type = pd.DataFrame(Range('Lookup', 'O3').table.value, columns = Range('Lookup', 'O3').horizontal.value)
+    message_type.drop(0, inplace= True)
+
+    data = pd.merge(data, message_type, left_on= 'Placement', right_on= 'Placement_category', how= 'left')
+    data.drop(['Campaign2', 'Placement_category'], axis= 1, inplace= True)
+
+    return data
+
 def categorize_report(data):
 
     data = placements(data)
     data = sites(data)
     data = creative(data)
+    data = dr_placement_message_type(data)
     data = language(data)
     data = date_columns(data)
 
