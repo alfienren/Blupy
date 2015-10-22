@@ -23,12 +23,12 @@ def tmo():
         ddr = pd.read_excel(ddrpath, 'Working Data', parse_cols='X, U, AH')
         ddr['Date'] = pd.to_datetime(ddr['Date'])
 
-        data = pd.read_excel(path, 'data', parse_cols= 'B, X, AA')
+        data = pd.read_excel(path, 'data', parse_cols= 'B, Y, AB')
         data = data.append(ddr)
 
     else:
 
-        data = pd.read_excel(path, 'data', parse_cols= 'B, X, AA')
+        data = pd.read_excel(path, 'data', parse_cols= 'B, Y, AB')
 
     data.rename(columns={'NTC Media Cost':'Spend'}, inplace= True)
     data.dropna(inplace= True)
