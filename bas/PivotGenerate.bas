@@ -1,4 +1,4 @@
-Attribute VB_Name = "Tools_PivotGenerate"
+Attribute VB_Name = "PivotGenerate"
 Option Explicit
 
 Sub GeneratePivot()
