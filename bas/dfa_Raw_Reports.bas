@@ -1,4 +1,5 @@
 Attribute VB_Name = "dfa_Raw_Reports"
+Option Private Module
 Option Explicit
 
 Sub Process_Raw_Reports()
@@ -44,7 +45,7 @@ On Error Resume Next
 Worksheets(wSATemp).Delete
 Worksheets(wDDR).Delete
 Worksheets(wSummary).Delete
-Worksheet(wQA).Delete
+Worksheets(wQA).Delete
 Err.Clear
 
 Application.DisplayAlerts = True

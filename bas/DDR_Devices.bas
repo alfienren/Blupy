@@ -1,4 +1,5 @@
 Attribute VB_Name = "DDR_Devices"
+Option Private Module
 Option Explicit
 
 Sub Top_15_Devices()

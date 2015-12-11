@@ -1,4 +1,5 @@
 Attribute VB_Name = "External_Calls"
+Option Private Module
 Option Explicit
 
 Sub Python_Weekly_Reporting()
@@ -9,12 +10,6 @@ Range("AG1").Value = ActiveWorkbook.FullName
 RunPython ("import main; main.weekly_reporting()")
 
 End Sub
-
-'Sub Python_DDR_Top_Devices()
-'
-'RunPython ("import main; main.dr_device_report()")
-'
-'End Sub
 
 Sub Python_Compress_Data()
 
@@ -34,7 +29,7 @@ RunPython ("import main; main.data_merge()")
 
 End Sub
 
-Sub Python_TMO_CostFeed()
+Sub Python_eBay_CostFeed()
 
 RunPython ("import main; main.tmo_costfeed()")
 

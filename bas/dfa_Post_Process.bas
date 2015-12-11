@@ -1,4 +1,5 @@
 Attribute VB_Name = "dfa_Post_Process"
+Option Private Module
 Option Explicit
 
 Sub Postprocess_Report()
@@ -10,11 +11,16 @@ Dim wDDR                    As String
 
 wCFVTemp = "CFV_Temp"
 wSATemp = "SA_Temp"
+wDDR = "DDR"
+wSummary = "Summary"
 
 Application.DisplayAlerts = False
 On Error Resume Next
 Worksheets(wSATemp).Delete
 Worksheets(wCFVTemp).Delete
+Worksheets(wDDR).Delete
+Worksheets(wSummary).Delete
+
 Err.Clear
 
 Application.DisplayAlerts = True

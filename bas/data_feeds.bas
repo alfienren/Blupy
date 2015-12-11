@@ -40,34 +40,11 @@ Sheets("Action_Reference").Activate
 Range("AA1").Value = ThisWorkbook.FullName
 Range("AC1").Value = FileSelected
 
-Call Python_TMO_CostFeed
+Call Python_eBay_CostFeed
 
 Range("AA1").Clear
 Range("AC1").Clear
 
 Sheets("data").Activate
-
-End Sub
-
-Sub Select_Feed_File()
-
-Set sFile = Application.FileDialog(msoFileDialogFilePicker)
-
-With sFile
-
-    .Title = "Select downloaded device feed text file"
-    
-    .AllowMultiSelect = False
-    
-    If .Show <> -1 Then
-        Exit Sub
-    End If
-    
-    FileSelected = .SelectedItems(1)
-    
-End With
-
-Sheets("Action_Reference").Activate
-Range("AE1").Value = FileSelected
 
 End Sub

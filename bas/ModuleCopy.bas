@@ -1,4 +1,5 @@
 Attribute VB_Name = "ModuleCopy"
+Option Private Module
 Option Explicit
 
 Sub CopyModule(wSource As Workbook, _
