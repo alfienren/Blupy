@@ -1,8 +1,9 @@
 import numpy as np
 import pandas as pd
 from xlwings import Range
+from campaign_reports import *
 
-def cfv_data(cfv):
+def custom_variable_columns(cfv):
 
     cfv['Orders'] = 1  # Create orders column in cfv data. Each OrderNumber counts as 1 order
 
@@ -46,7 +47,7 @@ def cfv_data(cfv):
 
     return cfv
 
-def ddr(cfv):
+def ddr_custom_variables(cfv):
 
     devices = cfv['Device (string)'].str.split(',').apply(pd.Series).stack()
     devices.index = devices.index.droplevel(-1)
@@ -55,11 +56,8 @@ def ddr(cfv):
     device_cfv = cfv[cfv.columns[0:17]].join(devices)
     cfv = cfv.append(device_cfv)
 
-    device_feed_path = Range('Action_Reference', 'AE1').value
-
-    device_lookup = pd.read_table(device_feed_path)
     excluded_devices = str(Range('Lookup', 'S2').value)
-    cfv = pd.merge(cfv, device_lookup, how = 'left', left_on = 'Device IDs', right_on = 'Device SKU')
+    cfv = pd.merge(cfv, ddr_devices.device_feed(), how = 'left', left_on = 'Device IDs', right_on = 'Device SKU')
 
     cfv['Prepaid GAs'] = np.where(((cfv['Device IDs'].str.contains(excluded_devices) == False) &
                                    (cfv['Device IDs'].notnull() == True) & (
@@ -175,9 +173,25 @@ def ddr(cfv):
 
     return cfv
 
-def clean_cfv(cfv):
 
-    cfv = cfv_data(cfv)
-    cfv = ddr(cfv)
+def format_custom_variable_columns(data):
 
-    return cfv
+    # CFV columns for Plans, Services, etc. that were created earlier have blank values replaced with 0.
+    data['Plans'].fillna(0, inplace=True)
+    data['Services'].fillna(0, inplace=True)
+    data['Devices'].fillna(0, inplace=True)
+    data['Accessories'].fillna(0, inplace=True)
+    data['Orders'].fillna(0, inplace=True)
+
+    # If the count of plans, services, accessories, devices, or orders is less than 1, the string is set to blank. If
+    # the count is 1 or greater, the string is associated to the count.
+    data['Plan (string)'] = np.where(data['Plans'] < 1, '', data['Plan (string)'])
+    data['Service (string)'] = np.where(data['Services'] < 1, '', data['Service (string)'])
+    data['Accessory (string)'] = np.where(data['Accessories'] < 1, '', data['Accessory (string)'])
+    data['Device (string)'] = np.where(data['Devices'] < 1, "", data['Device (string)'])
+    data['OrderNumber (string)'] = np.where(data['Orders'] < 1, '', data['OrderNumber (string)'])
+    data['Activity'] = np.where(data['Orders'] < 1, '', data['Activity'])
+    data['Floodlight Attribution Type'] = np.where(data['Orders'] < 1, '', data['Floodlight Attribution Type'])
+    data['Devices'] = np.where(data['Device (string)'].str.contains('nan') == True, 0, data['Devices'])
+
+    return data

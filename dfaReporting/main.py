@@ -6,7 +6,6 @@ import pandas as pd
 from dfa import *
 from utility import *
 from datafeeds import *
-from campaign_reports import *
 
 
 def chunk_df(df, sheet, startcell, chunk_size):
@@ -25,8 +24,35 @@ def chunk_df(df, sheet, startcell, chunk_size):
             Range(sheet, row + str(col), index=False, header=False).value = chunk
             col += chunk_size
 
-def weekly_reporting():
 
+def cfv_tab_name():
+    sa = 'SA_Temp'
+
+    return sa
+
+
+def sa_tab_name():
+    cfv = 'CFV_Temp'
+
+    return cfv
+
+
+def report_path():
+    path = Range('Action_Reference', 'AG1').value
+
+    return path
+
+
+def read_site_activity_report():
+    sa = pd.read_excel(report_path(), sa_tab_name(), index_col=None)
+
+    sa_creative = sa[['Placement', 'Creative Field 1']]
+    sa_creative.drop_duplicates(subset = 'Placement', inplace = True)
+
+    return (sa, sa_creative)
+
+
+def weekly_reporting():
     wb = Workbook.caller()
 
     wb.save()
@@ -36,33 +62,29 @@ def weekly_reporting():
     # Workbook needs to be saved in order to load the data into pandas properly
     # Load the Site Activity and Custom Floodlight Variable data into pandas as DataFrames
 
-    sheet = Range('Action_Reference', 'AG1').value
+    sa, sa_creative = read_site_activity_report()
 
-    cfv2 = pd.read_excel(sheet, 'CFV_Temp', index_col=None)
-    sa = pd.read_excel(sheet, 'SA_Temp', index_col=None)
+    cfv = pd.read_excel(report_path(), cfv_tab_name(), index_col=None)
 
-    sa_creative = sa[['Placement', 'Creative Field 1']]
-    sa_creative.drop_duplicates(subset = 'Placement', inplace = True)
+    cfv = pd.merge(cfv, sa_creative, how = 'left', on = 'Placement')
 
-    cfv = pd.merge(cfv2, sa_creative, how = 'left', on = 'Placement')
-
-    cfv = cfv_report.clean_cfv(cfv)
+    cfv = custom_variables.custom_variable_columns(cfv)
+    cfv = custom_variables.ddr_custom_variables(cfv)
 
     data = sa.append(cfv)
-
     data = clickthroughs.strip_clickthroughs(data)
 
-    data = floodlights.run_action_floodlight_tags(data)
+    data = custom_variables.format_custom_variable_columns(data)
+    data = floodlights.a_to_e_traffic_actions(data)
+
     data = categorization.categorize_report(data)
-
     data = floodlights.f_tags(data)
-
-    data = report_columns.additional(data)
+    data = report_columns.additional_columns(data)
 
     sa_columns = list(sa.columns)
     tag_columns = sa_columns[sa_columns.index('DBM Cost USD') + 1:]
 
-    columns = report_columns.order() + tag_columns
+    columns = report_columns.order_columns() + tag_columns
 
     data = data[columns]
     data.fillna(0, inplace=True)
@@ -74,7 +96,7 @@ def weekly_reporting():
 
     else:
 
-        past_data = pd.read_excel(Range('Action_Reference', 'AG1').value, 'data', index_col=None)
+        past_data = pd.read_excel(report_path(), 'data', index_col=None)
         appended_data = past_data.append(data)
         appended_data = appended_data[columns]
         appended_data.fillna(0, inplace=True)
@@ -83,7 +105,7 @@ def weekly_reporting():
 
     qa.placement_qa(data)
 
-    ddr_devices.top_15_devices(cfv2)
+    #ddr_devices.top_15_devices(cfv2)
 
 def data_compression():
 

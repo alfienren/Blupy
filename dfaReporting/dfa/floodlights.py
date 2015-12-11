@@ -1,33 +1,10 @@
 import re
 
 from xlwings import Range
-import numpy as np
 import pandas as pd
 
 
-def custom_floodlight_tags(data):
-
-    # CFV columns for Plans, Services, etc. that were created earlier have blank values replaced with 0.
-    data['Plans'].fillna(0, inplace=True)
-    data['Services'].fillna(0, inplace=True)
-    data['Devices'].fillna(0, inplace=True)
-    data['Accessories'].fillna(0, inplace=True)
-    data['Orders'].fillna(0, inplace=True)
-
-    # If the count of plans, services, accessories, devices, or orders is less than 1, the string is set to blank. If
-    # the count is 1 or greater, the string is associated to the count.
-    data['Plan (string)'] = np.where(data['Plans'] < 1, '', data['Plan (string)'])
-    data['Service (string)'] = np.where(data['Services'] < 1, '', data['Service (string)'])
-    data['Accessory (string)'] = np.where(data['Accessories'] < 1, '', data['Accessory (string)'])
-    data['Device (string)'] = np.where(data['Devices'] < 1, "", data['Device (string)'])
-    data['OrderNumber (string)'] = np.where(data['Orders'] < 1, '', data['OrderNumber (string)'])
-    data['Activity'] = np.where(data['Orders'] < 1, '', data['Activity'])
-    data['Floodlight Attribution Type'] = np.where(data['Orders'] < 1, '', data['Floodlight Attribution Type'])
-    data['Devices'] = np.where(data['Device (string)'].str.contains('nan') == True, 0, data['Devices'])
-
-    return data
-
-def action_tags(data):
+def a_to_e_traffic_actions(data):
 
     # Set the data column names to a variable
     column_names = data.columns
@@ -134,12 +111,5 @@ def f_tags(data):
     data['F Actions'] = data[f_conversions].sum(axis=1)
 
     data.drop(['Activity ID', 'Group Name', 'Expected URL', 'Tag', 'Tag Name (Concatenated)'], axis = 1)
-
-    return data
-
-def run_action_floodlight_tags(data):
-
-    data = action_tags(data)
-    data = custom_floodlight_tags(data)
 
     return data
