@@ -7,7 +7,7 @@ Sub Python_Weekly_Reporting()
 Sheets("Action_Reference").Activate
 Range("AG1").Value = ActiveWorkbook.FullName
 
-RunPython ("import main; main.weekly_reporting()")
+RunPython ("import main; main.generate_weekly_reporting()")
 
 End Sub
 
