@@ -3,13 +3,11 @@ import re
 from xlwings import Workbook, Range, Sheet
 import pandas as pd
 
-from dfa import *
-from utility import *
+from weekly_reporting import *
 from datafeeds import *
 
 
-def chunk_df(df, sheet, startcell, chunk_size):
-
+def chunk_df(df, sheet, startcell, chunk_size=5000):
     if len(df) <= (chunk_size + 1):
         Range(sheet, startcell, index=False, header=True).value = df
 
@@ -26,15 +24,15 @@ def chunk_df(df, sheet, startcell, chunk_size):
 
 
 def cfv_tab_name():
-    sa = 'SA_Temp'
-
-    return sa
-
-
-def sa_tab_name():
     cfv = 'CFV_Temp'
 
     return cfv
+
+
+def sa_tab_name():
+    sa = 'SA_Temp'
+
+    return sa
 
 
 def report_path():
@@ -52,7 +50,13 @@ def read_site_activity_report():
     return (sa, sa_creative)
 
 
-def weekly_reporting():
+def read_cfv_report():
+    cfv = pd.read_excel(report_path(), cfv_tab_name(), index_col=None)
+
+    return cfv
+
+
+def generate_weekly_reporting():
     wb = Workbook.caller()
 
     wb.save()
@@ -64,9 +68,7 @@ def weekly_reporting():
 
     sa, sa_creative = read_site_activity_report()
 
-    cfv = pd.read_excel(report_path(), cfv_tab_name(), index_col=None)
-
-    cfv = pd.merge(cfv, sa_creative, how = 'left', on = 'Placement')
+    cfv = pd.merge(read_cfv_report(), sa_creative, how = 'left', on = 'Placement')
 
     cfv = custom_variables.custom_variable_columns(cfv)
     cfv = custom_variables.ddr_custom_variables(cfv)
@@ -75,7 +77,7 @@ def weekly_reporting():
     data = clickthroughs.strip_clickthroughs(data)
 
     data = custom_variables.format_custom_variable_columns(data)
-    data = floodlights.a_to_e_traffic_actions(data)
+    data = floodlights.a_e_traffic(data)
 
     data = categorization.categorize_report(data)
     data = floodlights.f_tags(data)
@@ -90,35 +92,26 @@ def weekly_reporting():
     data.fillna(0, inplace=True)
 
     if Range('data', 'A1').value is None:
-        chunk_df(data, 'data', 'A1', 5000)
+        chunk_df(data, 'data', 'A1')
 
     # If data is already present in the tab, the two data sets are merged together and then copied into the data tab.
 
     else:
-
         past_data = pd.read_excel(report_path(), 'data', index_col=None)
         appended_data = past_data.append(data)
         appended_data = appended_data[columns]
         appended_data.fillna(0, inplace=True)
         Sheet('data').clear()
-        chunk_df(appended_data, 'data', 'A1', 5000)
+        chunk_df(appended_data, 'data', 'A1')
 
     qa.placement_qa(data)
 
     #ddr_devices.top_15_devices(cfv2)
 
-def data_compression():
-
-    compress.compress_data()
-
-def data_split():
-
-    split_data.split()
-
-def data_merge():
-
-    merge.merge_data()
 
 def tmo_costfeed():
+    Workbook.caller()
 
-    costfeed.tmo()
+    tmo.cost_feed()
+
+
