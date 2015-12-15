@@ -6,30 +6,33 @@ import arrow
 from xlwings import Range
 
 
-def placements(data):
-
+def placement_categories(data):
     desktop = '|'.join(list(Range('Lookup', 'A2').vertical.value))
     mobile =  '|'.join(list(Range('Lookup', 'B2').vertical.value))
     video = '|'.join(list(Range('Lookup', 'C2').vertical.value))
     standard = '|'.join(list(Range('Lookup', 'D2').vertical.value))
+    tmob = '|'.join(list(['T-Mobile', 'T-Mob']))
 
     rm = '|'.join(list(Range('Lookup', 'E2').vertical.value))
     custom = '|'.join(list(Range('Lookup', 'F2').vertical.value))
     rem = '|'.join(list(Range('Lookup', 'G2').vertical.value))
     social = '|'.join(list(Range('Lookup', 'H2').vertical.value))
 
-    data['Platform'] = np.where(data['Placement'].str.contains(desktop) == True, 'Desktop',
-                        np.where(data['Placement'].str.contains(mobile) == True, 'Mobile',
+    data['Placement2'] = np.where(data['Placement'].str.contains(tmob) == True,
+                                  data['Placement'].str.replace(tmob, ''), data['Placement'])
+
+    data['Platform'] = np.where((data['Placement2'].str.contains(mobile) == True), 'Mobile',
+                        np.where(data['Placement2'].str.contains(desktop) == True, 'Desktop',
                                  'Desktop'))
 
-    data['Creative'] = np.where(data['Placement'].str.contains(video) == True, 'Video',
+    data['Creative'] = np.where(data['Placement2'].str.contains(video) == True, 'Video',
                         np.where(data['Placement'].str.contains(standard) == True, 'Display',
                                  'Display'))
 
-    data['Creative2'] = np.where(data['Placement'].str.contains(rm) == True, 'Rich Media',
-                                 np.where(data['Placement'].str.contains(custom) == True, 'Custom',
-                                          np.where(data['Placement'].str.contains(rem) == True, 'Remessaging',
-                                                   np.where(data['Placement'].str.contains(social) == True, 'Social',
+    data['Creative2'] = np.where(data['Placement2'].str.contains(rm) == True, 'Rich Media',
+                                 np.where(data['Placement2'].str.contains(custom) == True, 'Custom',
+                                          np.where(data['Placement2'].str.contains(rem) == True, 'Remessaging',
+                                                   np.where(data['Placement2'].str.contains(social) == True, 'Social',
                                                             'Standard'))))
 
     data['Category'] = data['Platform'] + ' - ' + data['Creative'] + ' - ' + data['Creative2']
@@ -38,8 +41,8 @@ def placements(data):
 
     return data
 
-def creative(data):
 
+def creative_categories(data):
     # Message Bucket, Category and Offer
     # 90% of the time, the message bucket, category and offer can be determined from the creative field 1 column. It
     # follows a pattern of Bucket_Category_Offer
@@ -67,8 +70,8 @@ def creative(data):
 
     return data
 
-def sites(data):
 
+def sites(data):
     site_ref = pd.DataFrame(Range('Lookup', 'Q1').table.value, columns = Range('Lookup', 'Q1').horizontal.value)
     site_ref.drop(0, inplace = True)
 
@@ -77,26 +80,22 @@ def sites(data):
 
     return data
 
-def language(data):
 
+def language(data):
     spanish_campaigns = '|'.join(list(['Spanish', 'Hispanic', 'SL', 'Univision']))
 
     data['Language'] = np.where(data['Campaign'].str.contains(spanish_campaigns) == True, 'SL', 'EL')
 
     return data
 
-def mondays(dates):
 
+def mondays(dates):
     monday = dates - datetime.timedelta(days= dates.weekday()) + datetime.timedelta(days= 7, weeks= -1)
 
     return monday
 
+
 def date_columns(data):
-
-    # Week
-    # Month
-    # Quarter
-
     quarters = {
         'January': 'Q1',
         'February': 'Q1',
@@ -121,8 +120,8 @@ def date_columns(data):
 
     return data
 
-def dr_placement_message_type(data):
 
+def dr_placement_message_type(data):
     message_type = pd.DataFrame(Range('Lookup', 'K3').table.value, columns = Range('Lookup', 'K3').horizontal.value)
     message_type.drop(0, inplace= True)
 
@@ -131,11 +130,11 @@ def dr_placement_message_type(data):
 
     return data
 
-def categorize_report(data):
 
-    data = placements(data)
+def categorize_report(data):
+    data = placement_categories(data)
     data = sites(data)
-    data = creative(data)
+    data = creative_categories(data)
     data = dr_placement_message_type(data)
     data = language(data)
     data = date_columns(data)

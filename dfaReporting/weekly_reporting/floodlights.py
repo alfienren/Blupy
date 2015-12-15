@@ -74,6 +74,7 @@ def a_to_e_traffic_actions(data):
 
     return data
 
+
 def f_tags(data):
 
     # Create a DataFrame of the F Tag sheet included in the Excel worksheet.

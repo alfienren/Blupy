@@ -1,7 +1,6 @@
 import numpy as np
 
 def additional_columns(data):
-
     # The DFA field DBM Cost is more accurate for placements using dynamic bidding. If a placement is not using
     # dynamic bidding, DBM Cost = 0. Therefore, if DBM cost does not equal 0, replace the row's media cost with
     # DBM cost. If DBM Cost = 0, Media Cost stays the same.
@@ -21,8 +20,8 @@ def additional_columns(data):
 
     return data
 
-def order_columns():
 
+def order_columns():
     dimensions = ['Week', 'Date', 'Month', 'Quarter', 'Campaign', 'Language', 'Site (DCM)', 'Site', 'Click-through URL',
                   'F Tag', 'Category', 'Category_Adjusted', 'Message Bucket', 'Message Category', 'Creative Bucket',
                   'Creative Theme', 'Creative Type', 'Creative Groups 1', 'Creative ID', 'Ad', 'Creative Groups 2',

@@ -3,8 +3,8 @@ import pandas as pd
 from xlwings import Range
 from campaign_reports import *
 
-def custom_variable_columns(cfv):
 
+def custom_variable_columns(cfv):
     cfv['Orders'] = 1  # Create orders column in cfv data. Each OrderNumber counts as 1 order
 
     # Count the number of plans in the Plans column
@@ -22,15 +22,21 @@ def custom_variable_columns(cfv):
 
     # Postpaid plans are defined as a Plan + Device. By row, if number of plans is equal to number of devices, Postpaid
     # plans = number of plans. If plans and devices are not equal, use the minimum number.
-    cfv['Postpaid Plans'] = abs(np.where(cfv['Plans'] == cfv['Devices'], cfv['Plans'],
-                                     pd.concat([cfv['Plans'], cfv['Devices']], axis=1).min(axis=1)))
+    cfv['Postpaid Plans'] = abs(np.where(cfv['Plans'].fillna(0) == cfv['Devices'].fillna(0), cfv['Plans'],
+                                         np.where((cfv['Plans'].fillna(0) > cfv['Devices'].fillna(0)) | (
+                                         cfv['Plans'].fillna(0) < cfv['Devices'].fillna(0)),
+                                                  pd.concat([cfv['Plans'].fillna(0), cfv['Devices'].fillna(0)],
+                                                            axis=1).min(axis=1), 0)))
 
     # Prepaid plans are defined as the number of Devices with no service and plan. If number of plans and services are
     # 0, count of devices is prepaid. If service and plan are not equal, prepaid plans = 0.
-    cfv['Prepaid Plans'] = abs(np.where((cfv['Plans'] == 0) & (cfv['Services'] == 0), cfv['Devices'],
-                                    np.where((cfv['Devices'] > cfv['Plans']) & (cfv['Devices'] > cfv['Services']),
-                                             cfv['Devices'] - pd.concat([cfv['Plans'], cfv['Services']], axis=1).max(
-                                                 axis=1), 0)))
+    cfv['Prepaid Plans'] = abs(
+        np.where((cfv['Plans'].fillna(0) == 0) & (cfv['Services'].fillna(0) == 0), cfv['Devices'],
+                 np.where((cfv['Devices'].fillna(0) > cfv['Plans'].fillna(0)) & (
+                 cfv['Devices'].fillna(0) > cfv['Services'].fillna(0)),
+                          cfv['Devices'].fillna(0) - pd.concat([cfv['Plans'].fillna(0), cfv['Services'].fillna(0)],
+                                                               axis=1).max(
+                                  axis=1), 0)))
 
     # The DDR campaign counts view-through order credit at 50%. If the campaign name contains 'DDR' and the Floodlight
     # Attribution Type is View-through, the order is multiplied by 0.5.
@@ -47,8 +53,8 @@ def custom_variable_columns(cfv):
 
     return cfv
 
-def ddr_custom_variables(cfv):
 
+def ddr_custom_variables(cfv):
     devices = cfv['Device (string)'].str.split(',').apply(pd.Series).stack()
     devices.index = devices.index.droplevel(-1)
     devices.name = "Device IDs"
@@ -175,7 +181,6 @@ def ddr_custom_variables(cfv):
 
 
 def format_custom_variable_columns(data):
-
     # CFV columns for Plans, Services, etc. that were created earlier have blank values replaced with 0.
     data['Plans'].fillna(0, inplace=True)
     data['Services'].fillna(0, inplace=True)
