@@ -4,7 +4,7 @@ from xlwings import Range
 import pandas as pd
 
 
-def a_to_e_traffic_actions(data):
+def a_e_traffic(data):
 
     # Set the data column names to a variable
     column_names = data.columns
