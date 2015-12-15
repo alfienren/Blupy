@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def additional_columns(data):
     # The DFA field DBM Cost is more accurate for placements using dynamic bidding. If a placement is not using
     # dynamic bidding, DBM Cost = 0. Therefore, if DBM cost does not equal 0, replace the row's media cost with
