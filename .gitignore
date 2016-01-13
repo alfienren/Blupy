@@ -3,7 +3,6 @@ $ cat .gitignore
 _/
 test/
 docs/source/_static/fonts
-dfaReporting/.idea
 *.xlsm
 *.xlsx
 *.xls
