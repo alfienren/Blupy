@@ -11,3 +11,4 @@ docs/source/_static/fonts
 *.csv
 *.pyc
 *.ini
+_metro/
