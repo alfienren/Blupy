@@ -1,1 +1,1 @@
-__all__ = ['ddr_devices']
+__all__ = ['tmo_ddr_devices']
