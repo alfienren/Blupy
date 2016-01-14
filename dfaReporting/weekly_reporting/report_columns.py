@@ -44,3 +44,22 @@ def order_columns():
 
     return list(new_columns)
 
+
+def metro_columns(sa):
+    dimensions = list(sa.columns[0:13])
+
+    cfv_metrics = ['Floodlight Attribution Type', 'Activity', 'Transaction Count']
+
+    metrics = list(sa.columns[16:])
+
+    added_columns = ['Week', 'Date', 'Month', 'Quarter', 'Site', 'Category', 'Creative Type Lookup', 'Skippable',
+                     'Market', 'Media Cost', 'Impressions', 'Clicks', 'Video Plays', 'Video Completes',
+                     'Orders', 'Store Locator Visits', 'GM A Actions', 'GM B Actions', 'GM C Actions', 'GM D Actions',
+                     'Hispanic A Actions', 'Hispanic B Actions', 'Hispanic C Actions', 'Hispanic D Actions',
+                     'Total A Actions', 'Total B Actions', 'Total C Actions', 'Total D Actions', 'Awareness Actions',
+                     'Traffic Actions', 'Consideration Actions', 'Post-Impression Activity', 'Post-Click Activity']
+
+    new_columns = added_columns + dimensions + metrics + cfv_metrics
+
+    return new_columns
+

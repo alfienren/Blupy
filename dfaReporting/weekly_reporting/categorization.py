@@ -131,6 +131,28 @@ def dr_placement_message_type(data):
     return data
 
 
+def metro_categories(data):
+    sites = pd.DataFrame(Range('Lookup', 'G1').table.value, columns = Range('Lookup', 'G1').horizontal.value)
+    sites.drop(0, inplace = True)
+
+    data = pd.merge(data, sites, left_on= 'Site (DCM)', right_on= 'DFA Name', how = 'left')
+
+    spanish = '|'.join(list(['Spanish', 'Hispanic', 'Latino']))
+
+    data['Market'] = np.where(data['Campaign'].str.contains(spanish) == True,
+                              'Spanish', 'English')
+
+    cat = pd.DataFrame(Range('Lookup', 'A1').table.value, columns = Range('Lookup', 'A1').horizontal.value)
+    cat.drop(0, inplace = True)
+
+    data = pd.merge(data, cat, left_on = 'Placement', right_on = 'Placement Name', how = 'left')
+    data.drop('Placement Name', axis = 1, inplace =True)
+
+    data.drop_duplicates(inplace=True)
+
+    return data
+
+
 def categorize_report(data):
     data = placement_categories(data)
     data = sites(data)

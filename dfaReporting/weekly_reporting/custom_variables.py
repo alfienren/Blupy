@@ -63,7 +63,7 @@ def ddr_custom_variables(cfv):
     cfv = cfv.append(device_cfv)
 
     excluded_devices = str(Range('Lookup', 'S2').value)
-    cfv = pd.merge(cfv, ddr_devices.device_feed(), how = 'left', left_on = 'Device IDs', right_on = 'Device SKU')
+    cfv = pd.merge(cfv, tmo_ddr_devices.device_feed(), how = 'left', left_on = 'Device IDs', right_on = 'Device SKU')
 
     cfv['Prepaid GAs'] = np.where(((cfv['Device IDs'].str.contains(excluded_devices) == False) &
                                    (cfv['Device IDs'].notnull() == True) & (
