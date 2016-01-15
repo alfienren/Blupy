@@ -17,7 +17,7 @@ Set rBrand = Selection.Find(What:="Brand Remessaging", After:=ActiveCell, LookIn
     xlFormulas, LookAt:=xlPart, SearchOrder:=xlByRows, SearchDirection:= _
     xlNext, MatchCase:=False, SearchFormat:=False)
 
-If rDR Is Nothing Then
+'If rDR Is Nothing Then
 
     Set sFile = Application.FileDialog(msoFileDialogFilePicker)
     
@@ -33,7 +33,7 @@ If rDR Is Nothing Then
     
     End With
     
-End If
+'End If
 
 Sheets("Action_Reference").Activate
 
