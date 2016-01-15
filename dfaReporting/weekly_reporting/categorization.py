@@ -6,7 +6,7 @@ import arrow
 from xlwings import Range
 
 
-def placement_categories(data):
+def placement_categories(data, adv='tmo'):
     desktop = '|'.join(list(Range('Lookup', 'A2').vertical.value))
     mobile =  '|'.join(list(Range('Lookup', 'B2').vertical.value))
     video = '|'.join(list(Range('Lookup', 'C2').vertical.value))
@@ -19,7 +19,8 @@ def placement_categories(data):
     social = '|'.join(list(Range('Lookup', 'H2').vertical.value))
 
     data['Placement2'] = np.where(data['Placement'].str.contains(tmob) == True,
-                                  data['Placement'].str.replace(tmob, ''), data['Placement'])
+                                    data['Placement'].str.replace(tmob, ''), data['Placement'])
+
 
     data['Platform'] = np.where((data['Placement2'].str.contains(mobile) == True), 'Mobile',
                         np.where(data['Placement2'].str.contains(desktop) == True, 'Desktop',
@@ -35,9 +36,20 @@ def placement_categories(data):
                                                    np.where(data['Placement2'].str.contains(social) == True, 'Social',
                                                             'Standard'))))
 
-    data['Category'] = data['Platform'] + ' - ' + data['Creative'] + ' - ' + data['Creative2']
+    if adv == 'tmo':
+        data['Category'] = data['Platform'] + ' - ' + data['Creative'] + ' - ' + data['Creative2']
+        data['Category_Adjusted'] = data['Platform'] + ' - ' + data['Creative']
+    else:
+        data['TMO_Category'] = data['Platform'] + ' - ' + data['Creative'] + ' - ' + data['Creative2']
+        data['TMO_Category_Adjusted'] = data['Platform'] + ' - ' + data['Creative']
 
-    data['Category_Adjusted'] = data['Platform'] + ' - ' + data['Creative']
+        cat = pd.DataFrame(Range('Lookup', 'J1').table.value, columns = Range('Lookup', 'J1').horizontal.value)
+        cat.drop(0, inplace = True)
+
+        data = pd.merge(data, cat, left_on = 'Placement', right_on = 'Placement Name', how = 'left')
+        data.drop('Placement Name', axis = 1, inplace =True)
+
+        data.drop_duplicates(inplace=True)
 
     return data
 
@@ -73,7 +85,8 @@ def creative_categories(data):
 
 def sites(data):
     site_ref = pd.DataFrame(Range('Lookup', 'Q1').table.value, columns = Range('Lookup', 'Q1').horizontal.value)
-    site_ref.drop(0, inplace = True)
+
+    site_ref.drop(0, inplace=True)
 
     data = pd.merge(data, site_ref, left_on= 'Site (DCM)', right_on= 'DFA', how= 'left')
     data.drop('DFA', axis = 1, inplace = True)
@@ -82,7 +95,7 @@ def sites(data):
 
 
 def language(data):
-    spanish_campaigns = '|'.join(list(['Spanish', 'Hispanic', 'SL', 'Univision']))
+    spanish_campaigns = '|'.join(list(['Spanish', 'Hispanic', 'SL', 'Latino', 'Univision']))
 
     data['Language'] = np.where(data['Campaign'].str.contains(spanish_campaigns) == True, 'SL', 'EL')
 
@@ -131,33 +144,16 @@ def dr_placement_message_type(data):
     return data
 
 
-def metro_categories(data):
-    sites = pd.DataFrame(Range('Lookup', 'G1').table.value, columns = Range('Lookup', 'G1').horizontal.value)
-    sites.drop(0, inplace = True)
-
-    data = pd.merge(data, sites, left_on= 'Site (DCM)', right_on= 'DFA Name', how = 'left')
-
-    spanish = '|'.join(list(['Spanish', 'Hispanic', 'Latino']))
-
-    data['Market'] = np.where(data['Campaign'].str.contains(spanish) == True,
-                              'Spanish', 'English')
-
-    cat = pd.DataFrame(Range('Lookup', 'A1').table.value, columns = Range('Lookup', 'A1').horizontal.value)
-    cat.drop(0, inplace = True)
-
-    data = pd.merge(data, cat, left_on = 'Placement', right_on = 'Placement Name', how = 'left')
-    data.drop('Placement Name', axis = 1, inplace =True)
-
-    data.drop_duplicates(inplace=True)
-
-    return data
-
-
-def categorize_report(data):
-    data = placement_categories(data)
+def categorize_report(data, adv='tmo'):
     data = sites(data)
-    data = creative_categories(data)
-    data = dr_placement_message_type(data)
+
+    if adv == 'tmo':
+        data = placement_categories(data, adv='tmo')
+        data = creative_categories(data)
+        data = dr_placement_message_type(data)
+    else:
+        data = placement_categories(data, adv='metro')
+
     data = language(data)
     data = date_columns(data)
 
