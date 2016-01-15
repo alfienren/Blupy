@@ -41,13 +41,17 @@ def report_path():
     return path
 
 
-def read_site_activity_report():
+def read_site_activity_report(adv='tmo'):
     sa = pd.read_excel(report_path(), sa_tab_name(), index_col=None)
 
-    sa_creative = sa[['Placement', 'Creative Field 1']]
-    sa_creative.drop_duplicates(subset = 'Placement', inplace = True)
+    if adv == 'tmo':
+        sa_creative = sa[['Placement', 'Creative Field 1']]
+        sa_creative.drop_duplicates(subset = 'Placement', inplace = True)
 
-    return (sa, sa_creative)
+        return (sa, sa_creative)
+
+    else:
+        return sa
 
 
 def read_cfv_report():
@@ -56,41 +60,7 @@ def read_cfv_report():
     return cfv
 
 
-def generate_weekly_reporting():
-    wb = Workbook.caller()
-
-    wb.save()
-
-    # Before function is ran, VBA code will create the necessary tabs in order to process correctly. See the
-    # documentation in the VBA modules for more information.
-    # Workbook needs to be saved in order to load the data into pandas properly
-    # Load the Site Activity and Custom Floodlight Variable data into pandas as DataFrames
-
-    sa, sa_creative = read_site_activity_report()
-
-    cfv = pd.merge(read_cfv_report(), sa_creative, how = 'left', on = 'Placement')
-
-    cfv = custom_variables.custom_variable_columns(cfv)
-    cfv = custom_variables.ddr_custom_variables(cfv)
-
-    data = sa.append(cfv)
-    data = clickthroughs.strip_clickthroughs(data)
-
-    data = custom_variables.format_custom_variable_columns(data)
-    data = floodlights.a_e_traffic(data)
-
-    data = categorization.categorize_report(data)
-    data = floodlights.f_tags(data)
-    data = report_columns.additional_columns(data)
-
-    sa_columns = list(sa.columns)
-    tag_columns = sa_columns[sa_columns.index('DBM Cost USD') + 1:]
-
-    columns = report_columns.order_columns() + tag_columns
-
-    data = data[columns]
-    data.fillna(0, inplace=True)
-
+def merge_past_data(data, columns):
     if Range('data', 'A1').value is None:
         chunk_df(data, 'data', 'A1')
 
@@ -104,14 +74,76 @@ def generate_weekly_reporting():
         Sheet('data').clear()
         chunk_df(appended_data, 'data', 'A1')
 
+
+def generate_weekly_reporting():
+    wb = Workbook.caller()
+    wb.save()
+
+    # Before function is ran, VBA code will create the necessary tabs in order to process correctly. See the
+    # documentation in the VBA modules for more information.
+    # Workbook needs to be saved in order to load the data into pandas properly
+    # Load the Site Activity and Custom Floodlight Variable data into pandas as DataFrames
+
+    sa, sa_creative = read_site_activity_report(adv='tmo')
+
+    cfv = pd.merge(read_cfv_report(), sa_creative, how = 'left', on = 'Placement')
+
+    cfv = custom_variables.custom_variable_columns(cfv)
+    cfv = custom_variables.ddr_custom_variables(cfv)
+
+    data = sa.append(cfv)
+    data = clickthroughs.strip_clickthroughs(data)
+
+    data = custom_variables.format_custom_variable_columns(data)
+    data = floodlights.a_e_traffic(data, adv='tmo')
+
+    data = categorization.categorize_report(data, adv='tmo')
+    data = floodlights.f_tags(data)
+    data = report_columns.additional_columns(data, adv='tmo')
+
+    sa_columns = list(sa.columns)
+    tag_columns = sa_columns[sa_columns.index('DBM Cost USD') + 1:]
+
+    columns = report_columns.order_columns(adv='tmo') + tag_columns
+
+    data = data[columns]
+    data.fillna(0, inplace=True)
+
+    merge_past_data(data, columns)
+
     qa.placement_qa(data)
 
     #ddr_devices.top_15_devices(cfv2)
+
+
+def generate_metro_reporting():
+    wb = Workbook.caller()
+    wb.save()
+
+    sa = read_site_activity_report(adv='metro')
+    cfv = read_cfv_report()
+
+    data = sa.append(cfv)
+    data = floodlights.a_e_traffic(data, adv='metro')
+    data = categorization.date_columns(data)
+    data = categorization.categorize_report(data, adv='metro')
+
+    data = report_columns.additional_columns(data, adv='metro')
+
+    sa_columns = list(sa.columns)
+    tag_columns = sa_columns[sa_columns.index('Clicks') + 1:]
+
+    columns = report_columns.order_columns(adv='metro') + tag_columns
+
+    data = data[columns]
+    data.fillna(0, inplace=True)
+
+    merge_past_data(data, columns)
+
+    qa.placement_qa(data)
 
 
 def tmo_costfeed():
     Workbook.caller()
 
     tmo.cost_feed()
-
-
