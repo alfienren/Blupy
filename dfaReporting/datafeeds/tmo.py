@@ -22,11 +22,10 @@ def cost_feed():
         data = data.append(ddr)
 
     else:
-
         data = pd.read_excel(path, 'data', parse_cols= 'B, Y, AB')
 
     end = data['Date'].max()
-    start = end - datetime.timedelta(days= 7)
+    start = end - datetime.timedelta(days=6)
     data = data[(data['Date'] >= start) & (data['Date'] <= end)]
 
     data.rename(columns={'NTC Media Cost':'Spend'}, inplace= True)
