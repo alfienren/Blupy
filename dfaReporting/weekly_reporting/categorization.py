@@ -26,25 +26,26 @@ def placement_categories(data, adv='tmo'):
                         np.where(data['Placement2'].str.contains(desktop) == True, 'Desktop',
                                  'Desktop'))
 
-    data['Creative'] = np.where(data['Placement2'].str.contains(video) == True, 'Video',
+    data['Creative2'] = np.where(data['Placement2'].str.contains(video) == True, 'Video',
                         np.where(data['Placement'].str.contains(standard) == True, 'Display',
                                  'Display'))
 
-    data['Creative2'] = np.where(data['Placement2'].str.contains(rm) == True, 'Rich Media',
+    data['Creative3'] = np.where(data['Placement2'].str.contains(rm) == True, 'Rich Media',
                                  np.where(data['Placement2'].str.contains(custom) == True, 'Custom',
                                           np.where(data['Placement2'].str.contains(rem) == True, 'Remessaging',
                                                    np.where(data['Placement2'].str.contains(social) == True, 'Social',
                                                             'Standard'))))
 
     if adv == 'tmo':
-        data['Category'] = data['Platform'] + ' - ' + data['Creative'] + ' - ' + data['Creative2']
-        data['Category_Adjusted'] = data['Platform'] + ' - ' + data['Creative']
+        data['Category'] = data['Platform'] + ' - ' + data['Creative2'] + ' - ' + data['Creative3']
+        data['Category_Adjusted'] = data['Platform'] + ' - ' + data['Creative2']
     else:
-        data['TMO_Category'] = data['Platform'] + ' - ' + data['Creative'] + ' - ' + data['Creative2']
-        data['TMO_Category_Adjusted'] = data['Platform'] + ' - ' + data['Creative']
+        data['TMO_Category'] = data['Platform'] + ' - ' + data['Creative2'] + ' - ' + data['Creative3']
+        data['TMO_Category_Adjusted'] = data['Platform'] + ' - ' + data['Creative2']
 
         cat = pd.DataFrame(Range('Lookup', 'J1').table.value, columns = Range('Lookup', 'J1').horizontal.value)
         cat.drop(0, inplace = True)
+        cat.drop_duplicates(subset='Placement Name', inplace=True)
 
         data = pd.merge(data, cat, left_on = 'Placement', right_on = 'Placement Name', how = 'left')
         data.drop('Placement Name', axis = 1, inplace =True)
@@ -85,7 +86,6 @@ def creative_categories(data):
 
 def sites(data):
     site_ref = pd.DataFrame(Range('Lookup', 'Q1').table.value, columns = Range('Lookup', 'Q1').horizontal.value)
-
     site_ref.drop(0, inplace=True)
 
     data = pd.merge(data, site_ref, left_on= 'Site (DCM)', right_on= 'DFA', how= 'left')
@@ -94,8 +94,52 @@ def sites(data):
     return data
 
 
+def spanish_keywords():
+    spanish_campaigns = '|'.join(list(['Spanish', 'Hispanic', 'SL', 'Latino', 'Univision', 'Telemundo']))
+
+    return spanish_campaigns
+
+
+def media_plan(data):
+    spanish_campaigns = spanish_keywords()
+
+    data['Campaign2'] = np.where(data['Campaign'].str.contains('BidManager') == True, data['Placement'],
+                                 data['Campaign'])
+
+    data['Media Plan'] = np.where(data['Campaign2'].str.contains('Brand Remessaging|Brand Rms') == True,
+                                  'Brand Remessaging',
+                                  np.where(data['Campaign2'].str.contains('DDR') == True, 'DDR',
+                                           np.where(data['Campaign2'].str.contains('Forbes') == True,
+                                                    'Forbes Sponsorship',
+                                                    np.where(data['Campaign2'].str.contains('FEP|ADU|OXYGEN') == True,
+                                                             'FEP Upfront',
+                                                             np.where(data['Campaign2'].str.contains(
+                                                                 'DemandGen|Demand Gen') == True, 'Demand Gen',
+                                                                      np.where(data['Campaign2'].str.contains(
+                                                                          'Network') == True, 'Network',
+                                                                               'Super Bowl'))))))
+
+    data['Media Plan'] = np.where(data['Campaign'].str.contains(spanish_campaigns) == True, 'SL ' + data['Media Plan'],
+                                  data['Media Plan'])
+
+    data.drop('Campaign2', axis=1, inplace=True)
+
+    return data
+
+
+def message_campaign(data):
+    message_table = pd.DataFrame(Range('Lookup', 'T1').table.value, columns=Range('Lookup', 'T1').horizontal.value)
+    message_table.drop(0, inplace=True)
+
+    message_table.drop_duplicates(inplace=True)
+
+    data_merged = pd.merge(data, message_table, on=['Media Plan', 'Creative Groups 2'], how='left')
+
+    return data_merged
+
+
 def language(data):
-    spanish_campaigns = '|'.join(list(['Spanish', 'Hispanic', 'SL', 'Latino', 'Univision']))
+    spanish_campaigns = spanish_keywords()
 
     data['Language'] = np.where(data['Campaign'].str.contains(spanish_campaigns) == True, 'SL', 'EL')
 
@@ -151,6 +195,8 @@ def categorize_report(data, adv='tmo'):
         data = placement_categories(data, adv='tmo')
         data = creative_categories(data)
         data = dr_placement_message_type(data)
+        data = media_plan(data)
+        data = message_campaign(data)
     else:
         data = placement_categories(data, adv='metro')
 
