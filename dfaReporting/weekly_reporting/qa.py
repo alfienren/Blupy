@@ -6,8 +6,6 @@ from xlwings import Sheet, Range
 # no impressions.
 
 def placement_qa(data):
-    data = data[['Placement', 'Placement ID', 'Week', 'Media Cost', 'Impressions', 'Clicks']]
-
     data['Flag'] = np.where((data['Media Cost'] > 50) & (data['Impressions'] < 1000), 'Low Impressions',
                             np.where((data['Media Cost'] > 10) & (data['Impressions'] > 100) & (data['Clicks'] == 0),
                                      'Zero Clicks',
@@ -16,6 +14,7 @@ def placement_qa(data):
                                          'Zero Impressions', np.nan)))
 
     data = data[data['Flag'] != 'nan']
+    data = data[['Placement', 'Placement ID', 'Week', 'Media Cost', 'Impressions', 'Clicks', 'Flag']]
 
     Sheet.add('Data_QA_Output', after = 'data')
 
