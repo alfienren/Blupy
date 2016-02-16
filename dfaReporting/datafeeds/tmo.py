@@ -18,11 +18,11 @@ def cost_feed():
         ddr = pd.read_excel(ddrpath, 'Working Data', parse_cols='X, U, AH')
         ddr['Date'] = pd.to_datetime(ddr['Date'])
 
-        data = pd.read_excel(path, 'data', parse_cols= 'B, Y, AB')
+        data = pd.read_excel(path, 'data', parse_cols= 'B, AA, AD')
         data = data.append(ddr)
 
     else:
-        data = pd.read_excel(path, 'data', parse_cols= 'B, Y, AB')
+        data = pd.read_excel(path, 'data', parse_cols= 'B, AA, AD')
 
     end = data['Date'].max()
     start = end - datetime.timedelta(days=6)
