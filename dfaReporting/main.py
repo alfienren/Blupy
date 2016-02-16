@@ -46,7 +46,7 @@ def read_site_activity_report(adv='tmo'):
 
     if adv == 'tmo':
         sa_creative = sa[['Placement', 'Creative Field 1']]
-        sa_creative.drop_duplicates(subset = 'Placement', inplace = True)
+        sa_creative = sa_creative.drop_duplicates(subset = 'Placement')
 
         return (sa, sa_creative)
 
@@ -102,7 +102,7 @@ def generate_weekly_reporting():
     data = report_columns.additional_columns(data, adv='tmo')
 
     sa_columns = list(sa.columns)
-    tag_columns = sa_columns[sa_columns.index('DBM Cost USD') + 1:]
+    tag_columns = sa_columns[sa_columns.index('DBM Cost (USD)') + 1:]
 
     columns = report_columns.order_columns(adv='tmo') + tag_columns
 
@@ -136,7 +136,7 @@ def generate_metro_reporting():
     columns = report_columns.order_columns(adv='metro') + tag_columns
 
     data = data[columns]
-    data.fillna(0, inplace=True)
+    data = data.fillna(0)
 
     merge_past_data(data, columns)
 
