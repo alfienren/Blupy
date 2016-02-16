@@ -5,9 +5,10 @@ def additional_columns(data, adv='tmo'):
     # The DFA field DBM Cost is more accurate for placements using dynamic bidding. If a placement is not using
     # dynamic bidding, DBM Cost = 0. Therefore, if DBM cost does not equal 0, replace the row's media cost with
     # DBM cost. If DBM Cost = 0, Media Cost stays the same.
+
     if adv == 'tmo':
-        data['Media Cost'] = np.where(data['DBM Cost USD'] != 0, data['DBM Cost USD'], data['Media Cost'])
-        data.drop('DBM Cost USD', 1, inplace=True)
+        data['Media Cost'] = np.where(data['DBM Cost (USD)'] != 0, data['DBM Cost (USD)'], data['Media Cost'])
+        data.drop('DBM Cost (USD)', 1, inplace=True)
 
     # Adjust spend to Net to Client
     data['NTC Media Cost'] = 0
@@ -44,9 +45,9 @@ def order_columns(adv='tmo'):
 
     else:
         dimensions = ['Week', 'Date', 'Month', 'Quarter', 'Campaign', 'Language', 'Site (DCM)', 'Site',
-                      'TMO_Category', 'TMO_Category_Adjusted', 'Creative Type', 'Creative Groups 1',
-                      'Creative ID', 'Ad', 'Creative Groups 2', 'Placement', 'Placement ID', 'Category',
-                      'Creative Type Lookup', 'Skippable']
+                      'TMO_Category', 'TMO_Category_Adjusted', 'Creative', 'Creative Type', 'Creative Groups 1',
+                      'Creative ID', 'Ad', 'Creative Groups 2', 'Creative Field 2', 'Placement', 'Placement ID',
+                      'Category', 'Creative Type Lookup', 'Skippable']
 
         cfv_floodlight_columns = ['Floodlight Attribution Type', 'Activity', 'Transaction Count']
 
