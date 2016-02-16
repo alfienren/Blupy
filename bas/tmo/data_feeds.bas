@@ -37,7 +37,7 @@ Set rBrand = Selection.Find(What:="Brand Remessaging", After:=ActiveCell, LookIn
 
 Sheets("Action_Reference").Activate
 
-Range("AA1").Value = ThisWorkbook.FullName
+Range("AG1").Value = ThisWorkbook.FullName
 Range("AC1").Value = FileSelected
 
 Call Python_eBay_CostFeed
