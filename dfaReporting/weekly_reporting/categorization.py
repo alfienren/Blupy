@@ -39,7 +39,8 @@ def placement_categories(data, adv='tmo'):
     if adv == 'tmo':
         data['Category'] = data['Platform'] + ' - ' + data['Creative2'] + ' - ' + data['Creative3']
         data['Category_Adjusted'] = data['Platform'] + ' - ' + data['Creative2']
-    else:
+
+    elif adv == 'metro':
         data['TMO_Category'] = data['Platform'] + ' - ' + data['Creative2'] + ' - ' + data['Creative3']
         data['TMO_Category_Adjusted'] = data['Platform'] + ' - ' + data['Creative2']
 
