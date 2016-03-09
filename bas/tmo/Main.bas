@@ -17,3 +17,16 @@ Call Python_Weekly_Reporting
 Call Postprocess_Report
 
 End Sub
+
+Sub Create_Traffic_Master_Sheet()
+
+Call Select_Campaign_Trafficking_Reports_Folder
+
+Call Python_Build_Trafficking_Master_Sheet
+
+Sheets("Action_Reference").Activate
+Range("AE1").Clear
+
+Sheets("data").Activate
+
+End Sub

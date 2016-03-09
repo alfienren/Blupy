@@ -34,3 +34,9 @@ Sub Python_eBay_CostFeed()
 RunPython ("import main; main.tmo_costfeed()")
 
 End Sub
+
+Sub Python_FlatRates()
+
+RunPython ("import main; main.flat_rate_costs()")
+
+End Sub
