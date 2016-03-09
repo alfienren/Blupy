@@ -5,6 +5,7 @@ import pandas as pd
 
 from weekly_reporting import *
 from datafeeds import *
+from campaign_reports import wfm, traffic_master
 
 
 def chunk_df(df, sheet, startcell, chunk_size=5000):
@@ -141,6 +142,40 @@ def generate_metro_reporting():
     merge_past_data(data, columns)
 
     qa.placement_qa(data)
+
+
+def generate_wfm_reporting():
+    wfm.generate_reporting()
+
+
+def flat_rate_costs():
+    Workbook.caller()
+
+    budgets = traffic_master.load_traffic_sheet()
+    budgets = traffic_master.add_traffic_columns(budgets)
+    budgets = traffic_master.add_new_site_column(budgets)
+    budgets = traffic_master.transform_data_columns(budgets)
+    budgets = traffic_master.by_placement_budgets(budgets)
+
+    traffic_master.output_flat_rates(budgets)
+
+
+def build_traffic_master():
+    wb = Workbook.caller()
+    path = wb.fullname
+
+    master_sheet = traffic_master.merge_traffic_sheets()
+
+    output_path = path[:path.rindex('\\')] + '/' + 'Trafficking_Master.xlsx'
+
+    traffic_sheet = Workbook()
+
+    chunk_df(master_sheet, 0, 'A1')
+
+    traffic_sheet.save(output_path)
+
+    traffic_sheet.close()
+    wb.set_current()
 
 
 def tmo_costfeed():
