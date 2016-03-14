@@ -1,7 +1,6 @@
 from xlwings import Range
 import pandas as pd
 import numpy as np
-import main
 import os
 from weekly_reporting import categorization
 
@@ -10,15 +9,13 @@ def load_traffic_sheet():
     traffic_sheet = Range('Action_Reference', 'AE1').value
     budgets = pd.read_excel(traffic_sheet, 0)
 
-    budgets = budgets[budgets['Cost structure'].str.contains('Flat rate') == True]
-
     return budgets
 
 
 def add_traffic_columns(budgets):
     if not ('Days in Flight' or 'Spend per Day' or 'Units per Day' or 'Placement Group') in budgets.columns:
         budgets['Days in Flight'] = (pd.to_datetime(budgets['End date']) -
-                                     pd.to_datetime(budgets['Start date'])) / np.timedelta64(1, 'D')
+                                     pd.to_datetime(budgets['Start date'])) / np.timedelta64(1, 'D') + 1
 
         budgets['Spend per Day'] = budgets['Cost (USD)'] / budgets['Days in Flight']
         budgets['Units per Day'] = budgets['Units'] / budgets['Days in Flight']
@@ -154,9 +151,3 @@ def merge_traffic_sheets():
     traffic_master = traffic_master[column_order]
 
     return traffic_master
-
-
-def output_flat_rates(byday_budgets):
-    main.chunk_df(byday_budgets, 'Flat_Rate', 'A1')
-
-
