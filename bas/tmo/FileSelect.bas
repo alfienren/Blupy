@@ -24,13 +24,13 @@ Range("AE1").Value = FileSelected
 
 End Sub
 
-Sub Select_Trafficking_Campaign_Master_File()
+Sub Select_Planned_Media_Report()
 
 Set sFile = Application.FileDialog(msoFileDialogFilePicker)
 
 With sFile
 
-    .Title = "Select trafficking Campaign Master File"
+    .Title = "Select downloaded planned media report (csv)"
     
     .AllowMultiSelect = False
     

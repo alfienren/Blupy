@@ -35,8 +35,20 @@ RunPython ("import main; main.tmo_costfeed()")
 
 End Sub
 
+Sub Python_Build_Trafficking_Master_Sheet()
+
+RunPython ("import main; main.build_traffic_master()")
+
+End Sub
+
 Sub Python_FlatRates()
 
-RunPython ("import main; main.flat_rate_costs()")
+RunPython ("import main; main.output_flat_rate_report()")
+
+End Sub
+
+Sub Python_Pacing_Report()
+
+RunPython ("import main; main.pacing_report()")
 
 End Sub
