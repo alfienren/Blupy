@@ -5,7 +5,7 @@ import pandas as pd
 
 from weekly_reporting import *
 from datafeeds import *
-from campaign_reports import wfm, traffic_master
+from campaign_reports import wfm, traffic_master, campaign_pacing, cost_corrections
 
 
 def chunk_df(df, sheet, startcell, chunk_size=5000):
@@ -148,16 +148,14 @@ def generate_wfm_reporting():
     wfm.generate_reporting()
 
 
-def flat_rate_costs():
+def output_flat_rate_report():
     Workbook.caller()
 
-    budgets = traffic_master.load_traffic_sheet()
-    budgets = traffic_master.add_traffic_columns(budgets)
-    budgets = traffic_master.add_new_site_column(budgets)
-    budgets = traffic_master.transform_data_columns(budgets)
-    budgets = traffic_master.by_placement_budgets(budgets)
+    cost_corrections.flat_rate_corrections()
 
-    traffic_master.output_flat_rates(budgets)
+
+def pacing_report():
+    campaign_pacing.site_pacing_report()
 
 
 def build_traffic_master():
