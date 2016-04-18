@@ -9,6 +9,7 @@ def wfm_columns(data):
     column_names = list(data.columns)
     hub_key = '|'.join(list(['WFM', 'Hub']))
     walmart_key = '|'.join(list(['Walmart Family Mobile', 'Walmart']))
+
     hub_actions, walmart_actions = [], []
 
     for i in column_names:
