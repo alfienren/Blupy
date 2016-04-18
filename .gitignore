@@ -12,3 +12,7 @@ docs/source/_static/fonts
 *.pyc
 *.ini
 _metro/
+search
+search/
+dr
+dr/
