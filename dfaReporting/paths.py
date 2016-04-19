@@ -1,5 +1,6 @@
 from xlwings import Range
 
+
 def report_path():
     path = Range('Action_Reference', 'AG1').value
 

@@ -1,13 +1,14 @@
 from xlwings import Workbook
 from weekly_reporting import *
-from data import *
+from reporting_data import *
 from paths import *
-from datafeeds import tmo
 import campaign_reports
-import campaign_reports.ddr.pacing
-import campaign_reports.ddr.tableau
+from campaign_reports import costfeed
+from campaign_reports.ddr.pacing import *
+from campaign_reports.ddr.tableau import *
 
 import pandas as pd
+import numpy as np
 
 
 def generate_weekly_reporting():
@@ -44,7 +45,7 @@ def generate_weekly_reporting():
     data = data[columns]
     data.fillna(0, inplace=True)
 
-    data.merge_past_data(data, columns)
+    merge_past_data(data, columns)
 
     qa.placement_qa(data)
 
@@ -115,7 +116,7 @@ def build_traffic_master():
 def tmo_costfeed():
     Workbook.caller()
 
-    tmo.cost_feed()
+    costfeed.cost_feed()
 
 
 def dr_generate_dashboard_data():
@@ -124,12 +125,12 @@ def dr_generate_dashboard_data():
     save_path = str(dr_pivot_path())
     save_path = save_path[:save_path.rindex('\\')]
 
-    ddr_data = campaign_reports.ddr.pacing.display.raw_pivot()
+    ddr_data = display.raw_pivot()
 
-    ddr_display = campaign_reports.ddr.tableau.display.tableau_campaign_data(ddr_data)
-    ddr_search_data = campaign_reports.ddr.tableau.search.merge_search_data()
+    ddr_display = display.tableau_campaign_data(ddr_data)
+    ddr_search_data = search.merge_search_data()
 
-    tableau_search = campaign_reports.ddr.tableau.search.tableau_search_data(ddr_search_data)
+    tableau_search = search.tableau_search_data(ddr_search_data)
 
     tableau = ddr_display.append(tableau_search)
 
@@ -144,7 +145,7 @@ def dr_generate_dashboard_data():
         Sheet('merged').clear()
         chunk_df(appended_data, 'merged', 'A1')
 
-    campaign_reports.ddr.tableau.search.search_data_client(ddr_search_data, save_path)
+    search.search_data_client(ddr_search_data, save_path)
 
     wb2 = Workbook()
     Sheet('Sheet1').name = 'DDR Data'
@@ -153,3 +154,44 @@ def dr_generate_dashboard_data():
 
     wb2.save(save_path + '\\' + 'DR_Raw_Data.csv')
     wb2.close()
+
+
+def output_forecasts(pacing_data):
+    pacing_data['Week'] = pacing_data['Date'].apply(lambda x: categorization.mondays(x))
+
+    pacing_data = pd.pivot_table(pacing_data, index= ['Site', 'Tactic', 'Metric'],
+                          columns= ['Week'], values= 'value', aggfunc= np.sum).reset_index()
+
+    wb = Workbook(paths.dr_pacing_path())
+
+    Sheet('forecast_data').clear_contents()
+    Range('forecast_data', 'A1', index= False).value = pacing_data
+
+    wb.save()
+    wb.close()
+
+
+def dr_pacing_data_for_forecasts():
+    wb = Workbook.caller()
+
+    dr_data = display.raw_pivot()
+
+    dr_forecasting = data_transform.transform_dr_forecasts(dr_data)
+    wb.set_current()
+
+    Sheet('raw_pacing_data').clear_contents()
+    Range('raw_pacing_data', 'A1', index=False).value = dr_forecasting
+
+    performance.publishers(dr_data)
+
+
+def dr_reshape_forecasts():
+    Workbook.caller()
+
+    r_data = forecast.generate_forecasts()
+
+    pacing_data = forecast.merge_pacing_and_forecasts(r_data)
+
+    tab = display.tableau_pacing(pacing_data)
+
+    forecast.output_forecasts(tab)
