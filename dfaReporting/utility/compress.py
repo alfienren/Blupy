@@ -3,6 +3,7 @@ import os
 import pandas as pd
 from xlwings import Workbook, Range
 from win32com.client import Dispatch
+import reporting
 
 
 def compress_data():
@@ -32,7 +33,7 @@ def compress_data():
     wb = Workbook(joinpath)
     wb.set_current()
     data = data[columns]
-    data_output.chunk_df(data, 'data', 'A1', 2000)
+    reporting.chunk_df(data, 'data', 'A1', 2000)
 
 
 
