@@ -12,13 +12,19 @@ def device_feed():
     return device_lookup
 
 
-def top_15_devices(cfv):
+def excluded_devices():
+    excluded = Range('Lookup', 'O2').value
+
+    return str(excluded)
+
+
+def top_15_devices(cfv, feed_path, excluded_devices):
     Sheet.add('DDR')
     Sheet.add('Summary')
 
-    device_feed_path = device_feed()
+    device_text_file = pd.read_table(feed_path)
 
-    excluded_devices = str(Range('Lookup', 'O2').value)
+    excluded = excluded_devices
 
     cfv['Device IDs'] = cfv['Device (string)'].str.split(',')
 
@@ -40,14 +46,14 @@ def top_15_devices(cfv):
 
     while '' in ddr_devices: ddr_devices.remove('')
     while '' in ddr_plans: ddr_plans.remove('')
-    while excluded_devices in ddr_devices: ddr_devices.remove(excluded_devices)
+    while excluded in ddr_devices: ddr_devices.remove(excluded)
 
     device_counts = pd.DataFrame(pd.value_counts(pd.Series(ddr_devices).values, sort = True)[0:15])
     device_counts['Device Name'] = 1
 
     plan_counts = pd.DataFrame(pd.value_counts(pd.Series(ddr_plans).values, sort = True)[0:15])
 
-    Range('DDR', 'A1', index = False).value = device_feed_path
+    Range('DDR', 'A1', index = False).value = device_text_file
 
     Range('Summary', 'B1').value = device_counts
 
@@ -72,3 +78,7 @@ def top_15_devices(cfv):
     for cell in Range('Summary', 'D2').vertical:
         id = cell.offset(0, -2).get_address(False, False, False)
         cell.formula = '=IFERROR(INDEX(DDR!A:A,MATCH(Summary!' + id + ',DDR!G:G,0)),"na")'
+
+    Range('Summary', 'A1:C1').value = 'Rank', 'Device SKU', 'Count'
+    Range('Summary', 'H1').value = 'Rank'
+    Range('Summary', 'I1').value = 'Plan Name'
