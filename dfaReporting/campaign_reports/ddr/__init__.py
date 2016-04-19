@@ -1,1 +1,1 @@
-__all__ = ['pacing', 'tableau']
+__all__ = ['pacing', 'tableau', 'top_devices']
