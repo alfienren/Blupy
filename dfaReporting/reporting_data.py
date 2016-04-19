@@ -1,0 +1,66 @@
+from xlwings import Range, Sheet
+import re
+import pandas as pd
+import paths
+
+
+def chunk_df(df, sheet, startcell, chunk_size=5000):
+    if len(df) <= (chunk_size + 1):
+        Range(sheet, startcell, index=False, header=True).value = df
+
+    else:
+        Range(sheet, startcell, index=False).value = list(df.columns)
+        c = re.match(r"([a-z]+)([0-9]+)", startcell[0] + str(int(startcell[1]) + 1), re.I)
+        row = c.group(1)
+        col = int(c.group(2))
+
+        for chunk in (df[rw:rw + chunk_size] for rw in
+                      range(0, len(df), chunk_size)):
+            Range(sheet, row + str(col), index=False, header=False).value = chunk
+            col += chunk_size
+
+
+def cfv_tab_name():
+    cfv = 'CFV_Temp'
+
+    return cfv
+
+
+def sa_tab_name():
+    sa = 'SA_Temp'
+
+    return sa
+
+
+def read_site_activity_report(adv='tmo'):
+    sa = pd.read_excel(paths.report_path(), sa_tab_name(), index_col=None)
+
+    if adv == 'tmo':
+        sa_creative = sa[['Placement', 'Creative Field 1']]
+        sa_creative = sa_creative.drop_duplicates(subset = 'Placement')
+
+        return (sa, sa_creative)
+
+    else:
+        return sa
+
+
+def read_cfv_report():
+    cfv = pd.read_excel(paths.report_path(), cfv_tab_name(), index_col=None)
+
+    return cfv
+
+
+def merge_past_data(data, columns):
+    if Range('data', 'A1').value is None:
+        chunk_df(data, 'data', 'A1')
+
+    # If data is already present in the tab, the two data sets are merged together and then copied into the data tab.
+
+    else:
+        past_data = pd.read_excel(paths.report_path(), 'data', index_col=None)
+        appended_data = past_data.append(data)
+        appended_data = appended_data[columns]
+        appended_data.fillna(0, inplace=True)
+        Sheet('data').clear_contents()
+        chunk_df(appended_data, 'data', 'A1')
