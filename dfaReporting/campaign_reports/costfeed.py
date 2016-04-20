@@ -2,13 +2,13 @@ import os
 import datetime
 
 import pandas as pd
-from xlwings import Range
-
-import main
+from xlwings import Range, Workbook
 
 
 def cost_feed():
-    path = main.report_path()
+    wb = Workbook.caller()
+    path = wb.fullname
+
     filename = 'EBAY_COST_FEED_' + datetime.date.today().strftime('%Y%m%d') + '.txt'
     output_path = os.path.join(path[:path.rindex('\\')], filename)
 
@@ -18,11 +18,11 @@ def cost_feed():
         ddr = pd.read_excel(ddrpath, 'Working Data', parse_cols='X, U, AH')
         ddr['Date'] = pd.to_datetime(ddr['Date'])
 
-        data = pd.read_excel(path, 'data', parse_cols= 'B, AA, AD')
+        data = pd.read_excel(path, 'data', parse_cols= 'B, AD, AG')
         data = data.append(ddr)
 
     else:
-        data = pd.read_excel(path, 'data', parse_cols= 'B, AA, AD')
+        data = pd.read_excel(path, 'data', parse_cols= 'B, AD, AG')
 
     end = data['Date'].max()
     start = end - datetime.timedelta(days=6)
