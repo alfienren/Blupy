@@ -2,7 +2,7 @@ from xlwings import Range
 import pandas as pd
 import numpy as np
 import os
-from weekly_reporting import categorization
+from reporting import categorization
 
 
 def load_traffic_sheet():
