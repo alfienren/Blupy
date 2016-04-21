@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from xlwings import Workbook, Range
-import main
+import reporting
 
 
 def merge_search_data():
@@ -58,7 +58,7 @@ def search_data_client(search_data, save_path):
     wb = Workbook()
     wb.set_current()
 
-    main.chunk_df(client_data, 0, 'A1')
+    reporting.chunk_df(client_data, 0, 'A1')
 
     wb.save(save_path + '\\' + 'DR_Search_Raw_Data.csv')
     wb.close()
