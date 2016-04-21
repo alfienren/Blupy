@@ -1,15 +1,15 @@
-from xlwings import Range, Workbook
-from weekly_reporting import categorization, custom_variables, clickthroughs, floodlights, report_columns
+from xlwings import Workbook
+from reporting import categorization, custom_variables, clickthroughs, floodlights, report_columns
 from campaign_reports import tmo_ddr_devices
-import main
+from reporting_data import *
 
 
 def dr_weekly_reporting():
     wb = Workbook.caller()
     wb.save()
 
-    sa = main.read_site_activity_report(adv='dr')
-    cfv2 = main.read_cfv_report()
+    sa = read_site_activity_report(wb.fullname, adv='dr')
+    cfv2 = read_cfv_report(wb.fullname)
 
     date = sa['Date'].max().strftime('%m.%d.%Y')
 
@@ -49,7 +49,7 @@ def dr_weekly_reporting():
 
     data.fillna(0, inplace=True)
 
-    main.merge_past_data(data, columns)
+    merge_past_data(data, columns)
 
     wb2 = Workbook()
     wb2.set_current()

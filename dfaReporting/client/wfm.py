@@ -1,8 +1,6 @@
-from xlwings import Workbook, Range, Sheet
-import pandas as pd
-import re
-import main
-import weekly_reporting
+from xlwings import Workbook
+from reporting_data import *
+import reporting
 
 
 def wfm_columns(data):
@@ -54,11 +52,10 @@ def generate_reporting():
     wb = Workbook.caller()
     wb.save()
 
-    path = Range('Lookup', 'AG1').value
-    data = pd.read_excel(path, main.sa_tab_name(), index_col=None)
-    data = weekly_reporting.categorization.sites(data)
-    data = weekly_reporting.categorization.placement_categories(data, adv='wfm')
-    data = weekly_reporting.categorization.date_columns(data)
+    data = pd.read_excel(wb.fullname, sa_tab_name(), index_col=None)
+    data = reporting.categorization.sites(data)
+    data = reporting.categorization.placement_categories(data, adv='wfm')
+    data = reporting.categorization.date_columns(data)
     data = wfm_columns(data)
 
     ordered_columns = output_columns(data)
@@ -66,16 +63,16 @@ def generate_reporting():
     data = data[ordered_columns]
 
     if Range('data', 'A1').value is None:
-        main.chunk_df(data, 'data', 'A1')
+        chunk_df(data, 'data', 'A1')
 
     # If data is already present in the tab, the two data sets are merged together and then copied into the data tab.
 
     else:
-        past_data = pd.read_excel(path, 'data', index_col=None)
+        past_data = pd.read_excel(wb.fullname, 'data', index_col=None)
         appended_data = past_data.append(data)
         appended_data = appended_data[ordered_columns]
         appended_data.fillna(0, inplace=True)
         Sheet('data').clear()
-        main.chunk_df(appended_data, 'data', 'A1')
+        chunk_df(appended_data, 'data', 'A1')
 
 
