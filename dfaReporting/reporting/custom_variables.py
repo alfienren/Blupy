@@ -4,6 +4,12 @@ from xlwings import Range
 from campaign_reports import *
 
 
+def view_through_credit():
+    view_through = .5
+
+    return view_through
+
+
 def custom_variable_columns(cfv):
     cfv['Orders'] = 1  # Create orders column in cfv data. Each OrderNumber counts as 1 order
 
@@ -43,12 +49,12 @@ def custom_variable_columns(cfv):
     cfv['Orders'] = np.where(
         ((cfv['Campaign'].str.contains('DDR') == True) | (cfv['Campaign'].str.contains('Brand Remessaging') == True)) &
         (cfv['Floodlight Attribution Type'].str.contains('View-through') == True),
-        cfv['Orders'] * 0.5, cfv['Orders'])
+        cfv['Orders'] * view_through_credit(), cfv['Orders'])
 
     # Estimated Gross Adds are calculated as the count of Devices with 50% view-through credit.
     # If Floodlight Attribution Type is equal to View-through, the count of Devices is multiplied by 0.5
     cfv['eGAs'] = np.where(cfv['Floodlight Attribution Type'].str.contains('View-through') == True,
-                           (cfv['Device (string)'].str.count(',') + 1) / 2,
+                           (cfv['Device (string)'].str.count(',') + 1) * view_through_credit(),
                            cfv['Device (string)'].str.count(',') + 1)
 
     return cfv
@@ -69,7 +75,8 @@ def ddr_custom_variables(cfv):
                                    (cfv['Device IDs'].notnull() == True) & (
                                    (cfv['Product Subcategory'].str.contains('Prepaid') == True) | (
                                    cfv['Device IDs'].notnull()) & (cfv['Product Subcategory'].isnull())) &
-                                   (cfv['Floodlight Attribution Type'].str.contains('View-through') == True)), 0.5,
+                                   (cfv['Floodlight Attribution Type'].str.contains('View-through') == True)),
+                                  view_through_credit(),
                                   np.where(((cfv['Device IDs'].str.contains(excluded_devices) == False) & (
                                   cfv['Device IDs'].notnull() == True) &
                                             (cfv['Product Subcategory'].str.contains('Prepaid') == True) &
@@ -79,7 +86,8 @@ def ddr_custom_variables(cfv):
     cfv['Postpaid GAs'] = np.where(((cfv['Device IDs'].str.contains(excluded_devices) == False) &
                                     (cfv['Device IDs'].notnull() == True) & (
                                     cfv['Product Subcategory'].str.contains('Postpaid') == True) &
-                                    (cfv['Floodlight Attribution Type'].str.contains('View-through') == True)), 0.5,
+                                    (cfv['Floodlight Attribution Type'].str.contains('View-through') == True)),
+                                   view_through_credit(),
                                    np.where(((cfv['Device IDs'].str.contains(excluded_devices) == False) &
                                              (cfv['Device IDs'].notnull() == True) & (
                                              cfv['Product Subcategory'].str.contains('Postpaid') == True)), 1, 0))
@@ -90,7 +98,8 @@ def ddr_custom_variables(cfv):
                                     (cfv['Device IDs'].notnull() == True) & (
                                     cfv['Product Category'].str.contains('SIM card') == True) &
                                     (cfv['Product Subcategory'].str.contains('Prepaid') == True) &
-                                    (cfv['Floodlight Attribution Type'].str.contains('View-through') == True)), 0.5,
+                                    (cfv['Floodlight Attribution Type'].str.contains('View-through') == True)),
+                                   view_through_credit(),
                                    np.where(((cfv['Device IDs'].str.contains(excluded_devices) == False) &
                                              (cfv['Device IDs'].notnull() == True) & (
                                              cfv['Product Category'].str.contains('SIM card') == True) &
@@ -103,7 +112,8 @@ def ddr_custom_variables(cfv):
                                      (cfv['Device IDs'].notnull() == True) & (
                                      cfv['Product Category'].str.contains('SIM card') == True) &
                                      (cfv['Floodlight Attribution Type'].str.contains('View-through') == True) &
-                                     (cfv['Product Subcategory'].str.contains('Postpaid') == True)), 0.5,
+                                     (cfv['Product Subcategory'].str.contains('Postpaid') == True)),
+                                    view_through_credit(),
                                     np.where(((cfv['Device IDs'].str.contains(excluded_devices) == False) &
                                               (cfv['Device IDs'].notnull() == True) & (
                                               cfv['Product Category'].str.contains('SIM card') == True) &
@@ -116,7 +126,7 @@ def ddr_custom_variables(cfv):
                                                cfv['Product Category'].str.contains('Mobile Internet') == True) &
                                                (cfv['Product Subcategory'].str.contains('Prepaid') == True) &
                                                (cfv['Floodlight Attribution Type'].str.contains(
-                                                   'View-through') == True)), 0.5,
+                                                   'View-through') == True)), view_through_credit(),
                                               np.where(((cfv['Device IDs'].str.contains(excluded_devices) == False) &
                                                         (cfv['Device IDs'].notnull() == True) & (
                                                         cfv['Product Category'].str.contains(
@@ -129,7 +139,7 @@ def ddr_custom_variables(cfv):
                                                 cfv['Product Category'].str.contains('Mobile Internet') == True) &
                                                 (cfv['Product Subcategory'].str.contains('Postpaid') == True) &
                                                 (cfv['Floodlight Attribution Type'].str.contains(
-                                                    'View-through') == True)), 0.5,
+                                                    'View-through') == True)), view_through_credit(),
                                                np.where(((cfv['Device IDs'].str.contains(excluded_devices) == False) &
                                                          (cfv['Device IDs'].notnull() == True) & (
                                                          cfv['Product Category'].str.contains(
@@ -142,7 +152,8 @@ def ddr_custom_variables(cfv):
                                      (cfv['Device IDs'].notnull() == True) & (
                                      cfv['Product Category'].str.contains('Smartphone') == True) &
                                      (cfv['Product Subcategory'].str.contains('Prepaid') == True) &
-                                     (cfv['Floodlight Attribution Type'].str.contains('View-through') == True)), 0.5,
+                                     (cfv['Floodlight Attribution Type'].str.contains('View-through') == True)),
+                                    view_through_credit(),
                                     np.where((((cfv['Device IDs'].str.contains(excluded_devices) == False) &
                                                (cfv['Device IDs'].notnull() == True) & (
                                                cfv['Product Category'].str.contains('Smartphone') == True) &
@@ -154,7 +165,8 @@ def ddr_custom_variables(cfv):
                                       (cfv['Device IDs'].notnull() == True) & (
                                       cfv['Product Category'].str.contains('Smartphone') == True) &
                                       (cfv['Product Subcategory'].str.contains('Postpaid') == True) &
-                                      (cfv['Floodlight Attribution Type'].str.contains('View-through') == True)), 0.5,
+                                      (cfv['Floodlight Attribution Type'].str.contains('View-through') == True)),
+                                     view_through_credit(),
                                      np.where(((cfv['Device IDs'].notnull() == True) & (
                                      cfv['Product Category'].str.contains('Smartphone') == True) &
                                                (cfv['Product Subcategory'].str.contains('Postpaid') == True) &
@@ -164,7 +176,7 @@ def ddr_custom_variables(cfv):
     cfv['DDR New Devices'] = np.where(
         ((cfv['Device IDs'].str.contains(excluded_devices) == False) & (cfv['Device IDs'].notnull() == True) &
          (cfv['Activity'].str.contains('New TMO Order') == True) &
-         (cfv['Floodlight Attribution Type'].str.contains('View-through') == True)), 0.5,
+         (cfv['Floodlight Attribution Type'].str.contains('View-through') == True)), view_through_credit(),
         np.where(((cfv['Device IDs'].str.contains(excluded_devices) == False) & (cfv['Device IDs'].notnull() == True) &
                   (cfv['Activity'].str.contains('New TMO Order') == True) &
                   (cfv['Floodlight Attribution Type'].str.contains('Click-through') == True)), 1, 0))
@@ -172,7 +184,7 @@ def ddr_custom_variables(cfv):
     cfv['DDR Add-a-Line'] = np.where(
         ((cfv['Device IDs'].str.contains(excluded_devices) == False) & (cfv['Device IDs'].notnull() == True) &
          (cfv['Activity'].str.contains('New My.TMO Order') == True) &
-         (cfv['Floodlight Attribution Type'].str.contains('View-through') == True)), 0.5,
+         (cfv['Floodlight Attribution Type'].str.contains('View-through') == True)), view_through_credit(),
         np.where(((cfv['Device IDs'].str.contains(excluded_devices) == False) & (cfv['Device IDs'].notnull() == True) &
                   (cfv['Activity'].str.contains('New My.TMO Order') == True) &
                   (cfv['Floodlight Attribution Type'].str.contains('Click-through') == True)), 1, 0))

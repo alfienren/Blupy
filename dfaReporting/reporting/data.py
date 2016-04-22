@@ -1,7 +1,6 @@
 from xlwings import Range, Sheet
 import re
 import pandas as pd
-import paths
 
 
 def chunk_df(df, sheet, startcell, chunk_size=5000):
@@ -32,8 +31,8 @@ def sa_tab_name():
     return sa
 
 
-def read_site_activity_report(adv='tmo'):
-    sa = pd.read_excel(paths.report_path(), sa_tab_name(), index_col=None)
+def read_site_activity_report(path, adv='tmo'):
+    sa = pd.read_excel(path, sa_tab_name(), index_col=None)
 
     if adv == 'tmo':
         sa_creative = sa[['Placement', 'Creative Field 1']]
@@ -45,8 +44,8 @@ def read_site_activity_report(adv='tmo'):
         return sa
 
 
-def read_cfv_report():
-    cfv = pd.read_excel(paths.report_path(), cfv_tab_name(), index_col=None)
+def read_cfv_report(path):
+    cfv = pd.read_excel(path, cfv_tab_name(), index_col=None)
 
     return cfv
 
@@ -58,7 +57,7 @@ def merge_past_data(data, columns):
     # If data is already present in the tab, the two data sets are merged together and then copied into the data tab.
 
     else:
-        past_data = pd.read_excel(paths.report_path(), 'data', index_col=None)
+        past_data = pd.read_excel(wb.fullname, 'data', index_col=None)
         appended_data = past_data.append(data)
         appended_data = appended_data[columns]
         appended_data.fillna(0, inplace=True)

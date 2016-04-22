@@ -88,6 +88,7 @@ def creative_categories(data):
 def sites(data):
     site_ref = pd.DataFrame(Range('Lookup', 'Q1').table.value, columns = Range('Lookup', 'Q1').horizontal.value)
     site_ref.drop(0, inplace=True)
+    site_ref.drop_duplicates(subset='DFA', inplace=True)
 
     data = pd.merge(data, site_ref, left_on= 'Site (DCM)', right_on= 'DFA', how= 'left')
     data.drop('DFA', axis = 1, inplace = True)
@@ -185,6 +186,25 @@ def dr_placement_message_type(data):
 
     data = pd.merge(data, message_type, left_on= 'Placement', right_on= 'Placement_category', how= 'left')
     data.drop(['Campaign2', 'Placement_category'], axis= 1, inplace= True)
+
+    return data
+
+
+def dr_tactic(data):
+    tactic = pd.DataFrame(Range('Lookup', 'AD1').table.value, columns = Range('Lookup', 'AD1').horizontal.value)
+    tactic.drop(0, inplace=True)
+
+    data = pd.merge(data, tactic, on='Placement Messaging Type', how='left')
+
+    return data
+
+
+def dr_creative_categories(data):
+    creative_categories = pd.DataFrame(Range('Lookup', 'Y1').table.value,
+                                       columns = Range('Lookup', 'Y1').horizontal.value)
+    creative_categories.drop(0, inplace=True)
+
+    data = pd.merge(data, creative_categories, on='Creative Groups 2', how='left')
 
     return data
 

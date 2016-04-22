@@ -6,20 +6,20 @@ def additional_columns(data, adv='tmo'):
     # dynamic bidding, DBM Cost = 0. Therefore, if DBM cost does not equal 0, replace the row's media cost with
     # DBM cost. If DBM Cost = 0, Media Cost stays the same.
 
-    if adv == 'tmo':
+    if adv == 'tmo' or adv == 'dr':
         data['Media Cost'] = np.where(data['DBM Cost (USD)'] != 0, data['DBM Cost (USD)'], data['Media Cost'])
+    if adv == 'tmo':
         data.drop('DBM Cost (USD)', 1, inplace=True)
+    if adv == 'dr':
+        data.rename(columns={'Campaign':'Campaign2'}, inplace=True)
+        data['Campaign'] = np.where(data['Campaign2'].str.contains('DDR') == True, 'DR', 'Brand Remessaging')
+        data['NET Media Cost'] = data['Media Cost']
 
-    # Adjust spend to Net to Client
+    if adv != 'dr':
+        data['Video Completions'] = 0
+        data['Video Views'] = 0
+
     data['NTC Media Cost'] = 0
-
-    # DBM Cost column is then removed as it is no longer needed.
-
-    # Add columns for Video Completions and Views, primarily for compatibility between campaigns that run video and
-    # don't run video. Those that don't can keep the columns set to zero, but those that have video can then be
-    # adjusted with passback data.
-    data['Video Completions'] = 0
-    data['Video Views'] = 0
 
     return data
 
@@ -43,6 +43,8 @@ def order_columns(adv='tmo'):
                    'Prepaid SIMs', 'Postpaid SIMs', 'Prepaid Mobile Internet', 'Postpaid Mobile Internet',
                    'Prepaid Phone', 'Postpaid Phone', 'Total GAs', 'DDR New Devices', 'DDR Add-a-Line']
 
+        new_columns = dimensions + metrics + cfv_floodlight_columns
+
     else:
         dimensions = ['Week', 'Date', 'Month', 'Quarter', 'Campaign', 'Language', 'Site (DCM)', 'Site',
                       'TMO_Category', 'TMO_Category_Adjusted', 'Creative', 'Creative Type', 'Creative Groups 1',
@@ -58,8 +60,26 @@ def order_columns(adv='tmo'):
                    'Consideration Actions', 'Post-Click Activity', 'Post-Impression Activity', 'Video Views',
                    'Video Completions']
 
-    new_columns = dimensions + metrics + cfv_floodlight_columns
+        new_columns = dimensions + metrics + cfv_floodlight_columns
+
+    if adv == 'dr':
+
+        dimensions1 = ['Campaign', 'Month', 'Week', 'Site', 'Tactic', 'Category', 'Placement Messaging Type',
+                      'Message Bucket', 'Message Category', 'Message Offer']
+
+        dimensions2 = ['Campaign2', 'Date', 'Site (DCM)', 'Creative', 'Click-through URL', 'Creative Pixel Size',
+                       'Creative Type', 'Creative Field 1', 'Ad', 'Creative Groups 2', 'Placement', 'Placement ID',
+                       'Placement Cost Structure']
+
+        metrics1 = ['A Actions', 'B Actions', 'C Actions', 'D Actions', 'Store Locator Visits', 'Awareness Actions',
+                   'Consideration Actions', 'Traffic Actions', 'Post-Impression Activity', 'Post-Click Activity',
+                   'NTC Media Cost', 'NET Media Cost']
+
+        metrics2 = ['Impressions', 'Clicks', 'Media Cost', 'DBM Cost (USD)']
+
+        new_columns = dimensions1 + metrics1 + dimensions2 + metrics2
 
     return list(new_columns)
+
 
 
