@@ -1,1 +1,2 @@
-__all__ = ['categorization', 'custom_variables', 'clickthroughs', 'dr', 'floodlights', 'report_columns', 'qa', 'wfm']
+__all__ = ['categorization', 'clickthroughs', 'custom_variables', 'datafunc',
+           'floodlights', 'paths', 'report_columns', 'qa']
