@@ -1,16 +1,43 @@
-import main
-import data_transform
-from xlwings import Workbook, Range
+from xlwings import Workbook, Range, Application
 import pandas as pd
 import numpy as np
 import datetime
 import win32com.client as win32
+import campaign_reports
+import paths
+
+
+def qquarter():
+    quarter = 'Q1'
+
+    return quarter
+
+
+def quarter_start_year():
+    quarter = '1/1/2016'
+
+    return quarter
 
 
 def quarter_start():
     start = '1/1'
 
     return start
+
+
+def dr_placement_types():
+    cd = '|'.join(list(['C/D', 'C Pages', 'D Pages']))
+    t2t = '|'.join(list(['Tablet to Tablet']))
+    fbx = '|'.join(list(['FBX ']))
+    search = '|'.join(list(['Search']))
+    pros = '|'.join(list(['Prospecting']))
+    aal = '|'.join(list(['Add']))
+    tap_att = '|'.join(list(['Tap-to-Call (AT&T)']))
+    tap_other = '|'.join(list(['Tap-to-Call (Other)']))
+    tap_verizon = '|'.join(list(['Tap-to-Call (Verizon)']))
+    tap_sprint = '|'.join(list(['Tap-to-Call (Sprint)']))
+
+    return (cd, t2t, fbx, search, pros, aal, tap_att, tap_other, tap_sprint, tap_verizon)
 
 
 def placement_type_names():
@@ -77,7 +104,7 @@ def publishers(dr):
     week = week_of(dr)
 
     # Publisher Performance
-    pub_dr = dr[(dr['Campaign'] == 'DR') & (dr['Date'] >= main.quarter_start())]
+    pub_dr = dr[(dr['Campaign'] == 'DR') & (dr['Date'] >= quarter_start_year())]
     pub_dr = pub_dr.groupby(['Site', 'Placement Messaging Type', 'Week', 'Date'])
     pub_dr = pd.DataFrame(pub_dr.sum()).reset_index()
     #pub_dr = pub_dr[(pub_dr['NTC Media Cost'] != 0)]
@@ -86,7 +113,7 @@ def publishers(dr):
                                 'FBX Remessaging', pub_dr['Placement Messaging Type'])
 
     # Quarter
-    q_dr = pub_dr[pub_dr['Date'] >= main.quarter_start()]
+    q_dr = pub_dr[pub_dr['Date'] >= quarter_start_year()]
     q_dr = q_dr.groupby(['Site', 'Tactic'])
     q_dr = pd.DataFrame(q_dr.sum()).reset_index()
 
@@ -108,14 +135,14 @@ def publishers(dr):
     # Brand Remessaging
 
     br = dr[dr['Campaign'] == 'Brand Remessaging']
-    br_quarter = br[br['Date'] >= main.quarter_start()]
+    br_quarter = br[br['Date'] >= quarter_start_year()]
 
     br_quarter = br_quarter.groupby('Site')
     br_quarter = pd.DataFrame(br_quarter.sum().reset_index())
     br_quarter['Traffic Yield'] = br_quarter['Total Traffic Actions'].astype(float) / \
                                   br_quarter['Impressions'].astype(float)
 
-    pacing_wb = Workbook(main.dr_pacing_path())
+    pacing_wb = Workbook(paths.dr_pacing_path())
     pacing_wb.set_current()
 
     Range(performance_sheet(), 'A' + str(site_tactic_table()), index=False, header=False).value = q_dr[
@@ -180,8 +207,8 @@ def publisher_tactic_data():
 
     pub_performance['CPGA'] = pub_performance['Spend'].astype(float) / pub_performance['Total GAs'].astype(float)
 
-    pub_performance.rename(columns= {'Total GAs':'Total ' + main.qquarter() + ' GAs',
-                                     'Spend':'Total ' + main.qquarter() + ' Spend',
+    pub_performance.rename(columns= {'Total GAs':'Total ' + qquarter() + ' GAs',
+                                     'Spend':'Total ' + qquarter() + ' Spend',
                                      'Placement Messaging Type':'Tactic'}, inplace= True)
 
     pub_performance = goals(pub_performance)
@@ -201,8 +228,8 @@ def generate_publisher_tables(pub_performance):
 
     for i in site_list:
         df = pub_performance[pub_performance['Site'] == i]
-        df = df[['Tactic', 'Total ' + main.qquarter() + ' GAs', week,
-                 'Total ' + main.qquarter() + ' Spend', 'CPGA', main.qquarter() + ' CPGA Goal']]
+        df = df[['Tactic', 'Total ' + qquarter() + ' GAs', week,
+                 'Total ' + qquarter() + ' Spend', 'CPGA', qquarter() + ' CPGA Goal']]
         Range(performance_sheet(), start_column + str(cell_number), index = False).value = df
         Range(performance_sheet(), site_column + str(cell_number), index = False).value = i
         cell_number += 7
@@ -274,14 +301,14 @@ def generate_publisher_emails(pubs_combined, contacts, br):
 
         mail.To = str(contact_emails[i]).encode('utf-8')
         mail.CC = str(pub_emails[i]).encode('utf-8')
-        mail.subject = main.qquarter() + ' 2016 DDR Performance Update: ' + \
+        mail.subject = qquarter() + ' 2016 DDR Performance Update: ' + \
                        week_start + '-' + week_end + ' - ' + str(pub_list[i])
         mail.HTMLBody = '<body>' + \
             bodystyle + \
             greeting + \
             '<br><br>' + \
             'Below you will find your campaign performance breakout for the beginning of ' + \
-                        main.qquarter() + ' through the week ' + \
+                        qquarter() + ' through the week ' + \
             'ending ' + week_end + '.</p>' + \
             headerstyle + \
             'DDR Performance ' + flight_start + ' - ' + week_end + ' (All Tactics Combined)</p>' + \
@@ -300,3 +327,17 @@ def generate_publisher_emails(pubs_combined, contacts, br):
             'Best,' + \
             '</body>'
         mail.Display()
+
+
+def dr_publisher_performance_emails():
+    pacing_wb = Workbook.caller()
+
+    campaign_reports.ddr.pacing.performance.generate_publisher_tables(
+            campaign_reports.ddr.pacing.performance.publisher_tactic_data())
+
+    campaign_reports.ddr.pacing.performance.generate_publisher_emails(
+            campaign_reports.ddr.pacing.performance.publisher_overall_data(),
+            campaign_reports.ddr.pacing.performance.publisher_contact_info(),
+            campaign_reports.ddr.pacing.performance.brand_remessaging())
+
+    Application(wkb=pacing_wb).xl_app.Run('Format_Tables')

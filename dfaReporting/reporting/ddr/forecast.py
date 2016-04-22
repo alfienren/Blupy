@@ -1,14 +1,13 @@
-import main
-import numpy as np
-from xlwings import Range, Sheet, Workbook
+from xlwings import Range
 import re
-
 import pandas as pd
+from reporting import categorization
+import paths
 
 
 def generate_forecasts():
-    r_spend = pd.read_excel(main.r_output_path(), 0, index_cols= None)
-    r_ga = pd.read_excel(main.r_output_path(), 1, index_cols= None)
+    r_spend = pd.read_excel(paths.r_output_path(), 0, index_cols= None)
+    r_ga = pd.read_excel(paths.r_output_path(), 1, index_cols= None)
 
     r_spend.columns = pd.Series(r_spend.columns).astype(str) + '.Spend'
     r_ga.columns = pd.Series(r_ga.columns).astype(str) + '.GAs'
@@ -62,21 +61,6 @@ def merge_pacing_and_forecasts(r_output):
     raw_pacing.dropna(inplace= True)
 
     forecast_data = raw_pacing.append(r_output)
-    forecast_data['Week'] = forecast_data['Date'].apply(lambda x: main.monday_week_start(x))
+    forecast_data['Week'] = forecast_data['Date'].apply(lambda x: categorization.mondays(x))
 
     return forecast_data
-
-
-def output_forecasts(pacing_data):
-    pacing_data['Week'] = pacing_data['Date'].apply(lambda x: main.monday_week_start(x))
-
-    pacing_data = pd.pivot_table(pacing_data, index= ['Site', 'Tactic', 'Metric'],
-                          columns= ['Week'], values= 'value', aggfunc= np.sum).reset_index()
-
-    wb = Workbook(main.dr_pacing_path())
-
-    Sheet('forecast_data').clear_contents()
-    Range('forecast_data', 'A1', index= False).value = pacing_data
-
-    wb.save()
-    wb.close()
