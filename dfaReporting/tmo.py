@@ -1,4 +1,4 @@
-from xlwings import Range, Workbook
+from xlwings import Range, Sheet, Workbook
 from reporting import *
 from outputs import *
 
@@ -43,6 +43,10 @@ def generate_weekly_reporting():
     datafunc.merge_past_data(data, columns, wb.fullname)
 
     qa.placement_qa(data)
+
+    sheets_to_remove = template.delete_sheets(Sheet.all())
+    for i in sheets_to_remove:
+        Sheet(i).delete()
 
 
 def output_flat_rate_report():

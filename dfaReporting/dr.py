@@ -64,6 +64,10 @@ def dr_reporting():
 
     wb.set_current()
 
+    sheets_to_remove = template.delete_sheets(Sheet.all())
+    for i in sheets_to_remove:
+        Sheet(i).delete()
+
 
 def generate_dashboard():
     dashboard.generate_data()

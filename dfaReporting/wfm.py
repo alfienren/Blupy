@@ -75,3 +75,7 @@ def generate_reporting():
         appended_data.fillna(0, inplace=True)
         Sheet('data').clear()
         datafunc.chunk_df(appended_data, 'data', 'A1')
+
+    sheets_to_remove = template.delete_sheets(Sheet.all())
+    for i in sheets_to_remove:
+        Sheet(i).delete()
