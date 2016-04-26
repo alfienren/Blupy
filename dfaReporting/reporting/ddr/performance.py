@@ -3,8 +3,7 @@ import pandas as pd
 import numpy as np
 import datetime
 import win32com.client as win32
-import campaign_reports
-import paths
+from reporting import paths
 
 
 def qquarter():
@@ -100,7 +99,9 @@ def pub_aggregate_table():
 
 
 def publishers(dr):
-    cd, t2t, fbx, search, pros, aal, tap_att, tap_other, tap_sprint, tap_verizon = data_transform.dr_placement_types()
+    path = paths.path_select()
+
+    cd, t2t, fbx, search, pros, aal, tap_att, tap_other, tap_sprint, tap_verizon = dr_placement_types()
     week = week_of(dr)
 
     # Publisher Performance
@@ -142,7 +143,7 @@ def publishers(dr):
     br_quarter['Traffic Yield'] = br_quarter['Total Traffic Actions'].astype(float) / \
                                   br_quarter['Impressions'].astype(float)
 
-    pacing_wb = Workbook(paths.dr_pacing_path())
+    pacing_wb = Workbook(path)
     pacing_wb.set_current()
 
     Range(performance_sheet(), 'A' + str(site_tactic_table()), index=False, header=False).value = q_dr[
@@ -332,12 +333,8 @@ def generate_publisher_emails(pubs_combined, contacts, br):
 def dr_publisher_performance_emails():
     pacing_wb = Workbook.caller()
 
-    campaign_reports.ddr.pacing.performance.generate_publisher_tables(
-            campaign_reports.ddr.pacing.performance.publisher_tactic_data())
+    generate_publisher_tables(publisher_tactic_data())
 
-    campaign_reports.ddr.pacing.performance.generate_publisher_emails(
-            campaign_reports.ddr.pacing.performance.publisher_overall_data(),
-            campaign_reports.ddr.pacing.performance.publisher_contact_info(),
-            campaign_reports.ddr.pacing.performance.brand_remessaging())
+    generate_publisher_emails(publisher_overall_data(), publisher_contact_info(), brand_remessaging())
 
     Application(wkb=pacing_wb).xl_app.Run('Format_Tables')
