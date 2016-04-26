@@ -1,24 +1,29 @@
-import paths
-import numpy as np
-import pandas as pd
 import datetime
 import re
-from xlwings import Range, Sheet
+
+import numpy as np
+import pandas as pd
+from xlwings import Range, Sheet, Workbook
+
+from reporting import datafunc, paths
+from reporting.ddr import client_raw_data
 
 
 def raw_pivot():
-    ddr = pd.read_excel(paths.dr_pivot_path(), 'Working Data', index_cols=None, parse_cols='A:V,X,Z:AK,CP:DH')
+    path = paths.path_select()
+
+    ddr = pd.read_excel(path, 'data', index_cols=None, parse_cols='A:V,X,Z:AK,CR:DJ')
     ddr.fillna(0, inplace=True)
 
     return ddr
 
 
-def tableau_campaign_data(ddr):
-    ddr_columns = ['Campaign', 'Week', 'Site', 'Message Tactic', 'Placement Messaging Type', 'Message Offer', 'A', 'B',
-                   'C', 'D', 'SLV', 'Awareness Actions', 'Consideration Actions', 'Total Traffic Actions',
+def dr_display_data(ddr):
+    ddr_columns = ['Campaign', 'Week', 'Site', 'Message Tactic', 'Placement Messaging Type', 'Message Offer', 'A Actions', 'B Actions',
+                   'C Actions', 'D Actions', 'Store Locator Visits', 'Awareness Actions', 'Consideration Actions', 'Traffic Actions',
                    'NTC Media Cost', 'NET Media Cost', 'Impressions', 'Clicks', 'Orders', 'Total GAs', 'Prepaid GAs',
                    'Postpaid GAs', 'Prepaid SIMs', 'Postpaid SIMs', 'Prepaid Mobile Internet',
-                   'Postpaid Mobile Internet', 'Prepaid phone', 'Postpaid phone', 'AAL', 'New device']
+                   'Postpaid Mobile Internet', 'Prepaid Phone', 'Postpaid Phone', 'DDR Add-a-Line', 'DDR New Devices']
 
     ddr.rename(columns={'Tactic': 'Message Tactic'}, inplace=True)
 
@@ -40,6 +45,76 @@ def tableau_campaign_data(ddr):
     grouped['Source'] = 'DR-Pivot'
 
     return grouped
+
+
+def merge_search_data():
+    sheet = Range('Sheet3', 'AC1').value
+
+    search_tabs = ['Search Raw Data', 'Whistleout', 'CSE', 'Ad Marketplace']
+
+    search_data = pd.DataFrame()
+
+    for i in search_tabs:
+        df = pd.read_excel(sheet, i, index_cols=None)
+        df['Source'] = i
+        search_data = search_data.append(df)
+
+    return search_data
+
+
+def dr_search_data(search_data):
+    search_data[['Total GAs', 'New Total eGAs']] = search_data[['Total GAs', 'New Total eGAs']].fillna(0)
+
+    search_data['Total GAs'] = search_data['Total GAs'] + search_data['New Total eGAs']
+    search_data['NTC Media Cost'] = search_data['NET Media Cost'] / .96759
+
+    search_gas = pd.DataFrame(Range('Search_GAs', 'A1').table.value,
+                              columns= Range('Search_GAs', 'A1').horizontal.value)
+    search_gas.drop(0, inplace= True)
+
+    search_gas = search_gas[['Week', 'Traffic Actions', 'Orders', 'Prepaid GAs', 'Postpaid GAs', 'Prepaid SIMs',
+                             'Postpaid SIMs']]
+
+    search_gas['Source'] = 'Search Raw Data'
+
+    search = search_data.append(search_gas)
+
+    search['Tactic'] = 'Search'
+    search['Channel'] = 'DR'
+    search['Campaign'] = 'Search'
+
+    return search
+
+
+def generate_data():
+    wb = Workbook.caller()
+
+    save_path = paths.path_select()
+
+    save_path = save_path[:save_path.rindex('\\')]
+
+    ddr_data = raw_pivot()
+
+    ddr_display = dr_display_data(ddr_data)
+    ddr_search_data = merge_search_data()
+
+    tableau_search = dr_search_data(ddr_search_data)
+
+    tableau = ddr_display.append(tableau_search)
+
+    if Range('merged', 'A1').value is None:
+        datafunc.chunk_df(tableau, 'merged', 'A1')
+
+    # If data is already present in the tab, the two data sets are merged together and then copied into the data tab.
+    else:
+        past_data = pd.read_excel(wb.fullname, 'merged', index_col=None)
+        past_data = past_data[past_data['Campaign'] != 'Search']
+        appended_data = past_data.append(tableau)
+        Sheet('merged').clear()
+        datafunc.chunk_df(appended_data, 'merged', 'A1')
+
+    client_raw_data.search_data_client(ddr_search_data, save_path)
+    client_raw_data.display_data_client(ddr_data, save_path)
 
 
 def tableau_pacing(forecast_data):
@@ -70,63 +145,3 @@ def tableau_pacing(forecast_data):
     Range('tableau_pacing_data', 'A1', index= False).value = tableau_data_output
 
     return tableau_data
-
-
-def merge_search_data():
-    sheet = Range('Sheet3', 'AC1').value
-
-    search_tabs = ['Search Raw Data', 'Whistleout', 'CSE', 'Ad Marketplace']
-
-    search_data = pd.DataFrame()
-
-    for i in search_tabs:
-        df = pd.read_excel(sheet, i, index_cols=None)
-        df['Source'] = i
-        search_data = search_data.append(df)
-
-    return search_data
-
-
-def tableau_search_data(search_data):
-    search_data[['Total GAs', 'New Total eGAs']] = search_data[['Total GAs', 'New Total eGAs']].fillna(0)
-
-    search_data['Total GAs'] = search_data['Total GAs'] + search_data['New Total eGAs']
-    search_data['NTC Media Cost'] = search_data['NET Media Cost'] / .96759
-
-    search_gas = pd.DataFrame(Range('Search_GAs', 'A1').table.value,
-                              columns= Range('Search_GAs', 'A1').horizontal.value)
-    search_gas.drop(0, inplace= True)
-
-    search_gas = search_gas[['Week', 'Total Traffic Actions', 'Prepaid GAs', 'Postpaid GAs', 'Prepaid SIMs',
-                             'Postpaid SIMs']]
-
-    search_gas['Source'] = 'Search Raw Data'
-
-    search = search_data.append(search_gas)
-
-    search['Tactic'] = 'Search'
-    search['Channel'] = 'DR'
-    search['Campaign'] = 'Search'
-
-    return search
-
-
-def search_data_client(search_data, save_path):
-    column_order = ['Search Engine', 'Brand DDR Bucket', 'Week', 'NET Media Cost', 'Impressions', 'Clicks', 'Orders',
-                    'Plans', 'Prepaid Orders', 'Consideration Actions', 'Add-A-Line', 'Total GAs', 'New Total eGAs',
-                    'Telesales GAs']
-
-    client_data = search_data[column_order]
-    client_data = client_data[client_data['Week'] >= '1/1/2016']
-
-    client_data['Brand DDR Bucket']  = np.where(pd.isnull(client_data['Brand DDR Bucket']) == True,
-                                                client_data['Search Engine'],
-                                                client_data['Brand DDR Bucket'])
-
-    wb = Workbook()
-    wb.set_current()
-
-    reporting.chunk_df(client_data, 0, 'A1')
-
-    wb.save(save_path + '\\' + 'DR_Search_Raw_Data.csv')
-    wb.close()
