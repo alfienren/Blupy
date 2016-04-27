@@ -83,11 +83,12 @@ def order_columns(adv='tmo'):
 
 
 def dr_drop_columns(dr):
-    cols_to_drop = ['Month', 'Tactic', 'Placement Category', 'Message Bucket', 'Message Category',
-                    'Message Offer', 'A', 'B', 'C', 'D', 'SLV', 'Awareness Actions', 'Consideration Actions',
-                    'PI Traffic', 'PC Traffic', 'NET Media Cost', 'Clicks', 'Prepaid GAs', 'Postpaid GAs',
-                    'Prepaid SIMs', 'Postpaid SIMs', 'Prepaid Mobile Internet', 'Postpaid Mobile Internet',
-                    'Prepaid phone', 'Postpaid phone', 'AAL', 'New device']
+    cols_to_drop = ['Month', 'Tactic', 'Category', 'Message Bucket', 'Message Category',
+                    'Message Offer', 'A Actions', 'B Actions', 'C Actions', 'D Actions', 'Store Locator Visits',
+                    'Awareness Actions', 'Consideration Actions', 'Post-Impression Activity', 'Post-Click Activity',
+                    'NET Media Cost', 'Clicks', 'Prepaid GAs', 'Postpaid GAs', 'Prepaid SIMs', 'Postpaid SIMs',
+                    'Prepaid Mobile Internet', 'Postpaid Mobile Internet', 'Prepaid Phone', 'Postpaid Phone',
+                    'DDR Add-a-Line', 'DDR New Devices']
 
     ddr = dr.drop(cols_to_drop, axis= 1)
 
