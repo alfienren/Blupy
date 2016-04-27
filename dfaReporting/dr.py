@@ -38,9 +38,9 @@ def dr_reporting():
 
     cfv_floodlight_columns = ['Activity', 'OrderNumber (string)', 'Plan (string)', 'Device (string)',
                               'Service (string)', 'Accessory (string)', 'Floodlight Attribution Type', 'Orders',
-                              'Total GAs', 'Prepaid GAs', 'Postpaid GAs', 'Prepaid SIMs', 'Postpaid SIMs',
-                              'Prepaid Mobile Internet', 'Postpaid Mobile Internet', 'Prepaid Phone',
-                              'Postpaid Phone', 'DDR Add-a-Line', 'DDR New Devices']
+                              'Total GAs', 'Prepaid GAs', 'Postpaid GAs', 'Prepaid Orders', 'Postpaid Orders',
+                              'Prepaid SIMs', 'Postpaid SIMs', 'Prepaid Mobile Internet',
+                              'Postpaid Mobile Internet', 'Prepaid Phone', 'Postpaid Phone', 'DDR Add-a-Line', 'DDR New Devices']
 
     sa_columns = list(sa.columns)
     tag_columns = sa_columns[sa_columns.index('DBM Cost (USD)') + 1:]
