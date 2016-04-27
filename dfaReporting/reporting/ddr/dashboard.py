@@ -5,17 +5,9 @@ import numpy as np
 import pandas as pd
 from xlwings import Range, Sheet, Workbook
 
+from dr import raw_pivot
 from reporting import datafunc, paths
 from reporting.ddr import client_raw_data
-
-
-def raw_pivot():
-    path = paths.path_select()
-
-    ddr = pd.read_excel(path, 'data', index_cols=None, parse_cols='A:V,X,Z:AK,CR:DJ')
-    ddr.fillna(0, inplace=True)
-
-    return ddr
 
 
 def dr_display_data(ddr):

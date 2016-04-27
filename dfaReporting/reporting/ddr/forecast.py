@@ -86,7 +86,7 @@ def transform_dr_forecasts(dr):
                                    np.where(pacing_dr['Type'].str.contains(pros) == True, 'Prospecting',
                                             'Add-A-Line')))))
 
-    pacing_dr = pacing_dr[(pacing_dr['Date'] >= performance.quarter_start()) &
+    pacing_dr = pacing_dr[(pacing_dr['Date'] >= performance.quarter_start_year()) &
                           (pacing_dr['Site'].str.contains(categorization.dr_sites()) == True)]
 
     pacing_dr = pacing_dr.groupby(['Site', 'Type.Agg', 'Type', 'Date'])

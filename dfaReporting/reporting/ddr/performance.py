@@ -7,19 +7,19 @@ from reporting import paths
 
 
 def qquarter():
-    quarter = 'Q1'
+    quarter = 'Q2'
 
     return quarter
 
 
 def quarter_start_year():
-    quarter = '1/1/2016'
+    quarter = '4/18/2016'
 
     return quarter
 
 
 def quarter_start():
-    start = '1/1'
+    start = '4/18'
 
     return start
 
@@ -60,7 +60,7 @@ def goals(data):
     cp, dp, t2t, fbx, search, pros, aal, tap_att, tap_other, tap_verizon, tap_sprint = placement_type_names()
     types = list([cp, dp, t2t, fbx, search, pros, aal, tap_att, tap_other, tap_verizon, tap_sprint])
 
-    goal = pd.DataFrame({'Q1 CPGA Goal':
+    goal = pd.DataFrame({'Q2 CPO Goal':
                              [227.00, 227.00, 450.00, 290.00, 350.00, 725.00, 213.00, 500.00, 500.00, 500.00, 500.00],
                          'Tactic':
                              types})
@@ -87,13 +87,13 @@ def site_tactic_table():
 
 
 def brand_remessaging_table():
-    row_number = 51
+    row_number = 36
 
     return row_number
 
 
 def pub_aggregate_table():
-    row_number = 37
+    row_number = 26
 
     return row_number
 
@@ -131,7 +131,8 @@ def publishers(dr):
     sites = q_dr.groupby('Site')
     sites = pd.DataFrame(sites.sum()).reset_index()
 
-    sites['CPGA'] = sites['NET Media Cost'] / sites['Total GAs']
+    #sites['CPGA'] = sites['NET Media Cost'] / sites['Total GAs']
+    sites['CPO'] = sites['NET Media Cost'] / sites['Orders']
 
     # Brand Remessaging
 
@@ -140,14 +141,14 @@ def publishers(dr):
 
     br_quarter = br_quarter.groupby('Site')
     br_quarter = pd.DataFrame(br_quarter.sum().reset_index())
-    br_quarter['Traffic Yield'] = br_quarter['Total Traffic Actions'].astype(float) / \
+    br_quarter['Traffic Yield'] = br_quarter['Traffic Actions'].astype(float) / \
                                   br_quarter['Impressions'].astype(float)
 
     pacing_wb = Workbook(path)
     pacing_wb.set_current()
 
     Range(performance_sheet(), 'A' + str(site_tactic_table()), index=False, header=False).value = q_dr[
-        ['Site', 'Tactic', 'Total GAs']]
+        ['Site', 'Tactic', 'Orders']]
     Range(performance_sheet(), 'E' + str(site_tactic_table()), index= False, header= False).value = \
         q_dr['NET Media Cost']
 
@@ -155,7 +156,7 @@ def publishers(dr):
     Range(performance_sheet(), 'D' + str(site_tactic_table() - 1)).value = week
 
     Range(performance_sheet(), 'A' + str(pub_aggregate_table() + 1), index= False, header= False).value = \
-        sites[['Site', 'Total GAs', 'CPGA']]
+        sites[['Site', 'Orders', 'CPO']]
 
     Range(performance_sheet(), 'C7').value = \
         pub_dr['Week'].max().strftime('%m/%d/%Y').lstrip('0').replace(' 0', ' ')
@@ -164,7 +165,7 @@ def publishers(dr):
         br_quarter[['Traffic Yield', 'Impressions']]
 
     Range(performance_sheet(), 'E' + str(brand_remessaging_table()), index= False, header= False).value = \
-        br_quarter['Total Traffic Actions']
+        br_quarter['Traffic Actions']
 
     Range(performance_sheet(), 'F' + str(brand_remessaging_table()), index= False, header= False).value = \
         br_quarter['NET Media Cost']
@@ -206,9 +207,10 @@ def publisher_tactic_data():
                                          + ':E' + str(site_tactic_table() - 1)).value)
     pub_performance.drop(0, inplace= True)
 
-    pub_performance['CPGA'] = pub_performance['Spend'].astype(float) / pub_performance['Total GAs'].astype(float)
+    #pub_performance['CPGA'] = pub_performance['Spend'].astype(float) / pub_performance['Total GAs'].astype(float)
+    pub_performance['CPO'] = pub_performance['Spend'].astype(float) / pub_performance['Orders'].astype(float)
 
-    pub_performance.rename(columns= {'Total GAs':'Total ' + qquarter() + ' GAs',
+    pub_performance.rename(columns= {'Orders':'Total ' + qquarter() + ' Orders',
                                      'Spend':'Total ' + qquarter() + ' Spend',
                                      'Placement Messaging Type':'Tactic'}, inplace= True)
 
@@ -229,8 +231,8 @@ def generate_publisher_tables(pub_performance):
 
     for i in site_list:
         df = pub_performance[pub_performance['Site'] == i]
-        df = df[['Tactic', 'Total ' + qquarter() + ' GAs', week,
-                 'Total ' + qquarter() + ' Spend', 'CPGA', qquarter() + ' CPGA Goal']]
+        df = df[['Tactic', 'Total ' + qquarter() + ' Orders', week,
+                 'Total ' + qquarter() + ' Spend', 'CPO', qquarter() + ' CPO Goal']]
         Range(performance_sheet(), start_column + str(cell_number), index = False).value = df
         Range(performance_sheet(), site_column + str(cell_number), index = False).value = i
         cell_number += 7
@@ -288,7 +290,7 @@ def generate_publisher_emails(pubs_combined, contacts, br):
                 bodystyle + \
                 'Traffic Yield - ' + str(br['Traffic Yield'][1]) + \
                 '<br>' + \
-                'Traffic Actions - ' + str(int(br['Traffic Actions'])) + \
+                'Traffic Actions - ' + str(int(br['Traffic Actions'][1])) + \
                 '</p>' + \
                 boldstyle + \
                 'Brand Remessaging Performance Chart ' + flight_start + ' - ' + week_end + \
@@ -314,7 +316,7 @@ def generate_publisher_emails(pubs_combined, contacts, br):
             headerstyle + \
             'DDR Performance ' + flight_start + ' - ' + week_end + ' (All Tactics Combined)</p>' + \
             bodystyle + \
-            'CPGA - $' + str(float(df['CPGA']))[:-2] + '<br>' + 'GAs - ' + str(float(df['GAs'])) + \
+            'CPO - $' + str(float(df['CPO']))[:-2] + '<br>' + 'Orders - ' + str(float(df['Orders'])) + \
             '</p>' + \
             boldstyle + \
             'DDR Performance Chart by Tactic ' + flight_start + ' - ' + week_end + \
