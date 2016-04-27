@@ -1,13 +1,12 @@
 from xlwings import Range
 import pandas as pd
 import numpy as np
-import main
-import campaign_pacing
-from weekly_reporting import categorization
+from reporting import categorization, datafunc
+from outputs import pacing
 
 
 def flat_rate_corrections():
-    planned = campaign_pacing.open_planned_media_report()
+    planned = pacing.open_planned_media_report()
     planned = categorization.sites(planned)
 
     planned = planned[planned['Placement Cost Structure'].str.contains('Flat Rate') == True]
@@ -23,6 +22,4 @@ def flat_rate_corrections():
 
     planned['Ended'] = np.where(pd.to_datetime(planned['Placement End Date']) <= max_date, 'Ended', '')
 
-    main.chunk_df(planned, 'Flat_Rate', 'A1')
-
-
+    datafunc.chunk_df(planned, 'Flat_Rate', 'A1')

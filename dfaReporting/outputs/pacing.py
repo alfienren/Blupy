@@ -1,8 +1,7 @@
 import pandas as pd
 import numpy as np
-import main
 import arrow
-from weekly_reporting import categorization
+from reporting import categorization
 from xlwings import Range, Workbook
 
 
@@ -51,7 +50,7 @@ def site_pacing_report():
     actual = actual.groupby(['Campaign', 'Site', 'Month'])
     actual = pd.DataFrame(actual.sum()).reset_index()
 
-    merged = pd.merge(planned, actual, how='right', on=['Campaign', 'Site', 'Month'])
+    merged = pd.merge(planned, actual, how='left', on=['Campaign', 'Site', 'Month'])
 
     del merged['Placement Total Planned Media Cost']
     del merged['Planned Media Cost']
@@ -60,7 +59,7 @@ def site_pacing_report():
     del merged['month count']
 
     pacing_sheet = Workbook()
-    main.chunk_df(merged, 0, 'A1')
+    reporting.chunk_df(merged, 0, 'A1')
 
     pacing_sheet.save(output_path)
     pacing_sheet.close()
