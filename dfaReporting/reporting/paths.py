@@ -1,19 +1,12 @@
-from xlwings import Range
+import os
+from Tkinter import Tk
+from tkFileDialog import askopenfilename
 
 
-def dr_pacing_path():
-    path = Range('Sheet3', 'AC1').value
+def path_select():
+    Tk().withdraw()
 
-    return path
+    file_path = askopenfilename()
+    file_path = os.path.normpath(file_path)
 
-
-def r_output_path():
-    path = Range('Sheet3', 'AD1').value
-
-    return path
-
-
-def dr_pivot_path():
-    path = Range('Sheet3', 'AB1').value
-
-    return path
+    return file_path

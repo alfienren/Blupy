@@ -183,6 +183,7 @@ def date_columns(data):
 def dr_placement_message_type(data):
     message_type = pd.DataFrame(Range('Lookup', 'K3').table.value, columns = Range('Lookup', 'K3').horizontal.value)
     message_type.drop(0, inplace= True)
+    message_type.drop_duplicates(keep='last', inplace=True)
 
     data = pd.merge(data, message_type, left_on= 'Placement', right_on= 'Placement_category', how= 'left')
     data.drop(['Campaign2', 'Placement_category'], axis= 1, inplace= True)
@@ -193,6 +194,7 @@ def dr_placement_message_type(data):
 def dr_tactic(data):
     tactic = pd.DataFrame(Range('Lookup', 'AD1').table.value, columns = Range('Lookup', 'AD1').horizontal.value)
     tactic.drop(0, inplace=True)
+    tactic.drop_duplicates(keep='last', inplace=True)
 
     data = pd.merge(data, tactic, on='Placement Messaging Type', how='left')
 
@@ -203,10 +205,17 @@ def dr_creative_categories(data):
     creative_categories = pd.DataFrame(Range('Lookup', 'Y1').table.value,
                                        columns = Range('Lookup', 'Y1').horizontal.value)
     creative_categories.drop(0, inplace=True)
+    creative_categories.drop_duplicates(keep='last', inplace=True)
 
     data = pd.merge(data, creative_categories, on='Creative Groups 2', how='left')
 
     return data
+
+
+def dr_sites():
+    sites = '|'.join(list(['AOD', 'ASG', 'Amazon', 'Bazaar Voice', 'eBay', 'Magnetic', 'Yahoo']))
+
+    return sites
 
 
 def categorize_report(data, adv='tmo'):

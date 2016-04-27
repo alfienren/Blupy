@@ -1,6 +1,9 @@
-from xlwings import Range, Sheet
 import re
+
 import pandas as pd
+from xlwings import Range, Sheet
+
+from reporting.template import cfv_tab_name, sa_tab_name
 
 
 def chunk_df(df, sheet, startcell, chunk_size=5000):
@@ -19,20 +22,10 @@ def chunk_df(df, sheet, startcell, chunk_size=5000):
             col += chunk_size
 
 
-def cfv_tab_name():
-    cfv = 'CFV_Temp'
-
-    return cfv
-
-
-def sa_tab_name():
-    sa = 'SA_Temp'
-
-    return sa
-
-
 def read_site_activity_report(path, adv='tmo'):
     sa = pd.read_excel(path, sa_tab_name(), index_col=None)
+    if 'DBM Cost USD' in sa.columns:
+        sa.rename(columns={'DBM Cost USD':'DBM Cost (USD)'}, inplace=True)
 
     if adv == 'tmo':
         sa_creative = sa[['Placement', 'Creative Field 1']]
@@ -50,14 +43,14 @@ def read_cfv_report(path):
     return cfv
 
 
-def merge_past_data(data, columns):
+def merge_past_data(data, columns, path):
     if Range('data', 'A1').value is None:
         chunk_df(data, 'data', 'A1')
 
     # If data is already present in the tab, the two data sets are merged together and then copied into the data tab.
 
     else:
-        past_data = pd.read_excel(wb.fullname, 'data', index_col=None)
+        past_data = pd.read_excel(path, 'data', index_col=None)
         appended_data = past_data.append(data)
         appended_data = appended_data[columns]
         appended_data.fillna(0, inplace=True)
