@@ -41,22 +41,6 @@ def row():
 
 def publishers(dr):
     path = paths.path_select()
-
-    def dr_placement_types():
-        cd = '|'.join(list(['C Pages', 'D Pages']))
-        t2t = '|'.join(list(['Tablet to Tablet']))
-        fbx = '|'.join(list(['FBX ']))
-        search = '|'.join(list(['Search']))
-        pros = '|'.join(list(['Prospecting']))
-        aal = '|'.join(list(['Add']))
-        tap_att = '|'.join(list(['Tap-to-Call (AT&T)']))
-        tap_other = '|'.join(list(['Tap-to-Call (Other)']))
-        tap_verizon = '|'.join(list(['Tap-to-Call (Verizon)']))
-        tap_sprint = '|'.join(list(['Tap-to-Call (Sprint)']))
-
-        return (cd, t2t, fbx, search, pros, aal, tap_att, tap_other, tap_sprint, tap_verizon)
-
-    cd, t2t, fbx, search, pros, aal, tap_att, tap_other, tap_sprint, tap_verizon = dr_placement_types()
     week = week_of(dr)
 
     # Publisher Performance
@@ -64,7 +48,7 @@ def publishers(dr):
     pub_dr = pub_dr.groupby(['Site', 'Placement Messaging Type', 'Week', 'Date'])
     pub_dr = pd.DataFrame(pub_dr.sum()).reset_index()
 
-    pub_dr['Tactic'] = np.where(pub_dr['Placement Messaging Type'].str.contains(fbx) == True,
+    pub_dr['Tactic'] = np.where(pub_dr['Placement Messaging Type'].str.contains('FBX ') == True,
                                 'FBX Remessaging', pub_dr['Placement Messaging Type'])
 
     # Quarter
