@@ -1,4 +1,4 @@
-from xlwings import Range, Sheet, Workbook
+from xlwings import Range, Workbook, Application
 from reporting import *
 from outputs import *
 
@@ -44,9 +44,7 @@ def generate_weekly_reporting():
 
     qa.placement_qa(data)
 
-    sheets_to_remove = template.delete_sheets(Sheet.all())
-    for i in sheets_to_remove:
-        Sheet(i).delete()
+    Application(wkb=wb).xl_app.Run('Postprocess_Report')
 
 
 def output_flat_rate_report():

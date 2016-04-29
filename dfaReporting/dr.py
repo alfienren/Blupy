@@ -1,9 +1,18 @@
+from reporting import custom_variables, datafunc, categorization, floodlights, clickthroughs, report_columns, template, paths
+from reporting.ddr import top_devices, forecast, dashboard
+from reporting.ddr.performance import generate_emails, tables, publisher
 import numpy as np
 import pandas as pd
-from xlwings import Range, Sheet, Workbook
+from xlwings import Range, Sheet, Workbook, Application
 
-from reporting import *
-from reporting.ddr import *
+
+def raw_pivot():
+    path = paths.path_select()
+
+    ddr = pd.read_excel(path, 'data', index_cols=None, parse_cols='A:V,X,Z:AK,CR:DJ')
+    ddr.fillna(0, inplace=True)
+
+    return ddr
 
 
 def dr_reporting():
@@ -64,10 +73,6 @@ def dr_reporting():
 
     wb.set_current()
 
-    sheets_to_remove = template.delete_sheets(Sheet.all())
-    for i in sheets_to_remove:
-        Sheet(i).delete()
-
 
 def generate_dashboard():
     dashboard.generate_data()
@@ -79,19 +84,19 @@ def output_forecasts(pacing_data):
     pacing_data = pd.pivot_table(pacing_data, index= ['Site', 'Tactic', 'Metric'],
                           columns= ['Week'], values= 'value', aggfunc= np.sum).reset_index()
 
-    wb = Workbook(paths.dr_pacing_path())
+    #wb = Workbook(dr_pacing_path())
 
     Sheet('forecast_data').clear_contents()
     Range('forecast_data', 'A1', index= False).value = pacing_data
 
-    wb.save()
-    wb.close()
+    #wb.save()
+    #wb.close()
 
 
 def pacing_data_for_forecasts():
     wb = Workbook.caller()
 
-    dr_data = dashboard.raw_pivot()
+    dr_data = raw_pivot()
 
     dr_forecasting = forecast.transform_dr_forecasts(dr_data)
     wb.set_current()
@@ -99,7 +104,7 @@ def pacing_data_for_forecasts():
     Sheet('raw_pacing_data').clear_contents()
     Range('raw_pacing_data', 'A1', index=False).value = dr_forecasting
 
-    performance.publishers(dr_data)
+    publisher.publishers(dr_data)
 
 
 def reshape_forecasts():
@@ -111,8 +116,12 @@ def reshape_forecasts():
 
     tab = dashboard.tableau_pacing(pacing_data)
 
-    forecast.output_forecasts(tab)
+    output_forecasts(tab)
 
 
+def emails_to_publishers():
+    pacing_wb = Workbook.caller()
+    generate_emails.generate_publisher_emails(tables.aggregated(), tables.contacts(), tables.brand_remessaging())
+    tables.tables_for_emails(tables.site_tactic())
 
-
+    Application(wkb=pacing_wb).xl_app.Run('Format_Tables')
