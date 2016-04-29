@@ -78,47 +78,6 @@ def generate_dashboard():
     dashboard.generate_data()
 
 
-def output_forecasts(pacing_data):
-    pacing_data['Week'] = pacing_data['Date'].apply(lambda x: categorization.mondays(x))
-
-    pacing_data = pd.pivot_table(pacing_data, index= ['Site', 'Tactic', 'Metric'],
-                          columns= ['Week'], values= 'value', aggfunc= np.sum).reset_index()
-
-    #wb = Workbook(dr_pacing_path())
-
-    Sheet('forecast_data').clear_contents()
-    Range('forecast_data', 'A1', index= False).value = pacing_data
-
-    #wb.save()
-    #wb.close()
-
-
-def pacing_data_for_forecasts():
-    wb = Workbook.caller()
-
-    dr_data = raw_pivot()
-
-    dr_forecasting = forecast.transform_dr_forecasts(dr_data)
-    wb.set_current()
-
-    Sheet('raw_pacing_data').clear_contents()
-    Range('raw_pacing_data', 'A1', index=False).value = dr_forecasting
-
-    publisher.publishers(dr_data)
-
-
-def reshape_forecasts():
-    Workbook.caller()
-
-    r_data = forecast.generate_forecasts()
-
-    pacing_data = forecast.merge_pacing_and_forecasts(r_data)
-
-    tab = dashboard.tableau_pacing(pacing_data)
-
-    output_forecasts(tab)
-
-
 def emails_to_publishers():
     pacing_wb = Workbook.caller()
     generate_emails.generate_publisher_emails(tables.aggregated(), tables.contacts(), tables.brand_remessaging())
