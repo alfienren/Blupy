@@ -2,10 +2,9 @@ import datetime
 
 import pandas as pd
 from win32com import client as win32
-from xlwings import Range, Workbook, Application
+from xlwings import Range
 
-from reporting.ddr.performance.performance import performance_sheet, qquarter
-from reporting.ddr.performance.tables import tables_for_emails, site_tactic, aggregated, contacts, brand_remessaging
+from reporting.ddr.performance.common import performance_sheet, qquarter
 
 
 def generate_publisher_emails(pubs_combined, contacts, br):
@@ -20,9 +19,9 @@ def generate_publisher_emails(pubs_combined, contacts, br):
     bodystyle = '<p style = "font-family: Calibri; font-size: 11pt;">'
     boldstyle = '<p style = "font-family: Calibri; font-size: 11pt; font-weight: bold;">'
 
-    merged = pd.merge(pubs_combined, contacts, how= 'left', on= 'Publisher')
+    merged = pd.merge(pubs_combined, contacts, how= 'left', on= 'Site')
 
-    pub_list =  list(merged['Publisher'].unique())
+    pub_list =  list(merged['Site'].unique())
     pub_emails = list(merged['cc_emails'].unique())
     contact_emails = list(merged['Contact Email'].unique())
 
@@ -70,7 +69,7 @@ def generate_publisher_emails(pubs_combined, contacts, br):
 
         mail = outlook.CreateItem(0)
 
-        df = merged[merged['Publisher'] == pub_list[i]]
+        df = merged[merged['Site'] == pub_list[i]]
 
         mail.To = str(contact_emails[i]).encode('utf-8')
         mail.CC = str(pub_emails[i]).encode('utf-8')
@@ -100,13 +99,3 @@ def generate_publisher_emails(pubs_combined, contacts, br):
             'Best,' + \
             '</body>'
         mail.Display()
-
-
-def emails_to_publisher():
-    pacing_wb = Workbook.caller()
-
-    tables_for_emails(site_tactic())
-
-    generate_publisher_emails(aggregated(), contacts(), brand_remessaging())
-
-    Application(wkb=pacing_wb).xl_app.Run('Format_Tables')
