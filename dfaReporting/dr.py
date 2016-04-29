@@ -1,18 +1,8 @@
-from reporting import custom_variables, datafunc, categorization, floodlights, clickthroughs, report_columns, template, paths
-from reporting.ddr import top_devices, forecast, dashboard
-from reporting.ddr.performance import generate_emails, tables, publisher
-import numpy as np
-import pandas as pd
-from xlwings import Range, Sheet, Workbook, Application
+from xlwings import Range, Workbook, Application
 
-
-def raw_pivot():
-    path = paths.path_select()
-
-    ddr = pd.read_excel(path, 'data', index_cols=None, parse_cols='A:V,X,Z:AK,CR:DJ')
-    ddr.fillna(0, inplace=True)
-
-    return ddr
+from reporting import custom_variables, datafunc, categorization, floodlights, clickthroughs, report_columns
+from reporting.ddr import top_devices, dashboard
+from reporting.ddr.performance import generate_emails, tables
 
 
 def dr_reporting():

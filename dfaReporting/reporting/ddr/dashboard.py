@@ -5,7 +5,6 @@ import numpy as np
 import pandas as pd
 from xlwings import Range, Sheet, Workbook
 
-from dr import raw_pivot
 from reporting import datafunc, paths
 from reporting.ddr import client_raw_data
 
@@ -85,7 +84,7 @@ def generate_data():
 
     save_path = save_path[:save_path.rindex('\\')]
 
-    ddr_data = raw_pivot()
+    ddr_data = load_raw_dr_data()
 
     ddr_display = dr_display_data(ddr_data)
     ddr_search_data = merge_search_data()
@@ -137,3 +136,12 @@ def tableau_pacing(forecast_data):
     Range('tableau_pacing_data', 'A1', index= False).value = tableau_data_output
 
     return tableau_data
+
+
+def load_raw_dr_data():
+    path = Range('Sheet3', 'AB1').value
+
+    ddr = pd.read_excel(path, 'data', index_cols=None, parse_cols='A:V,X,Z:AK,CR:DJ')
+    ddr.fillna(0, inplace=True)
+
+    return ddr
