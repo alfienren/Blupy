@@ -1,10 +1,13 @@
-from xlwings import Range
 import re
-import pandas as pd
-import numpy as np
+
 import arrow
+import numpy as np
+import pandas as pd
+from xlwings import Range
+
+import reporting.ddr.performance.common
 from reporting import categorization, paths, report_columns
-from reporting.ddr import performance
+from reporting.ddr.performance import publisher
 
 
 def generate_forecasts():
@@ -74,7 +77,7 @@ def transform_dr_forecasts(dr):
     dr = dr[dr['Campaign'] == 'DR']
     ddr = report_columns.dr_drop_columns(dr)
 
-    cd, t2t, fbx, search, pros, aal, tap_att, tap_other, tap_sprint, tap_verizon = performance.dr_placement_types()
+    cd, t2t, fbx, search, pros, aal, tap_att, tap_other, tap_sprint, tap_verizon = ddr.forecast.dr_placement_types()
 
     pacing_dr = ddr.rename(columns={'Placement Messaging Type': 'Type', 'NTC Media Cost': 'Spend', 'Total GAs': 'GAs'})
 
@@ -86,7 +89,7 @@ def transform_dr_forecasts(dr):
                                    np.where(pacing_dr['Type'].str.contains(pros) == True, 'Prospecting',
                                             'Add-A-Line')))))
 
-    pacing_dr = pacing_dr[(pacing_dr['Date'] >= performance.quarter_start_year()) &
+    pacing_dr = pacing_dr[(pacing_dr['Date'] >= reporting.ddr.performance.common.quarter_start_year()) &
                           (pacing_dr['Site'].str.contains(categorization.dr_sites()) == True)]
 
     pacing_dr = pacing_dr.groupby(['Site', 'Type.Agg', 'Type', 'Date'])
