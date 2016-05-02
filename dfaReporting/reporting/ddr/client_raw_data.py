@@ -14,8 +14,8 @@ def search_data_client(search_data, save_path):
                                                 client_data['Search Engine'],
                                                 client_data['Brand DDR Bucket'])
 
-    client_data.to_csv(save_path + '\\' + 'DR_Search_Raw_Data.txt', sep='\t', encoding='utf-8')
+    client_data.to_csv(save_path + '\\' + 'DR_Search_Raw_Data.txt', sep='\t', encoding='utf-8', index=False)
 
 
 def display_data_client(dr_data, save_path):
-    dr_data.to_csv(save_path + '\\' + 'DDR_Raw_Data.txt', sep='\t', encoding='utf-8')
+    dr_data.to_csv(save_path + '\\' + 'DDR_Raw_Data.txt', sep='\t', encoding='utf-8', index=False)

@@ -6,10 +6,10 @@ from xlwings import Range, Sheet
 
 
 def device_feed():
-    device_feed_path = Range('Action_Reference', 'AE1').value
-    device_lookup = pd.read_table(device_feed_path)
+    path = Range('Action_Reference', 'AE1').value
+    device_feed = pd.read_table(path)
 
-    return device_lookup
+    return device_feed
 
 
 def excluded_devices():
@@ -18,13 +18,13 @@ def excluded_devices():
     return str(excluded)
 
 
-def top_15_devices(cfv, feed_path, excluded_devices):
+def top_15_devices(cfv, feed_path, excl_devices):
     Sheet.add('DDR')
     Sheet.add('Summary')
 
     device_text_file = pd.read_table(feed_path)
 
-    excluded = excluded_devices
+    excluded = excl_devices
 
     cfv['Device IDs'] = cfv['Device (string)'].str.split(',')
 
@@ -76,8 +76,8 @@ def top_15_devices(cfv, feed_path, excluded_devices):
     # Device Name
 
     for cell in Range('Summary', 'D2').vertical:
-        id = cell.offset(0, -2).get_address(False, False, False)
-        cell.formula = '=IFERROR(INDEX(DDR!A:A,MATCH(Summary!' + id + ',DDR!G:G,0)),"na")'
+        ids = cell.offset(0, -2).get_address(False, False, False)
+        cell.formula = '=IFERROR(INDEX(DDR!A:A,MATCH(Summary!' + ids + ',DDR!G:G,0)),"na")'
 
     Range('Summary', 'A1:C1').value = 'Rank', 'Device SKU', 'Count'
     Range('Summary', 'H1').value = 'Rank'
