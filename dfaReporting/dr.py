@@ -1,7 +1,7 @@
 from xlwings import Range, Workbook, Application
 
 from reporting import custom_variables, datafunc, categorization, floodlights, clickthroughs, report_columns
-from reporting.ddr import top_devices, dashboard
+from reporting.ddr import devices, dashboard
 from reporting.ddr.performance import generate_emails, tables
 
 
@@ -15,7 +15,7 @@ def dr_reporting():
     date = sa['Date'].max().strftime('%m.%d.%Y')
 
     feed_path = Range('Action_Reference', 'AE1').value
-    excluded = top_devices.excluded_devices()
+    excluded = devices.excluded_devices()
 
     cfv = custom_variables.custom_variable_columns(cfv2)
     cfv = custom_variables.ddr_custom_variables(cfv)
@@ -56,7 +56,7 @@ def dr_reporting():
     wb2 = Workbook()
     wb2.set_current()
 
-    top_devices.top_15_devices(cfv2, feed_path, excluded)
+    devices.top_15_devices(cfv2, feed_path, excluded)
 
     wb2.save(r'S:\SEA-Media\Analytics\T-Mobile\DR\Top 15 Devices Report\Top Devices Report ' + date + '.xlsx')
     wb2.close()
