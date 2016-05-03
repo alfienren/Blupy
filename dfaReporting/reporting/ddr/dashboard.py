@@ -21,7 +21,7 @@ def load_raw_dr_data():
 def dr_display_data(ddr):
     ddr_columns = ['Campaign', 'Week', 'Site', 'Message Tactic', 'Placement Messaging Type', 'Message Offer', 'A Actions', 'B Actions',
                    'C Actions', 'D Actions', 'Store Locator Visits', 'Awareness Actions', 'Consideration Actions', 'Traffic Actions',
-                   'NTC Media Cost', 'NET Media Cost', 'Impressions', 'Clicks', 'Orders', 'Total GAs', 'Prepaid GAs',
+                   'NTC Media Cost', 'NET Media Cost', 'Impressions', 'Clicks', 'Orders', 'Prepaid Orders', 'Postpaid Orders', 'Total GAs', 'Prepaid GAs',
                    'Postpaid GAs', 'Prepaid SIMs', 'Postpaid SIMs', 'Prepaid Mobile Internet',
                    'Postpaid Mobile Internet', 'Prepaid Phone', 'Postpaid Phone', 'DDR Add-a-Line', 'DDR New Devices']
 
