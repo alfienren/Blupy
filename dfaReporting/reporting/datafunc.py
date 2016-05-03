@@ -3,7 +3,23 @@ import re
 import pandas as pd
 from xlwings import Range, Sheet
 
-from reporting.template import cfv_tab_name, sa_tab_name
+
+def cfv_tab_name():
+    cfv = 'CFV_Temp'
+
+    return cfv
+
+
+def sa_tab_name():
+    sa = 'SA_Temp'
+
+    return sa
+
+
+def qa_tab_name():
+    qa = 'Data_QA_Output'
+
+    return qa
 
 
 def chunk_df(df, sheet, startcell, chunk_size=5000):
@@ -31,7 +47,7 @@ def read_site_activity_report(path, adv='tmo'):
         sa_creative = sa[['Placement', 'Creative Field 1']]
         sa_creative = sa_creative.drop_duplicates(subset = 'Placement')
 
-        return (sa, sa_creative)
+        return sa, sa_creative
 
     else:
         return sa
