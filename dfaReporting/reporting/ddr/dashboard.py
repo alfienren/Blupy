@@ -12,7 +12,7 @@ from reporting.ddr import client_raw_data
 def load_raw_dr_data():
     path = Range('Sheet3', 'AB1').value
 
-    ddr = pd.read_excel(path, 'data', index_cols=None, parse_cols='A:V,X,Z:AK,CR:DJ')
+    ddr = pd.read_excel(path, 'data', index_cols=None, parse_cols='A:V,X,Z:AK,CR:DL')
     ddr.fillna(0, inplace=True)
 
     return [ddr, path]
