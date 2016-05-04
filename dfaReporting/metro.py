@@ -1,5 +1,5 @@
-from xlwings import Sheet, Workbook
-from reporting import *
+from xlwings import Workbook
+from reporting import datafunc, categorization, report_columns, floodlights, qa
 
 
 def generate_metro_reporting():
@@ -27,7 +27,3 @@ def generate_metro_reporting():
     datafunc.merge_past_data(data, columns, wb.fullname)
 
     qa.placement_qa(data)
-
-    sheets_to_remove = template.delete_sheets(Sheet.all())
-    for i in sheets_to_remove:
-        Sheet(i).delete()
