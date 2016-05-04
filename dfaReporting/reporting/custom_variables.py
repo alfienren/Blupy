@@ -1,7 +1,8 @@
 import numpy as np
 import pandas as pd
 from xlwings import Range
-from reporting.ddr import top_devices
+from reporting.ddr import devices
+
 
 
 def view_through_credit():
@@ -11,7 +12,18 @@ def view_through_credit():
 
 
 def custom_variable_columns(cfv):
-    cfv['Orders'] = 1  # Create orders column in cfv data. Each OrderNumber counts as 1 order
+    device_feed = devices.device_feed()
+
+    postpaid = device_feed[device_feed['Product Subcategory'] == 'Postpaid']
+    prepaid = device_feed[device_feed['Product Subcategory'] == 'Prepaid']
+
+    prepaid_list = prepaid['Device SKU'].tolist()
+    prepaid_list = '|'.join(prepaid_list)
+
+    postpaid_list = postpaid['Device SKU'].tolist()
+    postpaid_list = '|'.join(postpaid_list)
+
+    cfv['Device_reg'] = cfv['Device (string)'].str.replace(',', '|')
 
     # Count the number of plans in the Plans column
     cfv['Plans'] = np.where(cfv['Plan (string)'] != np.NaN, cfv['Plan (string)'].str.count(',') + 1, 0)
@@ -46,10 +58,26 @@ def custom_variable_columns(cfv):
 
     # The DDR campaign counts view-through order credit at 50%. If the campaign name contains 'DDR' and the Floodlight
     # Attribution Type is View-through, the order is multiplied by 0.5.
-    cfv['Orders'] = np.where(((cfv['Plan (string)'].isnull() == True) & (cfv['Service (string)'].isnull() == True) & (
-    cfv['Device (string)'].isnull() == True) & (cfv['Accessory (string)'].notnull() == True)), 0,
-                             np.where(cfv['Floodlight Attribution Type'].str.contains('View-through') == True,
-                                      cfv['Orders'] * view_through_credit(), cfv['Orders']))
+    # cfv['Orders'] = np.where(((cfv['Plan (string)'].isnull() == True) & (cfv['Service (string)'].isnull() == True) & (
+    # cfv['Device (string)'].isnull() == True) & (cfv['Accessory (string)'].notnull() == True)), 0,
+    #                          np.where(cfv['Floodlight Attribution Type'].str.contains('View-through') == True,
+    #                                   cfv['Orders'] * view_through_credit(), cfv['Orders']))
+
+    cfv['Postpaid Orders'] = np.where((cfv['Device_reg'].str.contains(postpaid_list) == True) & (
+    cfv['Floodlight Attribution Type'].str.contains('View-through') == True),
+                                      1 * view_through_credit(), np.where(
+            (cfv['Device_reg'].str.contains(postpaid_list) == True) & (
+            cfv['Floodlight Attribution Type'].str.contains('Click-through') == True),
+            1, 0))
+
+    cfv['Prepaid Orders'] = np.where((cfv['Device_reg'].str.contains(prepaid_list) == True) & (
+    cfv['Floodlight Attribution Type'].str.contains('View-through') == True),
+                                      1 * view_through_credit(), np.where(
+            (cfv['Device_reg'].str.contains(prepaid_list) == True) & (
+            cfv['Floodlight Attribution Type'].str.contains('Click-through') == True),
+            1, 0))
+
+    cfv['Orders'] = cfv['Postpaid Orders'] + cfv['Prepaid Orders']
 
     # Estimated Gross Adds are calculated as the count of Devices with 50% view-through credit.
     # If Floodlight Attribution Type is equal to View-through, the count of Devices is multiplied by 0.5
@@ -61,18 +89,15 @@ def custom_variable_columns(cfv):
 
 
 def ddr_custom_variables(cfv):
-    devices = cfv['Device (string)'].str.split(',').apply(pd.Series).stack()
-    devices.index = devices.index.droplevel(-1)
-    devices.name = "Device IDs"
+    device_string = cfv['Device (string)'].str.split(',').apply(pd.Series).stack()
+    device_string.index = device_string.index.droplevel(-1)
+    device_string.name = "Device IDs"
 
-    device_cfv = cfv[cfv.columns[0:17]].join(devices)
+    device_cfv = cfv[cfv.columns[0:17]].join(device_string)
     cfv = cfv.append(device_cfv)
 
     excluded_devices = str(Range('Lookup', 'S2').value)
-    cfv = pd.merge(cfv, top_devices.device_feed(), how = 'left', left_on = 'Device IDs', right_on = 'Device SKU')
-
-    postpaid_percent = float(len(cfv[cfv['Product Subcategory'] == 'Postpaid'])) / \
-                       float(cfv['Product Subcategory'].count())
+    cfv = pd.merge(cfv, devices.device_feed(), how = 'left', left_on = 'Device IDs', right_on = 'Device SKU')
 
     cfv['Prepaid GAs'] = np.where(((cfv['Device IDs'].str.contains(excluded_devices) == False) &
                                    (cfv['Device IDs'].notnull() == True) & (
@@ -96,9 +121,6 @@ def ddr_custom_variables(cfv):
                                              cfv['Product Subcategory'].str.contains('Postpaid') == True)), 1, 0))
 
     cfv['Total GAs'] = cfv['Postpaid GAs'] + cfv['Prepaid GAs']
-
-    #cfv['Postpaid Orders'] = cfv['Orders'] * postpaid_percent * 2 / 2
-    #cfv['Prepaid Orders'] = cfv['Orders'] * (1 - postpaid_percent) * 2 / 2
 
     cfv['Prepaid SIMs'] = np.where(((cfv['Device IDs'].str.contains(excluded_devices) == False) &
                                     (cfv['Device IDs'].notnull() == True) & (
