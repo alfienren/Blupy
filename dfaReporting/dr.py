@@ -23,8 +23,6 @@ def dr_reporting():
     data = sa.append(cfv)
     data = clickthroughs.strip_clickthroughs(data)
 
-    data = custom_variables.format_custom_variable_columns(data)
-
     data = floodlights.a_e_traffic(data)
 
     data = categorization.sites(data)
