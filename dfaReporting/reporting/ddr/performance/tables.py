@@ -45,8 +45,6 @@ def site_tactic():
                                      'Spend':'Total ' + reporting.ddr.performance.common.qquarter() + ' Spend',
                                      'Placement Messaging Type':'Tactic'}, inplace= True)
 
-    #pub_performance = reporting.ddr.performance.common.goals()
-
     return pub_performance
 
 
