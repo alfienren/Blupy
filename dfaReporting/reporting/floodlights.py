@@ -129,13 +129,13 @@ def a_e_traffic(data, adv='tmo'):
     # The matches against the column names are then set
     view_based = list(set(view_through).intersection(column_names))
     click_based = list(set(click_through).intersection(column_names))
-    SLV_conversions = list(set(store_locator).intersection(column_names))
+    slv_conversions = list(set(store_locator).intersection(column_names))
 
     # With the matching references set, sum the matches for post-click and impression activity as well as SLV by row,
     # creating columns for each.
     data['Post-Click Activity'] = data[click_based].sum(axis=1)
     data['Post-Impression Activity'] = data[view_based].sum(axis=1)
-    data['Store Locator Visits'] = data[SLV_conversions].sum(axis=1)
+    data['Store Locator Visits'] = data[slv_conversions].sum(axis=1)
 
     # Create columns for Awareness and Consideration actions. Awareness Actions are the sum of A and B actions,
     # Consideration is the sum of C and D actions

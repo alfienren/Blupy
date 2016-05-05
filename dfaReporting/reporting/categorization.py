@@ -202,20 +202,20 @@ def dr_tactic(data):
 
 
 def dr_creative_categories(data):
-    creative_categories = pd.DataFrame(Range('Lookup', 'Y1').table.value,
+    categories = pd.DataFrame(Range('Lookup', 'Y1').table.value,
                                        columns = Range('Lookup', 'Y1').horizontal.value)
-    creative_categories.drop(0, inplace=True)
-    creative_categories.drop_duplicates(keep='last', inplace=True)
+    categories.drop(0, inplace=True)
+    categories.drop_duplicates(keep='last', inplace=True)
 
-    data = pd.merge(data, creative_categories, on='Creative Groups 2', how='left')
+    data = pd.merge(data, categories, on='Creative Groups 2', how='left')
 
     return data
 
 
 def dr_sites():
-    sites = '|'.join(list(['AOD', 'ASG', 'Amazon', 'Bazaar Voice', 'eBay', 'Magnetic', 'Yahoo']))
+    site = '|'.join(list(['AOD', 'ASG', 'Amazon', 'Bazaar Voice', 'eBay', 'Magnetic', 'Yahoo']))
 
-    return sites
+    return site
 
 
 def categorize_report(data, adv='tmo'):

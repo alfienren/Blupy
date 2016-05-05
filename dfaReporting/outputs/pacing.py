@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import arrow
-from reporting import categorization
+from reporting import categorization, datafunc
 from xlwings import Range, Workbook
 
 
@@ -59,7 +59,7 @@ def site_pacing_report():
     del merged['month count']
 
     pacing_sheet = Workbook()
-    reporting.chunk_df(merged, 0, 'A1')
+    datafunc.chunk_df(merged, 0, 'A1')
 
     pacing_sheet.save(output_path)
     pacing_sheet.close()
