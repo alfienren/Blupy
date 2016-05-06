@@ -67,7 +67,7 @@ def cost_feed():
     if Range('Action_Reference', 'AC1').value is not None:
 
         ddrpath = Range('Action_Reference', 'AC1').value
-        ddr = pd.read_excel(ddrpath, 'Working Data', parse_cols='X, U, AH')
+        ddr = pd.read_excel(ddrpath, 'data', parse_cols='X, U, AH')
         ddr['Date'] = pd.to_datetime(ddr['Date'])
 
         data = pd.read_excel(path, 'data', parse_cols= 'B, AD, AG')
