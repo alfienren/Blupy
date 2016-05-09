@@ -6,6 +6,7 @@ import pandas as pd
 import datetime
 import os
 
+
 def generate_weekly_reporting():
     wb = Workbook.caller()
     wb.save()
