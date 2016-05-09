@@ -11,9 +11,9 @@ def cfv_tab_name():
 
 
 def sa_tab_name():
-    sa = 'SA_Temp'
+    sa_name = 'SA_Temp'
 
-    return sa
+    return sa_name
 
 
 def qa_tab_name():
@@ -72,3 +72,4 @@ def merge_past_data(data, columns, path):
         appended_data.fillna(0, inplace=True)
         Sheet('data').clear_contents()
         chunk_df(appended_data, 'data', 'A1')
+
