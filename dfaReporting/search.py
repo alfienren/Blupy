@@ -1,6 +1,8 @@
 from xlwings import Range, Sheet, Workbook
 import pandas as pd
-from reporting import datafunc, custom_variables
+import numpy as np
+import os
+from reporting import datafunc, custom_variables, categorization
 
 
 def query_and_cfv_data(path):
@@ -13,10 +15,35 @@ def query_and_cfv_data(path):
         data = pd.read_excel(path, i, index_col=None)
         search_data = search_data.append(data)
 
+    search_data.rename(columns={'From':'Date'}, inplace=True)
+
+    search_data['Week'] = search_data['Date'].apply(lambda x: categorization.mondays(x))
+
     cfv = datafunc.read_cfv_report(path)
     cfv = custom_variables.custom_variable_columns(cfv)
     cfv = custom_variables.ddr_custom_variables(cfv)
 
     search_data = search_data.append(cfv)
 
-    return search_data
+    search_data.fillna(0, inplace=True)
+
+    search_pivoted = pd.pivot_table(search_data, index=['Account', 'Bucket Class', 'Business Unit', 'Campaign',
+                                          'Device segment', 'Date', 'Sitelink display text', 'Accessory (string)',
+                                          'OrderNumber (string)', 'Device (string)', 'Plan (string)',
+                                          'Service (string)'],
+                             aggfunc=np.sum, fill_value=0).reset_index()
+
+    search_pivoted = categorization.search_lookup(search_pivoted)
+    search_pivoted = categorization.date_columns(search_pivoted)
+
+    return search_pivoted
+
+
+def save_raw_data_file(search_pivoted):
+    save_path = Range('Lookup', 'K1').value
+
+    through_date = search_pivoted['Date'].max().strftime('%m.%d.%Y')
+
+    file_name = 'Search_Raw_Data_' + through_date + '.xlsx'
+
+    search_pivoted.to_excel(os.path.join(save_path, file_name), index=False)
