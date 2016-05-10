@@ -234,3 +234,14 @@ def categorize_report(data, adv='tmo'):
     data = date_columns(data)
 
     return data
+
+
+def search_lookup(data):
+    lookup_table = pd.DataFrame(Range('Lookup', 'A1').table.value,
+                                columns=Range('Lookup', 'A1').horizontal.value)
+    lookup_table.drop(0, inplace=True)
+    lookup_table.drop_duplicates(keep='last', inplace=True)
+
+    data = pd.merge(data, lookup_table, how='left', on='Bucket Class')
+
+    return data
