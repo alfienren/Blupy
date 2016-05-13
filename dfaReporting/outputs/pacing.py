@@ -20,7 +20,7 @@ def site_pacing_report():
 
     planned = categorization.sites(planned)
 
-    actual = pd.read_excel(path, 'data', parse_cols='B:AD', index_col=None)
+    actual = pd.read_excel(path, 'data', parse_cols='B:AJ', index_col=None)
 
     actual_columns_keep = ['Campaign', 'Site', 'Date', 'Month', 'NTC Media Cost']
 

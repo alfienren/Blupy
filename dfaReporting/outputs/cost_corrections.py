@@ -1,4 +1,4 @@
-from xlwings import Range
+from xlwings import Range, Sheet
 import pandas as pd
 import numpy as np
 from reporting import categorization, datafunc
@@ -22,4 +22,5 @@ def flat_rate_corrections():
 
     planned['Ended'] = np.where(pd.to_datetime(planned['Placement End Date']) <= max_date, 'Ended', '')
 
+    Sheet('Flat_Rate').clear_contents()
     datafunc.chunk_df(planned, 'Flat_Rate', 'A1')
