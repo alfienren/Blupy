@@ -39,8 +39,8 @@ def chunk_df(df, sheet, startcell, chunk_size=5000):
 
 
 def read_site_activity_report(path, adv='tmo'):
-    sa = pd.read_excel(path, sa_tab_name(), index_col=None)
-    if 'DBM Cost USD' in sa.columns:
+    sa = pd.read_excel(path, 'SA_Temp', index_col=None)
+    if 'DBM Cost USD' in list(sa.columns):
         sa.rename(columns={'DBM Cost USD':'DBM Cost (USD)'}, inplace=True)
 
     if adv == 'tmo':
