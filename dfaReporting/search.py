@@ -6,8 +6,8 @@ from reporting import datafunc, custom_variables, categorization
 
 
 def query_and_cfv_data(path):
-    query_sheets = ['Weekly Dash', 'Sitelink DDR', 'Sitelink Remarketing', 'Retention Location Intent Query',
-                    'Location Intent Query']
+    query_sheets = ['Weekly Dash', 'Sitelink DDR', 'Sitelink Remarketing', 'Sitelink Bing',
+                    'Retention Location Intent Query', 'Location Intent Query']
 
     search_data = pd.DataFrame()
 
@@ -50,8 +50,6 @@ def query_and_cfv_data(path):
     search_pivoted = categorization.date_columns(search_pivoted)
 
     datafunc.chunk_df(search_pivoted, 'data', 'A1')
-
-    #return search_pivoted
 
 
 def save_raw_data_file(search_pivoted):
