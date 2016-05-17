@@ -53,7 +53,7 @@ def generate_reporting():
     wb = Workbook.caller()
     wb.save()
 
-    data = pd.read_excel(wb.fullname, paths.sa_tab_name(), index_col=None)
+    data = pd.read_excel(wb.fullname, datafunc.sa_tab_name(), index_col=None)
     data = categorization.sites(data)
     data = categorization.placement_categories(data, adv='wfm')
     data = categorization.date_columns(data)
@@ -75,7 +75,3 @@ def generate_reporting():
         appended_data.fillna(0, inplace=True)
         Sheet('data').clear()
         datafunc.chunk_df(appended_data, 'data', 'A1')
-
-    sheets_to_remove = template.delete_sheets(Sheet.all())
-    for i in sheets_to_remove:
-        Sheet(i).delete()
