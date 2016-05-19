@@ -19,7 +19,7 @@ def load_raw_dr_data():
 
 
 def dr_display_data(ddr):
-    ddr_columns = ['Campaign', 'Week', 'Site', 'Message Tactic', 'Placement Messaging Type', 'Message Offer',
+    ddr_columns = ['Campaign', 'Week', 'Site', 'Message Tactic', 'Placement Messaging Type', #'Message Offer',
                    'A Actions', 'B Actions', 'C Actions', 'D Actions', 'Store Locator Visits', 'Awareness Actions',
                    'Consideration Actions', 'Traffic Actions', 'View-through Conversions', 'Click-through Conversions',
                    'NTC Media Cost', 'NET Media Cost', 'Impressions', 'Clicks', 'Orders', 'Prepaid Orders',
@@ -31,17 +31,27 @@ def dr_display_data(ddr):
                         'Post-Impression Activity': 'View-through Conversions',
                         'Post-Click Activity' : 'Click-through Conversions'}, inplace=True)
 
-    ddr['Week'] = pd.to_datetime(ddr['Week'])
-    end = ddr['Week'].max()
-    delta = datetime.timedelta(weeks=0)
-    start = end - delta
-    ddr_data = ddr[(ddr['Week'] >= start) & (ddr['Week'] <= end)]
+    # ddr['Week'] = pd.to_datetime(ddr['Week'])
+    # end = ddr['Week'].max()
+    # delta = datetime.timedelta(weeks=0)
+    # start = end - delta
+    # ddr_data = ddr[(ddr['Week'] >= start) & (ddr['Week'] <= end)]
 
-    ddr_data = ddr_data[ddr_columns]
+    ddr_data = ddr[ddr_columns]
 
-    gb = ddr_data.groupby(['Campaign', 'Week', 'Site', 'Message Tactic', 'Placement Messaging Type', 'Message Offer'])
+    telesales = pd.DataFrame(Range('Telesales', 'A1').table.value, columns=Range('Telesales', 'A1').horizontal.value)
+    telesales.drop(0, inplace=True)
+    # telesales = telesales[(telesales['Week'] >= start) & (telesales['Week'] <= end)]
+    telesales.set_index(['Site', 'Placement Messaging Type', 'Week'], inplace=True)
 
+    gb = ddr_data.groupby(['Campaign', 'Week', 'Site', 'Message Tactic', 'Placement Messaging Type'])
     grouped = gb.aggregate(np.sum).reset_index()
+
+    grouped.set_index(['Site', 'Placement Messaging Type', 'Week'], inplace=True)
+
+    grouped = pd.merge(grouped, telesales, how='left', right_index=True, left_index=True)
+
+    grouped.reset_index(inplace=True)
 
     grouped['Tactic'] = 'Display'
     grouped['Channel'] = np.where(grouped['Campaign'] == 'DR', 'DR', 'Brand Remessaging')
@@ -76,7 +86,7 @@ def dr_search_data(search_data):
                               columns= Range('Search_GAs', 'A1').horizontal.value)
     search_gas.drop(0, inplace= True)
 
-    search_gas = search_gas[['Week', 'Traffic Actions', 'Orders', 'Prepaid GAs', 'Postpaid GAs', 'Prepaid SIMs',
+    search_gas = search_gas[['Week', 'Traffic Actions', 'Prepaid GAs', 'Postpaid GAs', 'Prepaid SIMs',
                              'Postpaid SIMs']]
 
     search_gas['Source'] = 'Search Raw Data'
@@ -107,16 +117,16 @@ def generate_data():
 
     tableau = ddr_display.append(tableau_search)
 
+    tableau['Quarter'] = None
+    tableau['Week of Quarter'] = None
+
     if Range('merged', 'A1').value is None:
         datafunc.chunk_df(tableau, 'merged', 'A1')
 
     # If data is already present in the tab, the two data sets are merged together and then copied into the data tab.
     else:
-        past_data = pd.read_excel(wb.fullname, 'merged', index_col=None)
-        past_data = past_data[past_data['Campaign'] != 'Search']
-        appended_data = past_data.append(tableau)
         Sheet('merged').clear()
-        datafunc.chunk_df(appended_data, 'merged', 'A1')
+        datafunc.chunk_df(tableau, 'merged', 'A1')
 
     client_raw_data.search_data_client(ddr_search_data, save_path)
     client_raw_data.display_data_client(ddr_data, save_path)
