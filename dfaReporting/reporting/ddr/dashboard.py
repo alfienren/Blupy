@@ -120,33 +120,3 @@ def generate_data():
 
     client_raw_data.search_data_client(ddr_search_data, save_path)
     client_raw_data.display_data_client(ddr_data, save_path)
-
-
-def tableau_pacing(forecast_data):
-    column_names = '|'.join(list(['ASG', 'Amazon', 'Magnetic', 'eBay', 'Yahoo!', 'Bazaar Voice', 'Date', 'Type']))
-    sites = '|'.join(list(['ASG', 'Amazon', 'Bazaar Voice', 'eBay', 'Magnetic', 'Yahoo!']))
-    metrics = '|'.join(list(['Spend', 'GAs']))
-    to_remove = '|'.join(list([sites, metrics]))
-    conf_interval = '|'.join(list(['Hi', 'Lo']))
-
-    tableau_data = forecast_data.select(lambda x: re.search(column_names, x), axis= 1)
-
-    tableau_data = pd.melt(tableau_data, id_vars= ['Date', 'Type'],
-                   value_vars= [col for col in tableau_data.columns if re.search(sites, col)])
-
-    tableau_data['Site'] = tableau_data['variable'].str.split(' ').str[0]
-    tableau_data['Metric'] = tableau_data['variable'].str.split(' ').str[-1]
-    tableau_data['variable'] = tableau_data['variable'].str.replace(to_remove, '').str.strip()
-
-    tableau_data.rename(columns={'variable':'Tactic'}, inplace= True)
-    tableau_data = tableau_data[tableau_data['Tactic'].str.contains(conf_interval) == False]
-
-    tableau_data_output = pd.pivot_table(tableau_data, index=['Site', 'Tactic', 'Date', 'Type'],
-              columns=['Metric'], values='value', aggfunc=np.sum)
-    tableau_data_output.reset_index(inplace= True)
-
-    Sheet('tableau_pacing_data').clear_contents()
-
-    Range('tableau_pacing_data', 'A1', index= False).value = tableau_data_output
-
-    return tableau_data
