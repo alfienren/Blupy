@@ -1,6 +1,3 @@
-import datetime
-import re
-
 import numpy as np
 import pandas as pd
 from xlwings import Range, Sheet, Workbook
@@ -31,17 +28,10 @@ def dr_display_data(ddr):
                         'Post-Impression Activity': 'View-through Conversions',
                         'Post-Click Activity' : 'Click-through Conversions'}, inplace=True)
 
-    # ddr['Week'] = pd.to_datetime(ddr['Week'])
-    # end = ddr['Week'].max()
-    # delta = datetime.timedelta(weeks=0)
-    # start = end - delta
-    # ddr_data = ddr[(ddr['Week'] >= start) & (ddr['Week'] <= end)]
-
     ddr_data = ddr[ddr_columns]
 
     telesales = pd.DataFrame(Range('Telesales', 'A1').table.value, columns=Range('Telesales', 'A1').horizontal.value)
     telesales.drop(0, inplace=True)
-    # telesales = telesales[(telesales['Week'] >= start) & (telesales['Week'] <= end)]
     telesales.set_index(['Site', 'Placement Messaging Type', 'Week'], inplace=True)
 
     gb = ddr_data.groupby(['Campaign', 'Week', 'Site', 'Message Tactic', 'Placement Messaging Type'])
@@ -125,8 +115,12 @@ def generate_data():
 
     # If data is already present in the tab, the two data sets are merged together and then copied into the data tab.
     else:
+        past_data = pd.read_excel(wb.fullname, 'merged', index_col=None)
+        past_data = past_data[past_data['Campaign'] != 'Search']
+        past_data = past_data[(past_data['Source'] == 'DR-Pivot') & (past_data['Week'] <= '12/31/2015')]
+        appended_data = past_data.append(tableau)
         Sheet('merged').clear()
-        datafunc.chunk_df(tableau, 'merged', 'A1')
+        datafunc.chunk_df(appended_data, 'merged', 'A1')
 
     client_raw_data.search_data_client(ddr_search_data, save_path)
     client_raw_data.display_data_client(ddr_data, save_path)

@@ -37,7 +37,8 @@ def dr_reporting():
                               'Service (string)', 'Accessory (string)', 'Floodlight Attribution Type', 'Orders',
                               'Total GAs', 'Prepaid GAs', 'Postpaid GAs', 'Prepaid Orders', 'Postpaid Orders',
                               'Prepaid SIMs', 'Postpaid SIMs', 'Prepaid Mobile Internet',
-                              'Postpaid Mobile Internet', 'Prepaid Phone', 'Postpaid Phone', 'DDR Add-a-Line', 'DDR New Devices']
+                              'Postpaid Mobile Internet', 'Prepaid Phone', 'Postpaid Phone', 'DDR Add-a-Line',
+                              'DDR New Devices']
 
     sa_columns = list(sa.columns)
     tag_columns = sa_columns[sa_columns.index('DBM Cost (USD)') + 1:]
