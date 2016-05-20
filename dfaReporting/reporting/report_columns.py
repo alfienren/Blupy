@@ -6,7 +6,7 @@ def additional_columns(data, adv='tmo'):
     # dynamic bidding, DBM Cost = 0. Therefore, if DBM cost does not equal 0, replace the row's media cost with
     # DBM cost. If DBM Cost = 0, Media Cost stays the same.
 
-    if adv == 'tmo' or adv == 'dr':
+    if adv == 'tmo' or adv == 'dr' or adv == 'metro':
         data['Media Cost'] = np.where(data['DBM Cost (USD)'] != 0, data['DBM Cost (USD)'], data['Media Cost'])
     if adv == 'tmo':
         data.drop('DBM Cost (USD)', 1, inplace=True)
