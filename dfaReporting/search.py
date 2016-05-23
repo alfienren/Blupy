@@ -2,6 +2,7 @@ from xlwings import Range, Sheet, Workbook
 import pandas as pd
 import numpy as np
 import os
+import sys
 from reporting import datafunc, custom_variables, categorization
 
 
@@ -13,6 +14,23 @@ def query_and_cfv_data(path):
 
     for i in query_sheets:
         data = pd.read_excel(path, i, index_col=None)
+
+        if i == 'Sitelink Bing':
+
+            dr_brand = '|'.join(list(['DDR_B_High_Volume', 'DDR_B_Bring']))
+            remarket = '|'.join(list(['REM_']))
+            b_marketing = '|'.join(list(['DDR_B_']))
+            data.rename(columns={'Campaign name':'Campaign', 'Ad extension property value':'Sitelink display text'},
+                        inplace=True)
+
+            data = data[(data['Sitelink display text'].str.contains('My T-Mobile') == True)
+                        | (data['Sitelink display text'].str.contains('for Business') == True)]
+
+            data['Bucket Class'] =  np.where(data['Campaign'].str.contains(dr_brand) == True, 'DR-Brand',
+                                             np.where(data['Campaign'].str.contains(remarket) == True, 'Remarketing',
+                                                      np.where(data['Campaign'].str.contains(b_marketing) == True,
+                                                               'Brand Marketing', None)))
+
         data['Source'] = i
         search_data = search_data.append(data)
 
@@ -64,6 +82,8 @@ def save_raw_data_file(search_pivoted):
 
 def generate_search_reporting():
     wb = Workbook.caller()
+    wb.save()
+
     query_and_cfv_data(wb.fullname)
 
 
