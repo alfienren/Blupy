@@ -1,5 +1,3 @@
-import pandas as pd
-from xlwings import Range
 
 
 def performance_sheet():
