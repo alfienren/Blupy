@@ -4,7 +4,8 @@ import pandas as pd
 from win32com import client as win32
 from xlwings import Range
 
-from reporting.ddr.performance.common import performance_sheet, qquarter
+from reporting.ddr.performance.common import performance_sheet
+from reporting.categorization import qquarter
 
 
 def generate_publisher_emails(pubs_combined, contacts, br):
