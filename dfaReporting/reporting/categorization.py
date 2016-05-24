@@ -245,3 +245,18 @@ def search_lookup(data):
     data = pd.merge(data, lookup_table, how='left', on='Bucket Class')
 
     return data
+
+
+def qquarter():
+    quarter = 'Q2'
+
+    return quarter
+
+
+def quarter_start_year(start='quarter_start'):
+    if start != 'quarter_start':
+        quarter = '4/18/2016'
+    else:
+        quarter = '4/1/2016'
+
+    return quarter
