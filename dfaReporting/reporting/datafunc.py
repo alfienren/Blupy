@@ -3,23 +3,7 @@ import re
 import pandas as pd
 from xlwings import Range, Sheet
 
-
-def cfv_tab_name():
-    cfv = 'CFV_Temp'
-
-    return cfv
-
-
-def sa_tab_name():
-    sa_name = 'SA_Temp'
-
-    return sa_name
-
-
-def qa_tab_name():
-    qa = 'Data_QA_Output'
-
-    return qa
+from reporting.constants import TabNames
 
 
 def chunk_df(df, sheet, startcell, chunk_size=5000):
@@ -39,7 +23,7 @@ def chunk_df(df, sheet, startcell, chunk_size=5000):
 
 
 def read_site_activity_report(path, adv='tmo'):
-    sa = pd.read_excel(path, 'SA_Temp', index_col=None)
+    sa = pd.read_excel(path, TabNames.site_activity, index_col=None)
     if 'DBM Cost USD' in list(sa.columns):
         sa.rename(columns={'DBM Cost USD':'DBM Cost (USD)'}, inplace=True)
 
@@ -54,7 +38,7 @@ def read_site_activity_report(path, adv='tmo'):
 
 
 def read_cfv_report(path):
-    cfv = pd.read_excel(path, cfv_tab_name(), index_col=None)
+    cfv = pd.read_excel(path, TabNames.floodlight_variable, index_col=None)
 
     return cfv
 

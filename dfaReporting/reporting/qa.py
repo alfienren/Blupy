@@ -1,6 +1,6 @@
 import numpy as np
 from xlwings import Sheet, Range
-
+from reporting.constants import TabNames
 
 # Check placements with spend and impressions but 0 clicks. Also check for placements with spend and clicks but
 # no impressions.
@@ -18,6 +18,6 @@ def placement_qa(data):
 
     Sheet.add('Data_QA_Output', after = 'data')
 
-    Range('Data_QA_Output', 'A1', index = False).value = data
+    Range(TabNames.qa_tab_name, 'A1', index = False).value = data
 
 
