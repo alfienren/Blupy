@@ -30,29 +30,29 @@ def generate_publisher_emails(pubs_combined, contacts, br):
 
     for i in range(0, len(pub_list)):
         if pub_list[i] == 'ASG' or pub_list[i] == 'AOD':
-            greeting = 'Hi Dan and Team,'
-            flight_start = '1/1'
+            greeting = 'Hi Andrew and Team,'
+            flight_start = '4/18'
         elif pub_list[i] == 'Amazon':
             greeting = 'Hi Kate and Team,'
-            flight_start = '1/1'
+            flight_start = '4/18'
         elif pub_list[i] == 'eBay':
             greeting = 'Hi Katie,'
-            flight_start = '1/1'
+            flight_start = '4/18'
         elif pub_list[i] == 'Magnetic':
             greeting = 'Hi Melissa,'
-            flight_start = '1/1'
+            flight_start = '4/18'
         elif pub_list[i] == 'Yahoo!':
             greeting = 'Hi Krystal,'
-            flight_start = '1/1'
+            flight_start = '4/18'
         elif pub_list[i] == 'Bazaar Voice':
             greeting = 'Hi Alexa and Todd,'
-            flight_start = '1/1'
+            flight_start = '4/18'
         elif pub_list[i] == 'Drawbridge':
             greeting = 'Hi Stephanie and Mani,'
-            flight_start = '2/1'
+            flight_start = '4/18'
         else:
             greeting = 'Hello,'
-            flight_start = '1/1'
+            flight_start = '4/18'
 
         if pub_list[i] == 'ASG' or pub_list[i] == 'AOD':
             br_performance = headerstyle + \
@@ -61,6 +61,17 @@ def generate_publisher_emails(pubs_combined, contacts, br):
                 'Traffic Yield - ' + str(br['Traffic Yield'][1]) + \
                 '<br>' + \
                 'Traffic Actions - ' + str(int(br['Traffic Actions'][1])) + \
+                '</p>' + \
+                boldstyle + \
+                'Brand Remessaging Performance Chart ' + flight_start + ' - ' + week_end + \
+                '</p><br><br><br>'
+        elif pub_list[i] == 'TripleLift':
+            br_performance = headerstyle + \
+                'Brand Remessaging</p>' + \
+                bodystyle + \
+                'Traffic Yield - ' + str(br['Traffic Yield'][2]) + \
+                '<br>' + \
+                'Traffic Actions - ' + str(int(br['Traffic Actions'][2])) + \
                 '</p>' + \
                 boldstyle + \
                 'Brand Remessaging Performance Chart ' + flight_start + ' - ' + week_end + \
