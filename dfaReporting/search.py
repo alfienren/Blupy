@@ -8,7 +8,9 @@ from reporting import datafunc, custom_variables, categorization
 
 def query_and_cfv_data(path):
     query_sheets = ['Weekly Dash', 'Sitelink DDR', 'Sitelink Remarketing', 'Sitelink Bing',
-                    'Retention Location Intent Query', 'Location Intent Query']
+                    'Retention Location Intent Query', 'Location Intent Query', 'Marchex']
+
+    buckets = pd.read_excel(path, 'Lookup', parse_cols='E:G')
 
     search_data = pd.DataFrame()
 
@@ -16,7 +18,6 @@ def query_and_cfv_data(path):
         data = pd.read_excel(path, i, index_col=None)
 
         if i == 'Sitelink Bing':
-
             dr_brand = '|'.join(list(['DDR_B_High_Volume', 'DDR_B_Bring']))
             remarket = '|'.join(list(['REM_']))
             b_marketing = '|'.join(list(['DDR_B_']))
@@ -31,20 +32,44 @@ def query_and_cfv_data(path):
                                                       np.where(data['Campaign'].str.contains(b_marketing) == True,
                                                                'Brand Marketing', None)))
 
+        if i == 'Marchex':
+            data.set_index(['campaign_bucket', 'Metric'], inplace=True)
+            data = data.stack().reset_index()
+            data = pd.pivot_table(data, index=['campaign_bucket', 'level_2'], columns='Metric',
+                                  aggfunc=np.sum).reset_index()
+
+            data = pd.merge(data[['campaign_bucket', 'level_2']], data[0],
+                            how='left', right_index=True, left_index=True)
+
+            data.rename(columns={data.columns[0]: 'Bucket', data.columns[1]: 'Week'}, inplace=True)
+
+            data['Bucket Class'] = np.where(data['Bucket'].str.contains('DR') == True, 'DR-Brand',
+                                            np.where(data['Bucket'] == 'Brand Marketing', 'Brand Marketing',
+                                                     np.where(data['Bucket'] == 'Remarketing', 'Remarketing',
+                                                              np.where(data['Bucket'] == 'Deals & Coupons', 'Deals/Coupons',
+                                                                       np.where(data['Bucket'] == 'Whistleout', 'Whistleout', None)))))
+
+            data['Date'] = data['Week']
+
         data['Source'] = i
         search_data = search_data.append(data)
 
     search_data.rename(columns={'From':'Date'}, inplace=True)
 
-    search_data['Week'] = search_data['Date'].apply(lambda x: categorization.mondays(x))
-
     cfv = datafunc.read_cfv_report(path)
     cfv['Source'] = 'CFV'
+
+    buckets_cfv = buckets.set_index(['Campaign', 'Creative'])
+    cfv.set_index(['Campaign', 'Creative'], inplace=True)
+    cfv = pd.merge(cfv, buckets_cfv, how='left', right_index=True, left_index=True)
+    cfv.reset_index(inplace=True)
 
     cfv = custom_variables.custom_variable_columns(cfv)
     cfv = custom_variables.ddr_custom_variables(cfv)
 
     search_data = search_data.append(cfv)
+    search_data['Date'] = pd.to_datetime(search_data['Date'])
+    search_data['Week'] = search_data['Date'].apply(lambda x: categorization.mondays(x))
 
     search_data.fillna(0, inplace=True)
 
