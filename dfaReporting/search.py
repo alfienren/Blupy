@@ -41,7 +41,7 @@ def query_and_cfv_data(path):
             data = pd.merge(data[['campaign_bucket', 'level_2']], data[0],
                             how='left', right_index=True, left_index=True)
 
-            data.rename(columns={data.columns[0]: 'Bucket', data.columns[1]: 'Week'}, inplace=True)
+            data.rename(columns={data.columns[0]: 'Bucket', data.columns[1]: 'From'}, inplace=True)
 
             data['Bucket Class'] = np.where(data['Bucket'].str.contains('DR') == True, 'DR-Brand',
                                             np.where(data['Bucket'] == 'Brand Marketing', 'Brand Marketing',
@@ -49,23 +49,21 @@ def query_and_cfv_data(path):
                                                               np.where(data['Bucket'] == 'Deals & Coupons', 'Deals/Coupons',
                                                                        np.where(data['Bucket'] == 'Whistleout', 'Whistleout', None)))))
 
-            data['Date'] = data['Week']
-
         data['Source'] = i
         search_data = search_data.append(data)
 
     search_data.rename(columns={'From':'Date'}, inplace=True)
 
     cfv = datafunc.read_cfv_report(path)
-    cfv['Source'] = 'CFV'
 
     buckets_cfv = buckets.set_index(['Campaign', 'Creative'])
     cfv.set_index(['Campaign', 'Creative'], inplace=True)
-    cfv = pd.merge(cfv, buckets_cfv, how='left', right_index=True, left_index=True)
-    cfv.reset_index(inplace=True)
+    cfv = pd.merge(cfv, buckets_cfv, how='left', right_index=True, left_index=True).reset_index()
 
     cfv = custom_variables.custom_variable_columns(cfv)
     cfv = custom_variables.ddr_custom_variables(cfv)
+
+    cfv['Source'] = 'CFV'
 
     search_data = search_data.append(cfv)
     search_data['Date'] = pd.to_datetime(search_data['Date'])
