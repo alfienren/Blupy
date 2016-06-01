@@ -2,7 +2,6 @@ from xlwings import Range, Sheet, Workbook
 import pandas as pd
 import numpy as np
 import os
-import sys
 from reporting import datafunc, custom_variables, categorization
 
 
@@ -110,5 +109,22 @@ def generate_search_reporting():
     query_and_cfv_data(wb.fullname)
 
 
+def search_cfv_report():
+    wb = Workbook.caller()
+    wb.save()
 
+    path = wb.fullname
 
+    buckets = pd.read_excel(path, 'Lookup', parse_cols='E:G')
+
+    cfv = datafunc.read_cfv_report(path)
+
+    buckets_cfv = buckets.set_index(['Campaign', 'Creative'])
+    cfv.set_index(['Campaign', 'Creative'], inplace=True)
+    cfv = pd.merge(cfv, buckets_cfv, how='left', right_index=True, left_index=True).reset_index()
+
+    cfv = custom_variables.custom_variable_columns(cfv)
+    cfv = custom_variables.ddr_custom_variables(cfv)
+
+    Sheet('data').clear_contents()
+    datafunc.chunk_df(cfv, 'data', 'A1')
