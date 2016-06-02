@@ -4,6 +4,7 @@ class TabNames:
     site_activity = 'SA_Temp'
     floodlight_variable = 'CFV_Temp'
     qa_tab_name = 'Data_QA_Output'
+    search_output = 'Search_Output'
 
 
 class DrPerformance:

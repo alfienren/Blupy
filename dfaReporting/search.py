@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import os
 from reporting import datafunc, custom_variables, categorization
+from reporting.constants import TabNames
 
 
 def query_and_cfv_data(path):
@@ -86,7 +87,7 @@ def query_and_cfv_data(path):
 
     search_pivoted.rename(columns={'Cost':'Spend', 'Impr':'Impressions'}, inplace=True)
 
-    search_pivoted = categorization.search_lookup(search_pivoted)
+    search_pivoted = categorization.search_bucket_class(search_pivoted)
     search_pivoted = categorization.date_columns(search_pivoted)
 
     datafunc.chunk_df(search_pivoted, 'data', 'A1')
@@ -109,22 +110,118 @@ def generate_search_reporting():
     query_and_cfv_data(wb.fullname)
 
 
-def search_cfv_report():
-    wb = Workbook.caller()
-    wb.save()
-
-    path = wb.fullname
-
+def search_cfv_report(path):
     buckets = pd.read_excel(path, 'Lookup', parse_cols='E:G')
 
     cfv = datafunc.read_cfv_report(path)
+
+    cfv = custom_variables.custom_variable_columns(cfv)
+    cfv = custom_variables.ddr_custom_variables(cfv)
 
     buckets_cfv = buckets.set_index(['Campaign', 'Creative'])
     cfv.set_index(['Campaign', 'Creative'], inplace=True)
     cfv = pd.merge(cfv, buckets_cfv, how='left', right_index=True, left_index=True).reset_index()
 
-    cfv = custom_variables.custom_variable_columns(cfv)
-    cfv = custom_variables.ddr_custom_variables(cfv)
+    cfv = categorization.search_cfv_categories(cfv)
+
+    return cfv
+
+
+def search_cfv_outputs(cfv):
+    bucket_class_table = pd.pivot_table(cfv, index=['Bucket Class'],
+                                        values=['Prepaid Orders', 'Postpaid Orders', 'Orders',
+                                                'Prepaid GAs', 'Postpaid GAs', 'Total GAs'],
+                                        aggfunc=np.sum).reset_index()
+
+    engine_web_team_orders_table = pd.pivot_table(cfv, index=['Web Team'],
+                                           values=['Postpaid Orders', 'Prepaid Orders', 'Orders'],
+                                           aggfunc=np.sum).reset_index()
+
+    total_prepaid_orders, total_postpaid_orders, total_orders = [engine_web_team_orders_table['Prepaid Orders'].sum(),
+                                                                 engine_web_team_orders_table['Postpaid Orders'].sum(),
+                                                                 engine_web_team_orders_table['Prepaid Orders'].sum() +
+                                                                 engine_web_team_orders_table['Postpaid Orders'].sum()]
+
+    prepaid_order_percent = total_prepaid_orders / total_orders
+    postpaid_order_percent = total_postpaid_orders / total_orders
+
+    engine_web_team_ga_table = pd.pivot_table(cfv, index=['Web Team'],
+                                                  values=['Postpaid GAs', 'Prepaid GAs', 'Total GAs'],
+                                                  aggfunc=np.sum).reset_index()
+
+    orders_offset = len(engine_web_team_orders_table)
+    gas_offset = len(engine_web_team_ga_table)
+
+    total_prepaid_gas, total_postpaid_gas, total_gas = [engine_web_team_ga_table['Prepaid GAs'].sum(),
+                                                                 engine_web_team_ga_table['Postpaid GAs'].sum(),
+                                                                 engine_web_team_ga_table['Prepaid GAs'].sum() +
+                                                                 engine_web_team_ga_table['Postpaid GAs'].sum()]
+
+    prepaid_ga_percent = total_prepaid_gas / total_gas
+    postpaid_ga_percent = total_postpaid_gas / total_gas
+
+    Sheet(TabNames.search_output).clear()
+
+    Range(TabNames.search_output, 'A1', index=False).value = bucket_class_table
+    Range(TabNames.search_output, 'K1', index=False).value = \
+        engine_web_team_orders_table[['Web Team', 'Postpaid Orders', 'Prepaid Orders', 'Orders']]
+    Range(TabNames.search_output, 'R1', index=False).value = engine_web_team_ga_table
+
+    Range(TabNames.search_output, 'K2').vertical.offset(orders_offset, 0).value = \
+        'Total Orders', total_prepaid_orders, total_postpaid_orders, total_orders
+
+    Range(TabNames.search_output, 'K2').vertical.offset(orders_offset + 1, 0).value = \
+        'Pre vs. Post Proxy', prepaid_order_percent, postpaid_order_percent, '100%'
+
+    Range(TabNames.search_output, 'K2').vertical.offset(orders_offset + 3, 0).value = \
+        'Web Team Orders', total_orders
+
+    Range(TabNames.search_output, 'R2').vertical.offset(gas_offset, 0).value = \
+        'Total GAs', total_prepaid_gas, total_postpaid_gas, total_gas
+
+    Range(TabNames.search_output, 'R2').vertical.offset(gas_offset + 1, 0).value = \
+        'Pre vs. Post Proxy', prepaid_ga_percent, postpaid_ga_percent, '100%'
+
+    Range(TabNames.search_output, 'R2').vertical.offset(gas_offset + 3, 0).value = \
+        'Web Team eGAs', total_gas
+
+    engine_web_team_orders_table['Percent Total'] = engine_web_team_orders_table['Orders'] / \
+                                                    engine_web_team_orders_table['Orders'].sum()
+
+    engine_web_team_orders_table['Prepaid Proxy'] = engine_web_team_orders_table['Orders'] * prepaid_order_percent
+    engine_web_team_orders_table['Postpaid Proxy'] = engine_web_team_orders_table['Orders'] * postpaid_order_percent
+
+    engine_web_team_orders_table['Site'] = engine_web_team_orders_table['Web Team'].str.replace('DART Search : ', '')
+    engine_web_team_orders_table['Site'] = engine_web_team_orders_table['Site'].str.replace(' Web', '')
+    engine_web_team_orders_table['Site'] = \
+        engine_web_team_orders_table['Site'].str.replace('DART Search: Whistleout', 'Whistleout')
+
+    Range(TabNames.search_output, 'K2', index=False).vertical.offset(orders_offset + 5, 0).value = \
+        engine_web_team_orders_table[['Site', 'Percent Total', 'Prepaid Proxy', 'Postpaid Proxy', 'Orders']]
+
+    engine_web_team_ga_table['Percent Total'] = engine_web_team_ga_table['Total GAs'] / \
+                                                engine_web_team_ga_table['Total GAs'].sum()
+
+    engine_web_team_ga_table['Prepaid Proxy'] = engine_web_team_ga_table['Total GAs'] * prepaid_ga_percent
+    engine_web_team_ga_table['Postpaid Proxy'] = engine_web_team_ga_table['Total GAs'] * postpaid_ga_percent
+
+    engine_web_team_ga_table['Site'] = engine_web_team_ga_table['Web Team'].str.replace('DART Search : ', '')
+    engine_web_team_ga_table['Site'] = engine_web_team_ga_table['Site'].str.replace(' Web', '')
+    engine_web_team_ga_table['Site'] = \
+        engine_web_team_ga_table['Site'].str.replace('DART Search: Whistleout', 'Whistleout')
+
+    Range(TabNames.search_output, 'R2', index=False).vertical.offset(orders_offset + 5, 0).value = \
+        engine_web_team_ga_table[['Site', 'Percent Total', 'Prepaid Proxy', 'Postpaid Proxy', 'Total GAs']]
 
     Sheet('data').clear_contents()
     datafunc.chunk_df(cfv, 'data', 'A1')
+
+
+def generate_search_cfv_report():
+    wb = Workbook.caller()
+    wb.save()
+
+    cfv = search_cfv_report(wb.fullname)
+
+    search_cfv_outputs(cfv)
+
