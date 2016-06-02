@@ -236,13 +236,26 @@ def categorize_report(data, adv='tmo'):
     return data
 
 
-def search_lookup(data):
+def search_bucket_class(data):
     lookup_table = pd.DataFrame(Range('Lookup', 'A1').table.value,
                                 columns=Range('Lookup', 'A1').horizontal.value)
     lookup_table.drop(0, inplace=True)
     lookup_table.drop_duplicates(keep='last', inplace=True)
 
     data = pd.merge(data, lookup_table, how='left', on='Bucket Class')
+
+    return data
+
+
+def search_cfv_categories(data):
+    web_team = '|'.join(list(['DR-Brand', 'Remarketing', 'PLAs', 'Affiliate', 'Whistleout']))
+
+    data['Pre vs. Post'] = data['Site (DFA)'] + ' ' + data['Product Subcategory']
+    data['Web Team Post/Pre Paid'] = np.where(data['Bucket Class'].str.match(web_team) == True,
+                                              data['Site (DFA)'] + data['Pre vs. Post'] + ' Web', None)
+
+    data['Bucket Class Pre vs. Post'] = data['Bucket Class'] + ' ' + data['Product Subcategory']
+    data['Web Team'] = np.where(data['Bucket Class'].str.match(web_team) == True, data['Site (DFA)'] + ' Web', None)
 
     return data
 
