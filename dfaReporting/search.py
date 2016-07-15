@@ -21,8 +21,8 @@ def query_and_cfv_data(path):
             dr_brand = '|'.join(list(['DDR_B_High_Volume', 'DDR_B_Bring']))
             remarket = '|'.join(list(['REM_']))
             b_marketing = '|'.join(list(['DDR_B_']))
-            data.rename(columns={'Campaign name':'Campaign', 'Ad extension property value':'Sitelink display text'},
-                        inplace=True)
+            data.rename(columns={'Campaign name':'Campaign', 'Ad extension property value':'Sitelink display text',
+                                 'Impressions': 'Impr', 'Spend': 'Cost'}, inplace=True)
 
             data = data[(data['Sitelink display text'].str.contains('My T-Mobile') == True)
                         | (data['Sitelink display text'].str.contains('for Business') == True)]
@@ -46,8 +46,10 @@ def query_and_cfv_data(path):
             data['Bucket Class'] = np.where(data['Bucket'].str.contains('DR') == True, 'DR-Brand',
                                             np.where(data['Bucket'] == 'Brand Marketing', 'Brand Marketing',
                                                      np.where(data['Bucket'] == 'Remarketing', 'Remarketing',
-                                                              np.where(data['Bucket'] == 'Deals & Coupons', 'Deals/Coupons',
-                                                                       np.where(data['Bucket'] == 'Whistleout', 'Whistleout', None)))))
+                                                              np.where(data['Bucket'] == 'Deals & Coupons',
+                                                                       'Deals/Coupons',
+                                                                       np.where(data['Bucket'] == 'Whistleout',
+                                                                                'Whistleout', None)))))
 
         data['Source'] = i
         search_data = search_data.append(data)
@@ -85,7 +87,7 @@ def query_and_cfv_data(path):
     search_pivoted['Location Intent'] = search_pivoted['Location Intent_temp'] + search_pivoted['Location Intent_temp2']
     search_pivoted.drop(['Location Intent_temp', 'Location Intent_temp2'], axis=1, inplace=True)
 
-    search_pivoted.rename(columns={'Cost':'Spend', 'Impr':'Impressions'}, inplace=True)
+    search_pivoted.rename(columns={'Cost': 'Spend', 'Impr': 'Impressions'}, inplace=True)
 
     search_pivoted = categorization.search_bucket_class(search_pivoted)
     search_pivoted = categorization.date_columns(search_pivoted)
@@ -213,9 +215,6 @@ def search_cfv_outputs(cfv):
     Range(TabNames.search_output, 'R2', index=False).vertical.offset(orders_offset + 5, 0).value = \
         engine_web_team_ga_table[['Site', 'Percent Total', 'Prepaid Proxy', 'Postpaid Proxy', 'Total GAs']]
 
-    Sheet('data').clear_contents()
-    datafunc.chunk_df(cfv, 'data', 'A1')
-
 
 def generate_search_cfv_report():
     wb = Workbook.caller()
@@ -224,4 +223,16 @@ def generate_search_cfv_report():
     cfv = search_cfv_report(wb.fullname)
 
     search_cfv_outputs(cfv)
+
+    Sheet('data').clear_contents()
+
+    unneeded_cols = ['Average CPC', 'Avg CPC', 'CPA', 'CTR', 'CTR (%)', 'Conversion rate (%)', 'Creative Pixel Size',
+                     'Transaction Count', 'Creative Type', 'Creative Groups 2', 'Conversions', 'Ad extension type id',
+                     'Ad', 'Ad extension ID']
+
+    for i in unneeded_cols:
+        if i in list(cfv.columns):
+            cfv.drop(i, axis=1, inplace=True)
+
+    datafunc.chunk_df(cfv, 'data', 'A1')
 

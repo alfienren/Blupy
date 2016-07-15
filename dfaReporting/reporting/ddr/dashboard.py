@@ -2,8 +2,8 @@ import numpy as np
 import pandas as pd
 from xlwings import Range, Sheet, Workbook
 
+import reporting.datafunc
 from reporting import datafunc
-from reporting.ddr import client_raw_data
 
 
 def load_raw_dr_data():
@@ -16,11 +16,11 @@ def load_raw_dr_data():
 
 
 def dr_display_data(ddr):
-    ddr_columns = ['Campaign', 'Week', 'Site', 'Message Tactic', 'Placement Messaging Type', #'Message Offer',
-                   'A Actions', 'B Actions', 'C Actions', 'D Actions', 'Store Locator Visits', 'Awareness Actions',
-                   'Consideration Actions', 'Traffic Actions', 'View-through Conversions', 'Click-through Conversions',
-                   'NTC Media Cost', 'NET Media Cost', 'Impressions', 'Clicks', 'Orders', 'Prepaid Orders',
-                   'Postpaid Orders', 'Total GAs', 'Prepaid GAs', 'Postpaid GAs', 'Prepaid SIMs', 'Postpaid SIMs',
+    ddr_columns = ['Campaign', 'Week', 'Site', 'Message Tactic', 'Placement Messaging Type', 'A Actions', 'B Actions',
+                   'C Actions', 'D Actions', 'Store Locator Visits', 'Awareness Actions', 'Consideration Actions',
+                   'Traffic Actions', 'View-through Conversions', 'Click-through Conversions', 'NTC Media Cost',
+                   'NET Media Cost', 'Impressions', 'Clicks', 'Orders', 'Prepaid Orders', 'Postpaid Orders',
+                   'Total GAs', 'Prepaid GAs', 'Postpaid GAs', 'Prepaid SIMs', 'Postpaid SIMs',
                    'Prepaid Mobile Internet', 'Postpaid Mobile Internet', 'Prepaid Phone', 'Postpaid Phone',
                    'DDR Add-a-Line', 'DDR New Devices']
 
@@ -122,5 +122,5 @@ def generate_data():
         Sheet('merged').clear()
         datafunc.chunk_df(appended_data, 'merged', 'A1')
 
-    client_raw_data.search_data_client(ddr_search_data, save_path)
-    client_raw_data.display_data_client(ddr_data, save_path)
+    reporting.datafunc.search_data_client(ddr_search_data, save_path)
+    reporting.datafunc.display_data_client(ddr_data, save_path)

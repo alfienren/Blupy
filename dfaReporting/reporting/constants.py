@@ -1,3 +1,4 @@
+from xlwings import Range
 
 
 class TabNames:
@@ -15,3 +16,7 @@ class DrPerformance:
     aggregate_column = 'H'
 
 
+class StaticPaths:
+    offline = Range('Ref', 'A3').value
+    online = Range('Ref', 'A4').value
+    social = Range('Ref', 'A5').value

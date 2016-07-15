@@ -50,11 +50,11 @@ def generate_weekly_reporting():
 def output_flat_rate_report():
     Workbook.caller()
 
-    cost_corrections.flat_rate_corrections()
+    qa.flat_rate_corrections()
 
 
 def pacing_report():
-    pacing.site_pacing_report()
+    qa.site_pacing_report()
 
 
 def cost_feed():
@@ -70,11 +70,11 @@ def cost_feed():
         ddr = pd.read_excel(ddrpath, 'data', parse_cols='X, U, AH')
         ddr['Date'] = pd.to_datetime(ddr['Date'])
 
-        data = pd.read_excel(path, 'data', parse_cols= 'B, AE, AH')
+        data = pd.read_excel(path, 'data', parse_cols= 'B, AI, AL')
         data = data.append(ddr)
 
     else:
-        data = pd.read_excel(path, 'data', parse_cols= 'B, AE, AH')
+        data = pd.read_excel(path, 'data', parse_cols= 'B, AI, AL')
 
     end = data['Date'].max()
     start = end - datetime.timedelta(days=6)

@@ -1,8 +1,8 @@
 from xlwings import Range, Workbook, Application
 
+import reporting.ddr.performance
 from reporting import custom_variables, datafunc, categorization, floodlights, clickthroughs, report_columns
 from reporting.ddr import devices, dashboard
-from reporting.ddr.performance import generate_emails, tables
 
 
 def dr_reporting():
@@ -69,7 +69,9 @@ def generate_dashboard():
 
 def emails_to_publishers():
     pacing_wb = Workbook.caller()
-    generate_emails.generate_publisher_emails(tables.aggregated(), tables.contacts(), tables.brand_remessaging())
-    tables.tables_for_emails(tables.site_tactic())
+    reporting.ddr.performance.generate_publisher_emails(reporting.ddr.performance.aggregated(),
+                                                        reporting.ddr.performance.contacts(),
+                                                        reporting.ddr.performance.brand_remessaging())
+    reporting.ddr.performance.tables_for_emails(reporting.ddr.performance.site_tactic())
 
     Application(wkb=pacing_wb).xl_app.Run('Format_Tables')

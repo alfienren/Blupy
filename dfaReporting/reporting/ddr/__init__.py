@@ -1,1 +1,1 @@
-__all__ = ['client_raw_data', 'dashboard', 'forecast', 'devices']
+__all__ = ['dashboard', 'devices', 'performance']

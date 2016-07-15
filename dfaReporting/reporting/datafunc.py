@@ -1,5 +1,6 @@
 import re
 
+import numpy as np
 import pandas as pd
 from xlwings import Range, Sheet
 
@@ -57,3 +58,28 @@ def merge_past_data(data, columns, path):
         Sheet('data').clear_contents()
         chunk_df(appended_data, 'data', 'A1')
 
+
+def open_planned_media_report():
+    plan_sheet = Range('Action_Reference', 'AE1').value
+    planned = pd.read_csv(plan_sheet)
+
+    return planned
+
+
+def search_data_client(search_data, save_path):
+    column_order = ['Search Engine', 'Brand DDR Bucket', 'Week', 'NET Media Cost', 'Impressions', 'Clicks', 'Orders',
+                    'Plans', 'Prepaid Orders', 'Consideration Actions', 'Add-A-Line', 'Total GAs', 'New Total eGAs',
+                    'Telesales GAs']
+
+    client_data = search_data[column_order]
+    client_data = client_data[client_data['Week'] >= '1/1/2016']
+
+    client_data['Brand DDR Bucket']  = np.where(pd.isnull(client_data['Brand DDR Bucket']) == True,
+                                                client_data['Search Engine'],
+                                                client_data['Brand DDR Bucket'])
+
+    client_data.to_csv(save_path + '\\' + 'DR_Search_Raw_Data.txt', sep='\t', encoding='utf-8', index=False)
+
+
+def display_data_client(dr_data, save_path):
+    dr_data.to_csv(save_path + '\\' + 'DDR_Raw_Data.txt', sep='\t', encoding='utf-8', index=False)
