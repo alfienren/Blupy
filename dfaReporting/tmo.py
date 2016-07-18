@@ -1,6 +1,6 @@
-from xlwings import Range, Workbook, Application
+from xlwings import Range, Workbook, Sheet, Application
 from reporting import *
-from outputs import *
+from reporting.cross_channel import *
 
 import pandas as pd
 import datetime
@@ -90,3 +90,20 @@ def cost_feed():
     data = pd.DataFrame(data.sum().reset_index())
 
     data.to_csv(output_path, sep= '|', index= False, encoding= 'utf-8')
+
+
+def cross_channel_dashboard():
+    wb = Workbook.caller()
+
+    dma = sources.dma_lookup()
+    competitor = sources.competitors(dma)
+
+    data = dashboard.merge_channel_data(sources.online(), sources.offline(), sources.search(), sources.social(),
+                                        sources.tmo_inputs())
+
+    data_updates = {'Competitive' : competitor, 'merged_channels' : data[0], 'tmo_volume' : data[1]}
+    
+    for i, j in data_updates.iteritems():
+        Sheet(i).clear_contents()
+        datafunc.chunk_df(j, i, 'A1')
+
