@@ -20,3 +20,6 @@ class StaticPaths:
     offline = Range('Ref', 'A3').value
     online = Range('Ref', 'A4').value
     social = Range('Ref', 'A5').value
+    search = Range('Ref', 'B2').value
+    tmo_inputs = Range('Ref', 'B3').value
+    adscope = Range('Ref', 'B4').value
