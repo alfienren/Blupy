@@ -3,6 +3,7 @@ from reporting import *
 from reporting.cross_channel import *
 
 import pandas as pd
+import numpy as np
 import datetime
 import os
 
@@ -93,16 +94,32 @@ def cost_feed():
 
 
 def cross_channel_dashboard():
-    wb = Workbook.caller()
+    Workbook.caller()
+
+    search_path, tmo_inputs_path, adscope_path, online_path, social_path, offline_path = Range('Ref', 'B2:B7').value
 
     dma = sources.dma_lookup()
-    competitor = sources.competitors(dma)
+    competitor = sources.competitors(dma, adscope_path)
 
-    data = dashboard.merge_channel_data(sources.online(), sources.offline(), sources.search(), sources.social(),
-                                        sources.tmo_inputs())
+    search_dat = sources.search(search_path)
+
+    search_impressions = pd.pivot_table(search_dat, index=['Week'],
+                                                values=['Branded Search Impressions'], aggfunc=np.sum)
+
+    data = dashboard.merge_channel_data(sources.online(online_path), sources.offline(dma, offline_path,
+                                                                                     search_impressions),
+                                        search_dat, sources.social(social_path),
+                                        sources.tmo_inputs(tmo_inputs_path))
 
     data_updates = {'Competitive' : competitor, 'merged_channels' : data[0], 'tmo_volume' : data[1]}
-    
+
+    channels = data[0]
+    volume = data[1]
+    channels.to_excel('C:/Users/aarschle1/Desktop/cross_channel_test.xlsx')
+    volume.to_excel('C:/Users/aarschle1/Desktop/cross_channel_volume.xlsx')
+
+    #data['Week'] = pd.to_datetime(data['Week'])
+
     for i, j in data_updates.iteritems():
         Sheet(i).clear_contents()
         datafunc.chunk_df(j, i, 'A1')
