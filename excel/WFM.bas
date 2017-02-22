@@ -79,3 +79,11 @@ Sub Call_WFM_Reporting()
 RunPython ("import main; main.generate_wfm_reporting()")
 
 End Sub
+
+Sub WFM_Reporting()
+
+Call Process_Raw_Reports
+Call Postprocess_Report
+Call Call_WFM_Reporting
+
+End Sub
