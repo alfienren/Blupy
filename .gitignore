@@ -1,5 +1,6 @@
 $ cat .gitignore
 
+config.json
 _/
 test/
 docs/source/_static/fonts
