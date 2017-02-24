@@ -1,7 +1,6 @@
 from analytics.data_refresh import advertisers
 from analytics.reporting import dashboards, qa
 from dcm.trafficking import advertiser, floodlights, pixels
-from http.urls import URLs
 
 
 def tmobile_weekly_reporting():
@@ -53,17 +52,9 @@ def piggyback_pixels():
     pixels.Pixels().implement()
 
 
+def delete_pixels():
+    pixels.Pixels().delete()
+
+
 def list_campaigns():
     advertiser.Advertiser().list_campaign_names_ids()
-
-
-#################################### URLs ##############################
-
-def get_url_descriptions():
-    URLs().url_descriptions()
-
-if __name__ == 'floodlight_urls':
-    URLs().list_floodlights_from_urls()
-
-if __name__ == 'get_url_descriptions':
-    URLs().url_descriptions()
