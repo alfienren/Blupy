@@ -17,8 +17,6 @@ from analytics.data_refresh.data import DataMethods
 class URLs(object):
 
     def __init__(self):
-        super(URLs, self).__init__()
-
         self.save_path = os.path.join('C:', 'Users', getpass.getuser(), 'Desktop', 'sitemap.xml')
         #os.path.join(self.path[:self.path.rindex('\\')], 'sitemap.xml')
         self.sitemap_url = "https://www.t-mobile.com/sitemap.xml"
@@ -50,23 +48,58 @@ class URLs(object):
         Sheet(DCM_API().SITEMAP).autofit()
 
     @staticmethod
-    def url_list_command_prompt():
-        url_list = raw_input('Enter path to list of URLs (.csv or .xlsx). \n'
-                             'Must include only one tab with list of URLs in column A: ')
-
-        url_list = url_list.encode('string-escape')
-
-        if url_list[-4:] == '.csv':
-            urls = pd.read_csv(url_list, index_col=None).ix[:, 0].tolist()
-        else:
-            urls = pd.read_excel(url_list, index_col=None).ix[:, 0].tolist()
-
-        driver_path = raw_input('The webdriver is saved here: \n'
-                                'S:\SEA-Media\Analytics\T-Mobile\_\drivers \n'
-                                'Copy the .exe to another location and paste the full path.')
-
+    def list_floodlights_from_urls(urls, driver_path):
+        # url_list = raw_input('Enter path to list of URLs (.csv or .xlsx). \n'
+        #                      'Must include only one tab with list of URLs in column A: ')
+        #
+        # url_list = url_list.encode('string-escape')
+        #
+        # if url_list[-4:] == '.csv':
+        #     urls = pd.read_csv(url_list, index_col=None).ix[:, 0].tolist()
+        # else:
+        #     urls = pd.read_excel(url_list, index_col=None).ix[:, 0].tolist()
+        #
+        # driver_path = raw_input('The webdriver is saved here: \n'
+        #                         'S:\SEA-Media\Analytics\T-Mobile\_\drivers \n'
+        #                         'Copy the .exe to another location and paste the full path.')
+        #
         os.environ['webdriver.chrome.driver'] = driver_path
         driver = webdriver.Chrome(driver_path)
+
+        floodlights = []
+
+        for url in urls:
+            try:
+                driver.get(url)
+            except WebDriverException:
+                pass
+
+            time.sleep(10)
+            iframes = driver.find_elements_by_xpath('//iframe')
+
+            fls = []
+            for i in iframes:
+                src = i.get_attribute('src')
+                if 'fls.doubleclick.net' in src:
+                    fls.append(src)
+
+            joined = []
+            for j in fls:
+                split = j.split(';')
+                joined.append(';'.join(list(split[0:4])))
+
+            for k in joined:
+                if k == 'http://998766.fls.doubleclick.net/activityi':
+                    joined.remove(k)
+
+            if url != driver.current_url:
+                floodlights.append([url, joined])
+            else:
+                floodlights.append([url, joined, driver.current_url])
+
+        floodlights = pd.DataFrame(floodlights)
+
+        return floodlights
 
     @staticmethod
     def url_descriptions():
@@ -117,57 +150,21 @@ class URLs(object):
             save_path = os.path.join(url_list[:url_list.rindex('\\')], 'url_floodlights.csv')
             url_descriptions.to_csv(save_path, encoding='utf-8', index=False)
 
-    @staticmethod
-    def list_floodlights_from_urls():
-        url_list = raw_input('Enter path to list of URLs (.csv or .xlsx). \n'
-                             'Must include only one tab with list of URLs in column A: ')
-
-        url_list = url_list.encode('string-escape')
-
-        if url_list[-4:] == '.csv':
-            urls = pd.read_csv(url_list, index_col=None).ix[:, 0].tolist()
-        else:
-            urls = pd.read_excel(url_list, index_col=None).ix[:, 0].tolist()
-
-        driver_path = raw_input('The webdriver is saved here: \n'
-                                'S:\SEA-Media\Analytics\T-Mobile\_\drivers \n'
-                                'Copy the .exe to another location and paste the full path.')
-
-        os.environ['webdriver.chrome.driver'] = driver_path
-        driver = webdriver.Chrome(driver_path)
-
-        floodlights = []
-
-        for url in urls:
-            try:
-                driver.get(url)
-            except WebDriverException:
-                pass
-
-            time.sleep(10)
-            iframes = driver.find_elements_by_xpath('//iframe')
-
-            fls = []
-            for i in iframes:
-                src = i.get_attribute('src')
-                if 'fls.doubleclick.net' in src:
-                    fls.append(src)
-
-            joined = []
-            for j in fls:
-                split = j.split(';')
-                joined.append(';'.join(list(split[0:4])))
-
-            for k in joined:
-                if k == 'http://998766.fls.doubleclick.net/activityi':
-                    joined.remove(k)
-
-            if url != driver.current_url:
-                floodlights.append([url, joined])
-            else:
-                floodlights.append([url, joined, driver.current_url])
-
-        floodlights = pd.DataFrame(floodlights)
-
-        save_path = os.path.join(url_list[:url_list.rindex('\\')], 'url_floodlights.csv')
-        floodlights.to_csv(save_path, encoding='utf-8', index=False)
+    # @staticmethod
+    # def url_list_command_prompt():
+    #     url_list = raw_input('Enter path to list of URLs (.csv or .xlsx). \n'
+    #                          'Must include only one tab with list of URLs in column A: ')
+    #
+    #     url_list = url_list.encode('string-escape')
+    #
+    #     if url_list[-4:] == '.csv':
+    #         urls = pd.read_csv(url_list, index_col=None).ix[:, 0].tolist()
+    #     else:
+    #         urls = pd.read_excel(url_list, index_col=None).ix[:, 0].tolist()
+    #
+    #     driver_path = raw_input('The webdriver is saved here: \n'
+    #                             'S:\SEA-Media\Analytics\T-Mobile\_\drivers \n'
+    #                             'Copy the .exe to another location and paste the full path.')
+    #
+    #     os.environ['webdriver.chrome.driver'] = driver_path
+    #     driver = webdriver.Chrome(driver_path)
