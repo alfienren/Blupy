@@ -13,13 +13,30 @@ class ReportingAPI(configFile):
         auth = (self.configs['placed_api']['credentials']['username'],
                 self.configs['placed_api']['credentials']['password'])
 
-        tmo_el, tmo_sl, metro_el, metro_sl = self.configs['placed_api']['endpoints']['tmo_el'], \
-                                             self.configs['placed_api']['endpoints']['tmo_sl'], \
-                                             self.configs['placed_api']['endpoints']['metro_el'], \
-                                             self.configs['placed_api']['endpoints']['metro_sl']
+        base_tmo_el, base_tmo_sl, base_metro_el, base_metro_sl = self.configs['placed_api']['endpoints']["base"][
+                                                                     'tmo_el'], \
+                                                                 self.configs['placed_api']['endpoints']["base"][
+                                                                     'tmo_sl'], \
+                                                                 self.configs['placed_api']['endpoints']["base"][
+                                                                     'metro_el'], \
+                                                                 self.configs['placed_api']['endpoints']["base"][
+                                                                     'metro_sl']
 
-        data_endpoints = [tmo_el, tmo_sl, metro_el, metro_sl]
-        endpoint_names = ['TMO_EL', 'TMO_SL', 'Metro_EL', 'Metro_SL']
+        prospect_tmo_el, prospect_tmo_sl, prospect_metro_el, prospect_metro_sl = \
+        self.configs['placed_api']['endpoints']["prospect"][
+            'tmo_el'], \
+        self.configs['placed_api']['endpoints']["prospect"][
+            'tmo_sl'], \
+        self.configs['placed_api']['endpoints']["prospect"][
+            'metro_el'], \
+        self.configs['placed_api']['endpoints']["prospect"][
+            'metro_sl']
+
+        base_data_endpoints = [base_tmo_el, base_tmo_sl, base_metro_el, base_metro_sl]
+        prospect_data_endpoints = [prospect_tmo_el, prospect_tmo_sl, prospect_metro_el, prospect_metro_sl]
+        data_endpoints = base_data_endpoints + prospect_data_endpoints
+        endpoint_names = ['Base_TMO_EL', 'Base_TMO_SL', 'Base_Metro_EL', 'Base_Metro_SL',
+                          'Prospect_TMO_EL', 'Prospect_TMO_SL', 'Prospect_Metro_EL', 'Prospect_Metro_SL']
 
         placed_data = pd.DataFrame()
 
