@@ -7,6 +7,7 @@ from xlwings import Workbook, Range
 
 from dcm.dcm_api import DCM_API
 from analytics.data_refresh.data import DataMethods
+from config import configFile
 
 
 class Advertiser(DCM_API):
@@ -14,19 +15,18 @@ class Advertiser(DCM_API):
     def __init__(self):
         super(Advertiser, self).__init__()
 
-    @staticmethod
-    def advertiser_id(tab, cell):
+    def advertiser_id(self, tab, cell):
         if Range(tab, cell).value == 'T-Mobile':
-            adv_id = '998766'
+            adv_id = self.configs['advertiser_ids']['T-Mobile']
         elif Range(tab, cell).value == 'MetroPCS':
-            adv_id = '4348461'
+            adv_id = self.configs['advertiser_ids']['MetroPCS']
         else:
             sys.exit('An Advertiser must be selected')
 
         return adv_id
 
     def list_campaign_names_ids(self):
-        adv_id = Advertiser.advertiser_id(self.FLOODLIGHT_INFO_LIST, 'I1')
+        adv_id = Advertiser().advertiser_id(self.FLOODLIGHT_INFO_LIST, 'I1')
 
         campaigns = self.service.campaigns().list(profileId=self.prof_id, advertiserIds=adv_id,
                                           fields='campaigns(id,name),nextPageToken').execute()
@@ -40,7 +40,7 @@ class Advertiser(DCM_API):
                                 columns=Range(self.TRAFFIC_SHEET, 'O1').horizontal.value)
         camp_ids.drop(0, inplace=True)
 
-        adv_id = Advertiser.advertiser_id(self.TRAFFIC_SHEET, 'I1')
+        adv_id = Advertiser().advertiser_id(self.TRAFFIC_SHEET, 'I1')
         placements_json = self.service.placements()
         request = placements_json.list(profileId=self.prof_id,
                                        advertiserIds=adv_id,

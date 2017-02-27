@@ -1,1 +1,1 @@
-__all__ = ['advertiser', 'floodlights', 'pixels', 'sitemaps', 'urls']
+__all__ = ['advertiser', 'floodlights', 'pixels']

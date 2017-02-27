@@ -4,7 +4,7 @@ import httplib2
 import numpy as np
 import pandas as pd
 from pandas.io.json import json_normalize
-from xlwings import Range, Workbook
+from xlwings import Range
 
 from dcm.dcm_api import DCM_API
 from analytics.data_refresh.data import DataMethods
@@ -40,9 +40,9 @@ class Floodlights(DCM_API):
 
     def get(self):
         if Range(self.FLOODLIGHT_INFO_LIST, 'I1').value == 'T-Mobile':
-            adv_id = '998766'
+            adv_id = self.configs['advertiser_ids']['T-Mobile']
         elif Range(self.FLOODLIGHT_INFO_LIST, 'I1').value == 'MetroPCS':
-            adv_id = '4348461'
+            adv_id = self.configs['advertiser_ids']['MetroPCS']
         else:
             sys.exit('An Advertiser must be selected')
 
@@ -102,11 +102,12 @@ class Floodlights(DCM_API):
 
     def generate_all_tags(self):
         if Range(DCM_API().GENERATE_FLOODLIGHT_TAGS, 'I1').value == 'T-Mobile':
-            adv_id = '998766'
+            adv_id = self.configs['advertiser_ids']['T-Mobile']
         elif Range(DCM_API().GENERATE_FLOODLIGHT_TAGS, 'I1').value == 'MetroPCS':
-            adv_id = '4348461'
+            adv_id = self.configs['advertiser_ids']['MetroPCS']
         elif Range(DCM_API().GENERATE_FLOODLIGHT_TAGS, 'I1').value == 'Both':
-            adv_id = ['998766', '4348461']
+            adv_id = [self.configs['advertiser_ids']['T-Mobile'],
+                      self.configs['advertiser_ids']['MetroPCS']]
         else:
             sys.exit('An Advertiser must be selected')
 
