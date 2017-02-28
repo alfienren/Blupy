@@ -142,8 +142,6 @@ class DrDashboard(DataMethods):
         dr_data.to_csv(self.save_path + '\\' + 'DDR_Raw_Data.txt', sep='\t', encoding='utf-8', index=False)
 
 
-
-
 class CrossChannel(DataMethods):
 
     def __init__(self):

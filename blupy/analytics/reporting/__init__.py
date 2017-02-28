@@ -1,1 +1,1 @@
-__all__ = ['cross_environment', 'dashboards', 'qa']
+__all__ = ['cross_environment', 'dashboards', 'ias', 'qa']
