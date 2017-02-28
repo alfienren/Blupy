@@ -1,5 +1,5 @@
 from analytics.data_refresh import advertisers
-from analytics.reporting import dashboards, qa
+from analytics.reporting import dashboards, qa, ias
 from dcm.trafficking import advertiser, floodlights, pixels
 
 
@@ -58,3 +58,9 @@ def delete_pixels():
 
 def list_campaigns():
     advertiser.Advertiser().list_campaign_names_ids()
+
+
+############################## IAS ####################################
+
+def merge_ias():
+    ias.IASReporting().download_data()
