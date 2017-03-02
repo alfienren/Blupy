@@ -17,7 +17,7 @@ class IASReporting(DataMethods):
 
         sheets = Sheet.all()[:-1]
         for i in sheets:
-            c = Range(i, 'A100').offset(0, 1)
+            c = Range(i, 'A50').offset(0, 1)
             cell_range = Range(Range.get_address(c.current_region))
             col = string.uppercase[cell_range.column - 1]
             row = str(cell_range.row)
@@ -26,13 +26,23 @@ class IASReporting(DataMethods):
             d = pd.DataFrame(Range(i, cell).table.value,
                               columns=Range(i, cell).horizontal.value)
             d.drop(0, inplace=True)
+            d.fillna(0, inplace=True)
 
             if 'External Placement ID' in d.columns:
                 del d['External Placement ID']
             if 'AdServer Placement ID' in d.columns:
                 del d['AdServer Placement ID']
             if 'Publisher Name' in d.columns:
-                d.rename(columns={'Publisher Name':'Media Partner Name'}, inplace=True)
+                d.rename(columns={'Publisher Name': 'Media Partner Name'}, inplace=True)
+
+            if i.name == 'Firewall Activity':
+                block_status = d[0:7]
+                block_status.drop_duplicates(inplace=True)
+                block_status.set_index(['Campaign Name', 'Media Partner Name', 'Placement Name'], inplace=True)
+                d.drop([col for col in d.columns if 'Blocking Status' in col], axis=1, inplace=True)
+
+            if i.name == 'Traffic by Country':
+                d.drop(d.columns[d.sum() > 1000], axis=1, inplace=True)
 
             if data.empty == True:
                 data = data.append(d)
@@ -40,6 +50,10 @@ class IASReporting(DataMethods):
                 data.set_index(['Date', 'Campaign Name', 'Media Partner Name', 'Placement Name'], inplace=True)
                 d.set_index(['Date', 'Campaign Name', 'Media Partner Name', 'Placement Name'], inplace=True)
                 data = pd.merge(data, d, how='left', left_index=True, right_index=True).reset_index()
+
+        #if block_status.empty != True:
+        #    data.set_index(['Campaign Name', 'Media Partner Name', 'Placement Name'], inplace=True)
+        #    data = pd.merge(data, block_status, how='left', right_index=True, left_index=True).reset_index()
 
         self.wb.set_current()
 
@@ -51,4 +65,4 @@ class IASReporting(DataMethods):
             data.drop_duplicates(inplace=True)
             DataMethods().chunk_df(data, data_sheet, 'A1')
 
-        wb2.close()
+        #wb2.close()
