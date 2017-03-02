@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 from xlwings import Range, Workbook, Sheet
 
-from analytics.data_refresh.categorization import Categorization
+from analytics.data.categorization import Categorization
 
 
 class DataMethods(object):

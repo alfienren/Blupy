@@ -6,7 +6,7 @@ from pandas.io.json import json_normalize
 from xlwings import Workbook, Range
 
 from dcm.dcm_api import DCM_API
-from analytics.data_refresh.data import DataMethods
+from analytics.data.io import DataMethods
 from config import configFile
 
 

@@ -1,10 +1,10 @@
 import arrow
 import numpy as np
 import pandas as pd
-from analytics.data_refresh.data import DataMethods
+from analytics.data.io import DataMethods
 from xlwings import Sheet, Range, Workbook
 
-from analytics.data_refresh.categorization import Categorization
+from analytics.data.categorization import Categorization
 
 
 class QA(object):

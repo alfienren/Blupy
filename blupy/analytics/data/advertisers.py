@@ -8,7 +8,7 @@ from xlwings import Workbook, Range, Sheet
 
 from analytics.reporting.qa import QA
 from categorization import Categorization
-from data import DataMethods
+from io import DataMethods
 from floodlights import Floodlights
 
 

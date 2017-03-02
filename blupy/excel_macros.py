@@ -1,4 +1,4 @@
-from analytics.data_refresh import advertisers
+from analytics.data import advertisers
 from analytics.reporting import dashboards, qa, ias
 from dcm.trafficking import advertiser, floodlights, pixels
 

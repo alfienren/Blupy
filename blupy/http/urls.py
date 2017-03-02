@@ -8,17 +8,16 @@ from pandas import read_json
 from pandas.io.json import json_normalize
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException, NoSuchElementException
-from xlwings import Workbook, Sheet
+from xlwings import Sheet
 from xmlutils.xml2json import xml2json
 
 from dcm.dcm_api import DCM_API
-from analytics.data_refresh.data import DataMethods
+from analytics.data.io import DataMethods
 
 class URLs(object):
 
     def __init__(self):
         self.save_path = os.path.join('C:', 'Users', getpass.getuser(), 'Desktop', 'sitemap.xml')
-        #os.path.join(self.path[:self.path.rindex('\\')], 'sitemap.xml')
         self.sitemap_url = "https://www.t-mobile.com/sitemap.xml"
 
     def tmobile_sitemap(self):
@@ -32,7 +31,6 @@ class URLs(object):
 
         json_path = os.path.join(self.save_path[:self.save_path.rindex('\\')], 'sitemap.json')
         xml_convert = xml2json(self.save_path, json_path, encoding='utf-8')
-
         xml_convert.convert()
 
         clean_sitemap = read_json(json_path)
@@ -131,7 +129,6 @@ class URLs(object):
                     title, description = driver.find_element_by_xpath("//meta[@name='title']").get_attribute('content'), \
                                          driver.find_element_by_xpath("//meta[@name='description']").get_attribute(
                                              'content')
-
                 except NoSuchElementException:
                     pass
 
@@ -149,22 +146,3 @@ class URLs(object):
 
             save_path = os.path.join(url_list[:url_list.rindex('\\')], 'url_floodlights.csv')
             url_descriptions.to_csv(save_path, encoding='utf-8', index=False)
-
-    # @staticmethod
-    # def url_list_command_prompt():
-    #     url_list = raw_input('Enter path to list of URLs (.csv or .xlsx). \n'
-    #                          'Must include only one tab with list of URLs in column A: ')
-    #
-    #     url_list = url_list.encode('string-escape')
-    #
-    #     if url_list[-4:] == '.csv':
-    #         urls = pd.read_csv(url_list, index_col=None).ix[:, 0].tolist()
-    #     else:
-    #         urls = pd.read_excel(url_list, index_col=None).ix[:, 0].tolist()
-    #
-    #     driver_path = raw_input('The webdriver is saved here: \n'
-    #                             'S:\SEA-Media\Analytics\T-Mobile\_\drivers \n'
-    #                             'Copy the .exe to another location and paste the full path.')
-    #
-    #     os.environ['webdriver.chrome.driver'] = driver_path
-    #     driver = webdriver.Chrome(driver_path)

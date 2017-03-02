@@ -1,9 +1,9 @@
 import numpy as np
 import pandas as pd
-from analytics.data_refresh.data import DataMethods
+from analytics.data.io import DataMethods
 from xlwings import Range, Sheet
 
-from analytics.data_refresh.floodlights import Floodlights
+from analytics.data.floodlights import Floodlights
 
 
 class CrossEnvironment(DataMethods):
