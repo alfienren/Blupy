@@ -13,28 +13,52 @@ class Pixels(DCM_API):
 
     def get(self):
         floodlights = Range(self.LIST_FLOODLIGHT_PIXELS, 'A2').vertical.value
+        batch_floodlights = self.service.new_batch_http_request()
+
+        tags = []
+
+        def floodlight_callback(request_id, response, exception):
+            if exception is not None:
+                tag = pd.DataFrame({'Floodlight ID': {0: floodlights[int(request_id)-1]},
+                                    'name': {0: 'None'},
+                                    'tag': {0: 'None'}})
+                tags.append(tag)
+            else:
+                try:
+                    r = response['defaultTags']
+                    tag = pd.DataFrame(r)
+                    del tag['id']
+                    tag['Floodlight ID'] = floodlights[int(request_id)-1]
+                except:
+                    tag = pd.DataFrame({'Floodlight ID': {0: floodlights[int(request_id)-1]},
+                                        'name': {0: 'None'},
+                                        'tag': {0: 'None'}})
+
+                tags.append(tag)
+
+        for i in floodlights:
+            batch_floodlights.add(self.fl.get(profileId=self.prof_id, id=i), callback=floodlight_callback)
+
+        batch_floodlights.execute()
 
         df = pd.DataFrame()
-        for i in floodlights:
-            try:
-                pix = self.fl.get(profileId=self.prof_id, id=str(int(i))).execute()[
-                    'defaultTags']
-            except:
-                pass
-
-            tags = pd.DataFrame(pix)
-            del tags['id']
-            tags['Floodlight ID'] = i
-            df = df.append(tags)
+        for j in tags:
+            df = df.append(j)
 
         df = df[['Floodlight ID', 'name', 'tag']]
-
         DataMethods().chunk_df(df, self.LIST_FLOODLIGHT_PIXELS, 'K1')
 
     def implement(self):
         pixels = pd.DataFrame(Range(self.PIGGYBACK_PIXELS, 'A1').table.value,
                               columns=Range(self.PIGGYBACK_PIXELS, 'A1').horizontal.value)
         pixels.drop(0, inplace=True)
+        batch_pixels = self.service.new_batch_http_request()
+
+        def implement_pixel_callback(request_id, response, exception):
+            if exception is not None:
+                pass
+            else:
+                pass
 
         ids = list(pixels['Floodlight ID'].unique())
 
