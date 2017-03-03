@@ -33,18 +33,18 @@ class UpdateAdvertisers(Categorization, Floodlights, DataMethods):
         cfv = Floodlights().ddr_custom_variables(cfv)
 
         data = sa.append(cfv)
-        data = DataMethods().strip_clickthroughs(data)
+        data = self.strip_clickthroughs(data)
 
         data = Floodlights().a_e_traffic(data, adv='tmo')
 
         data = Categorization().categorize_report(data, adv='tmo')
         data = Floodlights().f_tags(data)
-        data = DataMethods().additional_columns(data, adv='tmo')
+        data = self.additional_columns(data, adv='tmo')
 
         sa_columns = list(sa.columns)
         tag_columns = sa_columns[sa_columns.index('DBM Cost (USD)') + 1:]
 
-        columns = DataMethods().order_columns(adv='tmo') + tag_columns
+        columns = self.order_columns(adv='tmo') + tag_columns
 
         data = data[columns]
         data.fillna(0, inplace=True)
@@ -64,12 +64,12 @@ class UpdateAdvertisers(Categorization, Floodlights, DataMethods):
         data = Categorization().date_columns(data)
         data = Categorization().categorize_report(data, adv='metro')
 
-        data = DataMethods().additional_columns(data, adv='metro')
+        data = self.additional_columns(data, adv='metro')
 
         sa_columns = list(sa.columns)
         tag_columns = sa_columns[sa_columns.index('Clicks') + 1:]
 
-        columns = DataMethods().order_columns(adv='metro') + tag_columns
+        columns = self.order_columns(adv='metro') + tag_columns
 
         data = data[columns]
         data = data.fillna(0)
@@ -93,7 +93,7 @@ class UpdateAdvertisers(Categorization, Floodlights, DataMethods):
         cfv = Floodlights().ddr_custom_variables(cfv)
 
         data = sa.append(cfv)
-        data = DataMethods().strip_clickthroughs(data)
+        data = self.strip_clickthroughs(data)
 
         data = Floodlights().a_e_traffic(data)
 
@@ -103,7 +103,7 @@ class UpdateAdvertisers(Categorization, Floodlights, DataMethods):
         data = Categorization().dr_tactic(data)
         data = Categorization().placements(data)
         data = Categorization().dr_creative_categories(data)
-        data = DataMethods().additional_columns(data, adv='dr')
+        data = self.additional_columns(data, adv='dr')
 
         cfv_floodlight_columns = ['Activity', 'OrderNumber (string)', 'Plan (string)', 'Device (string)',
                                   'Service (string)', 'Accessory (string)', 'Floodlight Attribution Type', 'Orders',
@@ -115,7 +115,7 @@ class UpdateAdvertisers(Categorization, Floodlights, DataMethods):
         sa_columns = list(sa.columns)
         tag_columns = sa_columns[sa_columns.index('DBM Cost (USD)') + 1:]
 
-        columns = DataMethods().order_columns(adv='dr') + tag_columns + cfv_floodlight_columns
+        columns = self.order_columns(adv='dr') + tag_columns + cfv_floodlight_columns
 
         data = data[columns]
 
@@ -460,3 +460,159 @@ class UpdateAdvertisers(Categorization, Floodlights, DataMethods):
         Range('Summary', 'A1:C1').value = 'Rank', 'Device SKU', 'Count'
         Range('Summary', 'H1').value = 'Rank'
         Range('Summary', 'I1').value = 'Plan Name'
+
+    @staticmethod
+    def additional_columns(data, adv='tmo'):
+        # The DFA field DBM Cost is more accurate for placements using dynamic bidding. If a placement is not using
+        # dynamic bidding, DBM Cost = 0. Therefore, if DBM cost does not equal 0, replace the row's media cost with
+        # DBM cost. If DBM Cost = 0, Media Cost stays the same.
+
+        if adv == 'tmo' or adv == 'dr':
+            data['Media Cost'] = np.where(data['DBM Cost (USD)'] != 0, data['DBM Cost (USD)'], data['Media Cost'])
+        if adv == 'tmo':
+            data.drop('DBM Cost (USD)', 1, inplace=True)
+        if adv == 'dr':
+            data.rename(columns={'Campaign': 'Campaign2'}, inplace=True)
+            data['Campaign'] = np.where(data['Campaign2'].str.contains('DDR') == True, 'DR', 'Brand Remessaging')
+            data['NET Media Cost'] = data['Media Cost']
+
+        if adv != 'dr':
+            data['Video Completions'] = 0
+            data['Video Views'] = 0
+
+        data['NTC Media Cost'] = 0
+
+        return data
+
+    @staticmethod
+    def order_columns(adv='tmo'):
+        if adv == 'tmo':
+            dimensions = ['Week', 'Date', 'Month', 'Quarter', 'Campaign', 'Media Plan', 'Language', 'Site (DCM)',
+                          'Site',
+                          'Click-through URL', 'F Tag', 'Category', 'Category_Adjusted', 'Message Bucket',
+                          'Message Category', 'Creative Bucket', 'Creative Theme', 'Creative Type',
+                          'Creative Groups 1',
+                          'Creative ID', 'Ad', 'Creative Groups 2', 'Message Campaign', 'Creative Field 1',
+                          'Placement Messaging Type', 'Placement', 'Placement ID', 'Placement Cost Structure']
+
+            cfv_floodlight_columns = ['OrderNumber (string)', 'Activity', 'Floodlight Attribution Type',
+                                      'Plan (string)', 'Device (string)', 'Service (string)', 'Accessory (string)']
+
+            metrics = ['Media Cost', 'NTC Media Cost', 'Impressions', 'Clicks', 'Orders', 'Plans', 'Add-a-Line',
+                       'Activations', 'Devices', 'Services', 'Accessories', 'Postpaid Plans', 'Prepaid Plans',
+                       'eGAs',
+                       'Store Locator Visits', 'A Actions', 'B Actions', 'C Actions', 'D Actions', 'E Actions',
+                       'F Actions',
+                       'Awareness Actions', 'Consideration Actions', 'Traffic Actions', 'Post-Click Activity',
+                       'Post-Impression Activity', 'Video Views', 'Video Completions', 'Prepaid GAs',
+                       'Postpaid GAs',
+                       'Postpaid Orders', 'Prepaid Orders', 'Prepaid SIMs', 'Postpaid SIMs',
+                       'Prepaid Mobile Internet',
+                       'Postpaid Mobile Internet', 'Prepaid Phone', 'Postpaid Phone', 'Total GAs',
+                       'DDR New Devices',
+                       'DDR Add-a-Line']
+
+            new_columns = dimensions + metrics + cfv_floodlight_columns
+
+        else:
+            dimensions = ['Week', 'Date', 'Month', 'Quarter', 'Campaign', 'Language', 'Site (DCM)', 'Site',
+                          'TMO_Category', 'TMO_Category_Adjusted', 'Creative', 'Creative Type', 'Creative Groups 1',
+                          'Creative ID', 'Ad', 'Creative Groups 2', 'Creative Field 2', 'Placement', 'Placement ID',
+                          'Category', 'Creative Type Lookup', 'Skippable']
+
+            cfv_floodlight_columns = ['Floodlight Attribution Type', 'Activity', 'Transaction Count']
+
+            metrics = ['Media Cost', 'NTC Media Cost', 'Impressions', 'Clicks', 'Orders', 'Store Locator Visits',
+                       'GM A Actions', 'GM B Actions', 'GM C Actions', 'GM D Actions', 'Hispanic A Actions',
+                       'Hispanic B Actions', 'Hispanic C Actions', 'Hispanic D Actions', 'Total A Actions',
+                       'Total B Actions', 'Total C Actions', 'Total D Actions', 'Awareness Actions',
+                       'Traffic Actions',
+                       'Consideration Actions', 'Post-Click Activity', 'Post-Impression Activity', 'Video Views',
+                       'Video Completions']
+
+            new_columns = dimensions + metrics + cfv_floodlight_columns
+
+        if adv == 'dr':
+            dimensions1 = ['Campaign', 'Month', 'Week', 'Site', 'Tactic', 'Category', 'Placement Messaging Type',
+                           'Message Bucket', 'Message Category', 'Message Offer']
+
+            dimensions2 = ['Campaign2', 'Date', 'Site (DCM)', 'Creative', 'Click-through URL',
+                           'Creative Pixel Size',
+                           'Creative Type', 'Creative Field 1', 'Ad', 'Creative Groups 2', 'Placement',
+                           'Placement ID',
+                           'Placement Cost Structure']
+
+            metrics1 = ['A Actions', 'B Actions', 'C Actions', 'D Actions', 'Store Locator Visits',
+                        'Awareness Actions',
+                        'Consideration Actions', 'Traffic Actions', 'Post-Impression Activity',
+                        'Post-Click Activity',
+                        'NTC Media Cost', 'NET Media Cost']
+
+            metrics2 = ['Impressions', 'Clicks', 'Media Cost', 'DBM Cost (USD)']
+
+            new_columns = dimensions1 + metrics1 + dimensions2 + metrics2
+
+        return list(new_columns)
+
+    @staticmethod
+    def dr_drop_columns(dr):
+        cols_to_drop = ['Month', 'Tactic', 'Category', 'Message Bucket', 'Message Category',
+                        'Message Offer', 'A Actions', 'B Actions', 'C Actions', 'D Actions', 'Store Locator Visits',
+                        'Awareness Actions', 'Consideration Actions', 'Post-Impression Activity',
+                        'Post-Click Activity',
+                        'NET Media Cost', 'Clicks', 'Prepaid GAs', 'Postpaid GAs', 'Prepaid SIMs', 'Postpaid SIMs',
+                        'Prepaid Mobile Internet', 'Postpaid Mobile Internet', 'Prepaid Phone', 'Postpaid Phone',
+                        'DDR Add-a-Line', 'DDR New Devices']
+
+        ddr = dr.drop(cols_to_drop, axis=1)
+
+        return ddr
+
+    @staticmethod
+    def strip_clickthroughs(data):
+
+        data['Click-through URL'] = data['Click-through URL'].str.replace('http://analytics.bluekai.com/site/', '')
+        data['Click-through URL'] = data['Click-through URL'].str.replace(
+            '%3F%3DADV_DS_%epid!_%eaid!_%ecid!_%eadv!',
+            '')
+        data['Click-through URL'] = data['Click-through URL'].str.replace('15991\?phint', '')
+        data['Click-through URL'] = data['Click-through URL'].str.replace('http://15991\?phint', '')
+        data['Click-through URL'] = data['Click-through URL'].str.replace('event%3Dclick&phint', '')
+        data['Click-through URL'] = data['Click-through URL'].str.replace('aid%3D%eadv!&phint', '')
+        data['Click-through URL'] = data['Click-through URL'].str.replace('pid%3D%epid!&phint', '')
+        data['Click-through URL'] = data['Click-through URL'].str.replace('cid%3D%ebuy!&phint', '')
+        data['Click-through URL'] = data['Click-through URL'].str.replace('crid%3D%ecid!&done', '')
+        data['Click-through URL'] = data['Click-through URL'].str.replace('pid%3D%25epid!&phint', '')
+        data['Click-through URL'] = data['Click-through URL'].str.replace('%3D%epid!_%eaid!_%ecid!_%eadv!', '')
+        data['Click-through URL'] = data['Click-through URL'].str.replace('%26csdids', '')
+        data['Click-through URL'] = data['Click-through URL'].str.replace('DADV_DS_ADDDVL4Q_EMUL7Y9E1YA4116', '')
+        data['Click-through URL'] = data['Click-through URL'].str.replace('DWTR_DD_DDRDSPLYPR_JM2694TSP3U5895', '')
+        data['Click-through URL'] = data['Click-through URL'].str.replace('DWTR_DD_DDRFCBK_RQLMKXRCUQZ1042', '')
+        data['Click-through URL'] = data['Click-through URL'].str.replace('%3Fcmpid%3', '')
+        data['Click-through URL'] = data['Click-through URL'].str.replace('b/refmh_', '')
+        data['Click-through URL'] = data['Click-through URL'].str.replace(
+            '%3Fcm_mmc%3DPurchase-_-Display-_-Revere-_-Revere', '')
+        data['Click-through URL'] = data['Click-through URL'].str.replace(
+            '%3Fcm_mmc%3DDisplay-_-Purchase-_-GM-_-Tablet_Base', '')
+        data['Click-through URL'] = data['Click-through URL'].str.replace(
+            '%3Fcmpid%3DWTR_DD_DDRFCBK_RQLMKXRCUQZ1042%26csdids%3D%epid!_%eaid!_%ecid!_%eadv!', '')
+        data['Click-through URL'] = data['Click-through URL'].str.replace(
+            '%3F%26csdids%3DADV_DS_%epid!_%eaid!_%ecid!_%eadv!', '')
+        data['Click-through URL'] = data['Click-through URL'].str.replace(
+            '%3Fcm_mmc%3DPurchase-_-Display-_-Revere-_-Revere%26csdids%3D%epid!_%eaid!_%ecid!_%eadv!', '')
+        data['Click-through URL'] = data['Click-through URL'].str.replace(
+            '%3Fcm_mmc%3DDisplay-_-Purchase-_-GM-_-Tablet_Base%26csdids%3D%epid!_%eaid!_%ecid!_%eadv!', '')
+        data['Click-through URL'] = data['Click-through URL'].str.replace(
+            '%3Fcmpid%3DWTR_DD_DDRDSPLYPR_JM2694TSP3U5895%26csdids%3D%epid!_%eaid!_%ecid!_%eadv!', '')
+        data['Click-through URL'] = data['Click-through URL'].str.replace('&csdids%epid!_%eaid!_%ecid!_%eadv!', '')
+        data['Click-through URL'] = data['Click-through URL'].str.replace('=', '')
+        data['Click-through URL'] = data['Click-through URL'].str.replace('%2F', '/')
+        data['Click-through URL'] = data['Click-through URL'].str.replace('%3A', ':')
+        data['Click-through URL'] = data['Click-through URL'].str.replace('%23', '#')
+        data['Click-through URL'] = data['Click-through URL'].apply(lambda x: str(x).split('.html')[0])
+        data['Click-through URL'] = data['Click-through URL'].apply(lambda x: str(x).split('?')[0])
+        data['Click-through URL'] = data['Click-through URL'].apply(lambda x: str(x).split('%')[0])
+        data['Click-through URL'] = data['Click-through URL'].apply(lambda x: str(x).split('_')[0])
+        data['Click-through URL'] = data['Click-through URL'].str.replace('DWTR', '')
+
+        return data
