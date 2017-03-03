@@ -38,7 +38,6 @@ class DCM_API(configFile):
         user_name = getpass.getuser()
 
         storage = Storage(storage_path + user_name + '.dat')
-
         credentials = storage.get()
 
         if credentials is None or credentials.invalid:
@@ -48,7 +47,6 @@ class DCM_API(configFile):
                 storage, argparser.parse_args([]))
 
         auth = credentials.authorize(httplib2.Http())
-
         service = build(self.API_NAME, self.API_VERSION, http=auth)
 
         return service

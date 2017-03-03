@@ -8,11 +8,10 @@ class ReportingAPI(configFile):
     def __init__(self):
         super(ReportingAPI, self).__init__()
         self.configs = configFile().load_config()
+        self.auth = (self.configs['placed_api']['credentials']['username'],
+                     self.configs['placed_api']['credentials']['password'])
 
     def placed(self):
-        auth = (self.configs['placed_api']['credentials']['username'],
-                self.configs['placed_api']['credentials']['password'])
-
         base_tmo_el, base_tmo_sl, base_metro_el, base_metro_sl = self.configs['placed_api']['endpoints']["base"][
                                                                      'tmo_el'], \
                                                                  self.configs['placed_api']['endpoints']["base"][
@@ -41,7 +40,7 @@ class ReportingAPI(configFile):
         placed_data = pd.DataFrame()
 
         for i in range(0, len(data_endpoints)):
-            req = requests.get(i, auth=auth)
+            req = requests.get(i, auth=self.auth)
             data = pd.read_csv(req.json()['urls'][0], delimiter=',')
             data['endpoint'] = endpoint_names[i]
             placed_data = placed_data.append(data)
