@@ -1,4 +1,4 @@
-from analytics.data import advertisers
+from analytics.data import advertisers, api
 from analytics.reporting import dashboards, qa, ias
 from dcm.trafficking import advertiser, floodlights, pixels
 
@@ -59,8 +59,12 @@ def delete_pixels():
 def list_campaigns():
     advertiser.Advertiser().list_campaign_names_ids()
 
-
 ############################## IAS ####################################
 
 def merge_ias():
     ias.IASReporting().download_data()
+
+############################## Placed ####################################
+
+def placed_data():
+    api.ReportingAPI().placed()

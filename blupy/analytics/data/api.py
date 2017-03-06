@@ -1,6 +1,7 @@
 from config import configFile
 import requests
 import pandas as pd
+from io import DataMethods
 
 
 class ReportingAPI(configFile):
@@ -40,9 +41,13 @@ class ReportingAPI(configFile):
         placed_data = pd.DataFrame()
 
         for i in range(0, len(data_endpoints)):
-            req = requests.get(i, auth=self.auth)
-            data = pd.read_csv(req.json()['urls'][0], delimiter=',')
-            data['endpoint'] = endpoint_names[i]
-            placed_data = placed_data.append(data)
+            req = requests.get(data_endpoints[i], auth=self.auth)
+            try:
+                data = pd.read_csv(req.json()['urls'][0], delimiter=',')
+                data['endpoint'] = endpoint_names[i]
+                placed_data = placed_data.append(data)
+            except:
+                pass
 
-        return placed_data
+        #return placed_data
+        DataMethods().chunk_df(placed_data, 'Sheet1', 'A1')
