@@ -201,10 +201,10 @@ class Categorization(object):
         message_type.drop(0, inplace= True)
         message_type.drop_duplicates(keep='last', inplace=True)
 
-        dat = pd.merge(data, message_type, left_on= 'Placement', right_on= 'Placement_category', how= 'left')
-        dat.drop(['Campaign2', 'Placement_category'], axis= 1, inplace= True)
+        data = pd.merge(data, message_type, left_on= 'Placement', right_on= 'Placement_category', how= 'left')
+        data.drop(['Campaign2', 'Placement_category'], axis= 1, inplace= True)
 
-        return dat
+        return data
 
     @staticmethod
     def dr_tactic(data):

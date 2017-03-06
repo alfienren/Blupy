@@ -41,7 +41,8 @@ class IASReporting(DataMethods):
                 block_status = d[0:6]
                 block_status.drop_duplicates(inplace=True)
                 block_status.set_index(['Campaign Name', 'Media Partner Name', 'Placement Name'], inplace=True)
-                block_status.drop([col for col in block_status.columns if 'Blocking Status' not in col], axis=1, inplace=True)
+                block_status.drop([col for col in block_status.columns if 'Blocking Status' not in col], axis=1,
+                                  inplace=True)
                 d.drop([col for col in d.columns if 'Blocking Status' in col], axis=1, inplace=True)
 
             if i.name == 'Traffic by Country':
@@ -72,4 +73,4 @@ class IASReporting(DataMethods):
             data.drop_duplicates(inplace=True)
             DataMethods().chunk_df(data, data_sheet, 'A1')
 
-        #wb2.close()
+        wb2.close()
