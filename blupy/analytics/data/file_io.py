@@ -11,7 +11,6 @@ from analytics.data.categorization import Categorization
 class DataMethods(object):
 
     def __init__(self):
-        super(DataMethods, self).__init__()
         self.wb = Workbook.caller()
         self.path = self.wb.fullname
         self.temp_site_activity = 'SA_Temp'
