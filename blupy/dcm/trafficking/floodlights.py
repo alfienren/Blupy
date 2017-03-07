@@ -7,7 +7,7 @@ from pandas.io.json import json_normalize
 from xlwings import Range
 
 from dcm.dcm_api import DCM_API
-from analytics.data.io import DataMethods
+from analytics.data.file_io import DataMethods
 
 
 class Floodlights(DCM_API):

@@ -2,7 +2,7 @@ import pandas as pd
 from xlwings import Range
 import httplib2
 
-from analytics.data.io import DataMethods
+from analytics.data.file_io import DataMethods
 from dcm.dcm_api import DCM_API
 
 
