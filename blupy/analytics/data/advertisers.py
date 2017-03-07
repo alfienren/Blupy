@@ -8,7 +8,7 @@ from xlwings import Workbook, Range, Sheet
 
 from analytics.reporting.qa import QA
 from categorization import Categorization
-from io import DataMethods
+from file_io import DataMethods
 from floodlights import Floodlights
 
 
@@ -44,7 +44,25 @@ class UpdateAdvertisers(Categorization, Floodlights, DataMethods):
         sa_columns = list(sa.columns)
         tag_columns = sa_columns[sa_columns.index('DBM Cost (USD)') + 1:]
 
-        columns = self.order_columns(adv='tmo') + tag_columns
+        dimensions = ['Week', 'Date', 'Month', 'Quarter', 'Campaign', 'Media Plan', 'Language', 'Site (DCM)',
+                      'Site', 'Click-through URL', 'F Tag', 'Category', 'Category_Adjusted', 'Message Bucket',
+                      'Message Category', 'Creative Bucket', 'Creative Theme', 'Creative Type', 'Creative Groups 1',
+                      'Creative ID', 'Ad', 'Creative Groups 2', 'Message Campaign', 'Creative Field 1',
+                      'Placement Messaging Type', 'Placement', 'Placement ID', 'Placement Cost Structure']
+
+        cfv_floodlight_columns = ['OrderNumber (string)', 'Activity', 'Floodlight Attribution Type',
+                                  'Plan (string)', 'Device (string)', 'Service (string)', 'Accessory (string)']
+
+        metrics = ['Media Cost', 'NTC Media Cost', 'Impressions', 'Clicks', 'Orders', 'Plans', 'Add-a-Line',
+                   'Activations', 'Devices', 'Services', 'Accessories', 'Postpaid Plans', 'Prepaid Plans', 'eGAs',
+                   'Store Locator Visits', 'A Actions', 'B Actions', 'C Actions', 'D Actions', 'E Actions', 'F Actions',
+                   'Awareness Actions', 'Consideration Actions', 'Traffic Actions', 'Post-Click Activity',
+                   'Post-Impression Activity', 'Video Views', 'Video Completions', 'Prepaid GAs', 'Postpaid GAs',
+                   'Postpaid Orders', 'Prepaid Orders', 'Prepaid SIMs', 'Postpaid SIMs', 'Prepaid Mobile Internet',
+                   'Postpaid Mobile Internet', 'Prepaid Phone', 'Postpaid Phone', 'Total GAs', 'DDR New Devices',
+                   'DDR Add-a-Line']
+
+        columns = dimensions + metrics + cfv_floodlight_columns + tag_columns
 
         data = data[columns]
         data.fillna(0, inplace=True)
@@ -69,7 +87,21 @@ class UpdateAdvertisers(Categorization, Floodlights, DataMethods):
         sa_columns = list(sa.columns)
         tag_columns = sa_columns[sa_columns.index('Clicks') + 1:]
 
-        columns = self.order_columns(adv='metro') + tag_columns
+        dimensions = ['Week', 'Date', 'Month', 'Quarter', 'Campaign', 'Language', 'Site (DCM)', 'Site',
+                      'TMO_Category', 'TMO_Category_Adjusted', 'Creative', 'Creative Type', 'Creative Groups 1',
+                      'Creative ID', 'Ad', 'Creative Groups 2', 'Creative Field 2', 'Placement', 'Placement ID',
+                      'Category', 'Creative Type Lookup', 'Skippable']
+
+        cfv_floodlight_columns = ['Floodlight Attribution Type', 'Activity', 'Transaction Count']
+
+        metrics = ['Media Cost', 'NTC Media Cost', 'Impressions', 'Clicks', 'Orders', 'Store Locator Visits',
+                   'GM A Actions', 'GM B Actions', 'GM C Actions', 'GM D Actions', 'Hispanic A Actions',
+                   'Hispanic B Actions', 'Hispanic C Actions', 'Hispanic D Actions', 'Total A Actions',
+                   'Total B Actions', 'Total C Actions', 'Total D Actions', 'Awareness Actions',
+                   'Traffic Actions', 'Consideration Actions', 'Post-Click Activity', 'Post-Impression Activity',
+                   'Video Views', 'Video Completions']
+
+        columns = dimensions + metrics + cfv_floodlight_columns + tag_columns
 
         data = data[columns]
         data = data.fillna(0)
@@ -115,7 +147,20 @@ class UpdateAdvertisers(Categorization, Floodlights, DataMethods):
         sa_columns = list(sa.columns)
         tag_columns = sa_columns[sa_columns.index('DBM Cost (USD)') + 1:]
 
-        columns = self.order_columns(adv='dr') + tag_columns + cfv_floodlight_columns
+        dimensions1 = ['Campaign', 'Month', 'Week', 'Site', 'Tactic', 'Category', 'Placement Messaging Type',
+                       'Message Bucket', 'Message Category', 'Message Offer']
+
+        dimensions2 = ['Campaign2', 'Date', 'Site (DCM)', 'Creative', 'Click-through URL', 'Creative Pixel Size',
+                       'Creative Type', 'Creative Field 1', 'Ad', 'Creative Groups 2', 'Placement', 'Placement ID',
+                       'Placement Cost Structure']
+
+        metrics1 = ['A Actions', 'B Actions', 'C Actions', 'D Actions', 'Store Locator Visits', 'Awareness Actions',
+                    'Consideration Actions', 'Traffic Actions', 'Post-Impression Activity', 'Post-Click Activity',
+                    'NTC Media Cost', 'NET Media Cost']
+
+        metrics2 = ['Impressions', 'Clicks', 'Media Cost', 'DBM Cost (USD)']
+
+        columns = dimensions1 + metrics1 + dimensions2 + metrics2 + tag_columns + cfv_floodlight_columns
 
         data = data[columns]
 
@@ -483,76 +528,6 @@ class UpdateAdvertisers(Categorization, Floodlights, DataMethods):
         data['NTC Media Cost'] = 0
 
         return data
-
-    @staticmethod
-    def order_columns(adv='tmo'):
-        if adv == 'tmo':
-            dimensions = ['Week', 'Date', 'Month', 'Quarter', 'Campaign', 'Media Plan', 'Language', 'Site (DCM)',
-                          'Site',
-                          'Click-through URL', 'F Tag', 'Category', 'Category_Adjusted', 'Message Bucket',
-                          'Message Category', 'Creative Bucket', 'Creative Theme', 'Creative Type',
-                          'Creative Groups 1',
-                          'Creative ID', 'Ad', 'Creative Groups 2', 'Message Campaign', 'Creative Field 1',
-                          'Placement Messaging Type', 'Placement', 'Placement ID', 'Placement Cost Structure']
-
-            cfv_floodlight_columns = ['OrderNumber (string)', 'Activity', 'Floodlight Attribution Type',
-                                      'Plan (string)', 'Device (string)', 'Service (string)', 'Accessory (string)']
-
-            metrics = ['Media Cost', 'NTC Media Cost', 'Impressions', 'Clicks', 'Orders', 'Plans', 'Add-a-Line',
-                       'Activations', 'Devices', 'Services', 'Accessories', 'Postpaid Plans', 'Prepaid Plans',
-                       'eGAs',
-                       'Store Locator Visits', 'A Actions', 'B Actions', 'C Actions', 'D Actions', 'E Actions',
-                       'F Actions',
-                       'Awareness Actions', 'Consideration Actions', 'Traffic Actions', 'Post-Click Activity',
-                       'Post-Impression Activity', 'Video Views', 'Video Completions', 'Prepaid GAs',
-                       'Postpaid GAs',
-                       'Postpaid Orders', 'Prepaid Orders', 'Prepaid SIMs', 'Postpaid SIMs',
-                       'Prepaid Mobile Internet',
-                       'Postpaid Mobile Internet', 'Prepaid Phone', 'Postpaid Phone', 'Total GAs',
-                       'DDR New Devices',
-                       'DDR Add-a-Line']
-
-            new_columns = dimensions + metrics + cfv_floodlight_columns
-
-        else:
-            dimensions = ['Week', 'Date', 'Month', 'Quarter', 'Campaign', 'Language', 'Site (DCM)', 'Site',
-                          'TMO_Category', 'TMO_Category_Adjusted', 'Creative', 'Creative Type', 'Creative Groups 1',
-                          'Creative ID', 'Ad', 'Creative Groups 2', 'Creative Field 2', 'Placement', 'Placement ID',
-                          'Category', 'Creative Type Lookup', 'Skippable']
-
-            cfv_floodlight_columns = ['Floodlight Attribution Type', 'Activity', 'Transaction Count']
-
-            metrics = ['Media Cost', 'NTC Media Cost', 'Impressions', 'Clicks', 'Orders', 'Store Locator Visits',
-                       'GM A Actions', 'GM B Actions', 'GM C Actions', 'GM D Actions', 'Hispanic A Actions',
-                       'Hispanic B Actions', 'Hispanic C Actions', 'Hispanic D Actions', 'Total A Actions',
-                       'Total B Actions', 'Total C Actions', 'Total D Actions', 'Awareness Actions',
-                       'Traffic Actions',
-                       'Consideration Actions', 'Post-Click Activity', 'Post-Impression Activity', 'Video Views',
-                       'Video Completions']
-
-            new_columns = dimensions + metrics + cfv_floodlight_columns
-
-        if adv == 'dr':
-            dimensions1 = ['Campaign', 'Month', 'Week', 'Site', 'Tactic', 'Category', 'Placement Messaging Type',
-                           'Message Bucket', 'Message Category', 'Message Offer']
-
-            dimensions2 = ['Campaign2', 'Date', 'Site (DCM)', 'Creative', 'Click-through URL',
-                           'Creative Pixel Size',
-                           'Creative Type', 'Creative Field 1', 'Ad', 'Creative Groups 2', 'Placement',
-                           'Placement ID',
-                           'Placement Cost Structure']
-
-            metrics1 = ['A Actions', 'B Actions', 'C Actions', 'D Actions', 'Store Locator Visits',
-                        'Awareness Actions',
-                        'Consideration Actions', 'Traffic Actions', 'Post-Impression Activity',
-                        'Post-Click Activity',
-                        'NTC Media Cost', 'NET Media Cost']
-
-            metrics2 = ['Impressions', 'Clicks', 'Media Cost', 'DBM Cost (USD)']
-
-            new_columns = dimensions1 + metrics1 + dimensions2 + metrics2
-
-        return list(new_columns)
 
     @staticmethod
     def dr_drop_columns(dr):
