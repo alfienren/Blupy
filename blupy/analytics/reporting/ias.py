@@ -2,7 +2,7 @@ from xlwings import Sheet, Range, Workbook
 import string
 import pandas as pd
 import numpy as np
-from analytics.data.io import DataMethods
+from analytics.data.file_io import DataMethods
 
 
 class IASReporting(DataMethods):

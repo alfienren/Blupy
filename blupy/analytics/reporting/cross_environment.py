@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from analytics.data.io import DataMethods
+from analytics.data.file_io import DataMethods
 from xlwings import Range, Sheet
 
 from analytics.data.floodlights import Floodlights

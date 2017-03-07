@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from xlwings import Range, Workbook, Sheet
 
-from analytics.data.io import DataMethods
+from analytics.data.file_io import DataMethods
 
 
 class DrDashboard(DataMethods):

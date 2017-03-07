@@ -8,7 +8,6 @@ from xlwings import Range
 class Floodlights(object):
 
     def __init__(self):
-        super(Floodlights, self).__init__()
         self.view_through = .25
         self.action_reference = 'Action_Reference'
         self.spanish_language = '|'.join(list(['Spanish', 'Hispanic', 'SL']))

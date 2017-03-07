@@ -9,7 +9,6 @@ from xlwings import Range
 class Categorization(object):
 
     def __init__(self):
-        super(Categorization, self).__init__()
         self.spanish_campaigns = '|'.join(list(['Spanish', 'Hispanic', 'SL', 'Latino', 'Univision', 'Telemundo']))
         self.quarter = 'Q2'
 
