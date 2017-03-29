@@ -19,9 +19,11 @@ class DCM_API(configFile):
         self.API_VERSION = 'v2.7'
         self.API_SCOPES = ['https://www.googleapis.com/auth/dfatrafficking',
                       'https://www.googleapis.com/auth/dfareporting']
-        self.service = self.authenticate_user()
+        self.service = self.authenticate_user()[1]
+        self.auth = self.authenticate_user()[0]
         self.prof_id = self.profile_id(self.service)
         self.fl = self.service.floodlightActivities()
+        self.reports = self.service.reports()
         self.CREATE_FLOODLIGHTS = 'Create_Floodlights'
         self.FLOODLIGHT_INFO_LIST = 'Get_Floodlights'
         self.GENERATE_FLOODLIGHT_TAGS = 'Generate_Tags'
@@ -49,7 +51,7 @@ class DCM_API(configFile):
         auth = credentials.authorize(httplib2.Http())
         service = build(self.API_NAME, self.API_VERSION, http=auth)
 
-        return service
+        return [auth, service]
 
     @staticmethod
     def profile_id(service):

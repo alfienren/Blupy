@@ -3,11 +3,10 @@ import sys
 import numpy as np
 import pandas as pd
 from pandas.io.json import json_normalize
-from xlwings import Workbook, Range
+from xlwings import Range
 
 from dcm.dcm_api import DCM_API
 from analytics.data.file_io import DataMethods
-from config import configFile
 
 
 class Advertiser(DCM_API):
