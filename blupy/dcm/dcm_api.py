@@ -10,20 +10,21 @@ from xlwings import Workbook
 from config import configFile
 
 
-class DCM_API(configFile):
+class DCM_API(object):
 
     def __init__(self):
-        super(DCM_API, self).__init__()
         Workbook.caller()
+        self.configs = configFile().load_config()
         self.API_NAME = 'dfareporting'
         self.API_VERSION = 'v2.7'
         self.API_SCOPES = ['https://www.googleapis.com/auth/dfatrafficking',
                       'https://www.googleapis.com/auth/dfareporting']
-        self.service = self.authenticate_user()[1]
-        self.auth = self.authenticate_user()[0]
+        self.authenticate = self.authenticate_user()
+        self.service = self.authenticate[1]
+        self.auth = self.authenticate[0]
         self.prof_id = self.profile_id(self.service)
         self.fl = self.service.floodlightActivities()
-        self.reports = self.service.reports()
+        self.reporting = self.service.reports()
         self.CREATE_FLOODLIGHTS = 'Create_Floodlights'
         self.FLOODLIGHT_INFO_LIST = 'Get_Floodlights'
         self.GENERATE_FLOODLIGHT_TAGS = 'Generate_Tags'
