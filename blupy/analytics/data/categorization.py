@@ -103,8 +103,7 @@ class Categorization(object):
 
         return data
 
-    @staticmethod
-    def media_plan(data):
+    def media_plan(self, data):
         data['Campaign2'] = np.where(data['Campaign'].str.contains('BidManager') == True, data['Placement'],
                                      data['Campaign'])
 

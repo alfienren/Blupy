@@ -1,6 +1,6 @@
-from analytics.data import advertisers, api
+from analytics.data import advertisers, api, streams
 from analytics.reporting import dashboards, qa, ias
-from dcm.trafficking import advertiser, floodlights, pixels
+from dcm import advertiser, floodlights, pixels
 
 
 def tmobile_weekly_reporting():
@@ -68,3 +68,7 @@ def merge_ias():
 
 def placed_data():
     api.ReportingAPI().placed()
+
+
+def cfv_report():
+    streams.DatoramaStreams().custom_floodlights()

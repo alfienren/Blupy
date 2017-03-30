@@ -12,7 +12,7 @@ from xlwings import Sheet
 from xmlutils.xml2json import xml2json
 
 from dcm.dcm_api import DCM_API
-from analytics.data.io import DataMethods
+from analytics.data.file_io import DataMethods
 
 class URLs(object):
 

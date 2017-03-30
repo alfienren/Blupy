@@ -3,6 +3,7 @@ import re
 import numpy as np
 import pandas as pd
 from xlwings import Range
+from config import configFile
 
 
 class Floodlights(object):
@@ -11,7 +12,8 @@ class Floodlights(object):
         self.view_through = .25
         self.action_reference = 'Action_Reference'
         self.spanish_language = '|'.join(list(['Spanish', 'Hispanic', 'SL']))
-        self.device_feed = pd.read_table(Range(self.action_reference, 'AE1').value)
+        self.config = configFile().load_config()
+        self.device_feed = pd.read_table(self.config['reporting_references']['device_feed'])
 
     def a_e_traffic(self, data, adv='tmo'):
         # Set the data column names to a variable
