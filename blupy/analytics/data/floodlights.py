@@ -182,16 +182,19 @@ class Floodlights(object):
         cfv['Device_reg'] = cfv['Device (string)'].apply(lambda x: str(x).replace(',', '|'))
 
         # Count the number of plans in the Plans column
-        cfv['Plans'] = np.where(cfv['Plan (string)'] != np.NaN,
+        cfv['Plans'] = np.where(cfv['Plan (string)'] != '',
                                 cfv['Plan (string)'].apply(lambda x: str(x).count(',')) + 1, 0)
         # Count number of services in the Service column
-        cfv['Services'] = np.where(cfv['Service (string)'] != np.NaN,
+        cfv['Services'] = np.where((cfv['Plan (string)'] != np.NaN) |
+                                   (cfv['Plan (string)'] != ''),
                                    cfv['Service (string)'].apply(lambda x: str(x).count(',')) + 1, 0)
         # Count number of Accessories in the Accessories column
-        cfv['Accessories'] = np.where(cfv['Accessory (string)'] != np.NaN,
+        cfv['Accessories'] = np.where((cfv['Plan (string)'] != np.NaN) |
+                                      (cfv['Plan (string)'] != ''),
                                       cfv['Accessory (string)'].apply(lambda x: str(x).count(',')) + 1, 0)
         # Count number of devices in the Plans column
-        cfv['Devices'] = np.where(cfv['Device (string)'] != np.NaN,
+        cfv['Devices'] = np.where((cfv['Plan (string)'] != np.NaN) |
+                                  (cfv['Plan (string)'] != ''),
                                   cfv['Device (string)'].apply(lambda x: str(x).count(',')) + 1, 0)
         # Count number of Add-a-Lines in the Service column
         cfv['Add-a-Line'] = cfv['Service (string)'].apply(lambda x: str(x).count('ADD'))
@@ -223,27 +226,34 @@ class Floodlights(object):
         #                          np.where(cfv['Floodlight Attribution Type'].str.contains('View-through') == True,
         #                                   cfv['Orders'] * view_through_credit(), cfv['Orders']))
 
-        cfv['Postpaid Orders'] = np.where((cfv['Device_reg'].str.contains(postpaid_list) == True) & (
-            cfv['Floodlight Attribution Type'].str.contains('View-through') == True),
-                                          1 * self.view_through, np.where(
-                (cfv['Device_reg'].str.contains(postpaid_list) == True) & (
-                    cfv['Floodlight Attribution Type'].str.contains('Click-through') == True),
-                1, 0))
+        #cfv['Postpaid Orders'] = np.where((cfv['Device_reg'].str.contains(postpaid_list) == True) & (
+        #    cfv['Floodlight Attribution Type'].str.contains('View-through') == True),
+        #                                  1 * self.view_through, np.where(
+        #        (cfv['Device_reg'].str.contains(postpaid_list) == True) & (
+        #            cfv['Floodlight Attribution Type'].str.contains('Click-through') == True),
+        #        1, 0))
 
-        cfv['Prepaid Orders'] = np.where((cfv['Device_reg'].str.contains(prepaid_list) == True) & (
-            cfv['Floodlight Attribution Type'].str.contains('View-through') == True),
-                                         1 * self.view_through, np.where(
-                (cfv['Device_reg'].str.contains(prepaid_list) == True) & (
-                    cfv['Floodlight Attribution Type'].str.contains('Click-through') == True),
-                1, 0))
+        #cfv['Prepaid Orders'] = np.where((cfv['Device_reg'].str.contains(prepaid_list) == True) & (
+        #    cfv['Floodlight Attribution Type'].str.contains('View-through') == True),
+        #                                 1 * self.view_through, np.where(
+        #        (cfv['Device_reg'].str.contains(prepaid_list) == True) & (
+        #            cfv['Floodlight Attribution Type'].str.contains('Click-through') == True),
+        #        1, 0))
 
-        cfv['Orders'] = cfv['Postpaid Orders'] + cfv['Prepaid Orders']
+        #cfv['Orders'] = cfv['Postpaid Orders'] + cfv['Prepaid Orders']
+        cfv['Orders'] = np.where(cfv['Floodlight Attribution Type'].str.contains('View-through') == True,
+                                 1 * self.view_through, 0)
 
         # Estimated Gross Adds are calculated as the count of Devices with 50% view-through credit.
         # If Floodlight Attribution Type is equal to View-through, the count of Devices is multiplied by 0.5
         cfv['eGAs'] = np.where(cfv['Floodlight Attribution Type'].str.contains('View-through') == True,
                                (cfv['Device (string)'].apply(lambda x: str(x).count(',')) + 1) * self.view_through,
                                (cfv['Device (string)'].apply(lambda x: str(x).count(',')) + 1))
+
+        cfv['eGAs'] = np.where((cfv['Device (string)'] == 'nan') |
+                               (cfv['Device (string)'] == None) |
+                               (cfv['Device (string)'] == np.NaN),
+                               0, cfv['eGAs'])
 
         return cfv
 
@@ -255,7 +265,7 @@ class Floodlights(object):
         device_cfv = cfv[cfv.columns[0:17]].join(device_string)
         cfv = cfv.append(device_cfv)
 
-        excluded_devices = str(Range('Lookup', 'S2').value)
+        excluded_devices = str(610214693839)
         cfv = pd.merge(cfv, self.device_feed, how='left', left_on='Device IDs', right_on='Device SKU')
 
         cfv['Prepaid GAs'] = np.where(((cfv['Device IDs'].str.contains(excluded_devices) == False) &
