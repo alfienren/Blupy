@@ -1,5 +1,7 @@
-from analytics.data import advertisers, api, streams
-from analytics.reporting import dashboards, qa, ias
+from data import advertisers, streams
+from reporting import dashboards, qa, ias
+
+from data import api
 from dcm import advertiser, floodlights, pixels
 
 

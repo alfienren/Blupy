@@ -1,7 +1,7 @@
+import getpass
 import os
 import time
 import urllib2
-import getpass
 
 import pandas as pd
 from pandas import read_json
@@ -12,7 +12,8 @@ from xlwings import Sheet
 from xmlutils.xml2json import xml2json
 
 from dcm.dcm_api import DCM_API
-from analytics.data.file_io import DataMethods
+from file_io import DataMethods
+
 
 class URLs(object):
 
