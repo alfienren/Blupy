@@ -1,10 +1,11 @@
-from dcm.dcm_api import DCM_API
-import requests
-from StringIO import StringIO
-import pandas as pd
-import numpy as np
 import time
-from analytics.data.file_io import DataMethods
+from StringIO import StringIO
+
+import numpy as np
+import pandas as pd
+import requests
+
+from dcm.dcm_api import DCM_API
 
 
 class DCMReports(DCM_API):

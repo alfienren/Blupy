@@ -1,9 +1,9 @@
+import httplib2
 import pandas as pd
 from xlwings import Range
-import httplib2
 
-from analytics.data.file_io import DataMethods
 from dcm.dcm_api import DCM_API
+from data.file_io import DataMethods
 
 
 class Pixels(DCM_API):

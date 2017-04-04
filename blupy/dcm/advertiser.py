@@ -6,7 +6,7 @@ from pandas.io.json import json_normalize
 from xlwings import Range
 
 from dcm.dcm_api import DCM_API
-from analytics.data.file_io import DataMethods
+from data.file_io import DataMethods
 
 
 class Advertiser(DCM_API):
